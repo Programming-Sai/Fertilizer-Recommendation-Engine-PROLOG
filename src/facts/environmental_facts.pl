@@ -1,3 +1,6 @@
+% Environmental facts
+% environment(CropType, Temperature, Humidity, Rainfall, Season, Location).
+
 
 % Cereals
 environment(cereal, cold, low, low, spring, tropical).
