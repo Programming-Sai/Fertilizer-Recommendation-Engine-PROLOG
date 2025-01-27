@@ -66,23 +66,130 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
 
 
-% Define a separate predicate for fertilizer recommendations based on conditions
+
+
+
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Recommendation) :-
+    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
+    Recommendation = 'Impractical combination: adjust fertilizer or water levels.'.
+
+
+
+
+% Expanded fertilizer recommendation rules
 fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation) :-
     ( CropType == cereal ->
         ( Nitrogen == high, Phosphorous == high, Potassium == high ->
-            Recommendation = "Use NPK 10:10:10 with broadcasting, apply every 30 days."
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:10:10", "values": {"N": 10, "P": 10, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Cereal crops have high nutrient demand, particularly in the vegetative stage.",
+                              "Balanced NPK ratio ensures optimal growth and grain formation.",
+                              "Broadcasting allows even distribution over the field."]
+            }
         ;
             Nitrogen == moderate, Phosphorous == moderate, Potassium == moderate ->
-            Recommendation = "Use compost with side-dressing, apply every 60 days."
+            Recommendation = {
+                "fertilizerType": "Compost",
+                "NPK": {"ratio": "Varied", "values": {"N": "Varied", "P": "Varied", "K": "Varied"}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "every 60 days",
+                "reasoning": ["Moderate nutrient demand can be fulfilled with organic compost.",
+                              "Compost improves soil texture and water retention.",
+                              "Side-dressing focuses nutrient availability to growing plants.",
+                              "Promotes long-term soil health."]
+            }
         )
     ;
     CropType == vegetable ->
         ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
-            Recommendation = "Use NPK 20:10:10 with fertigation, apply every 30 days."
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "15:5:10", "values": {"N": 15, "P": 5, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 30 days",
+                "reasoning": ["Vegetables require high nitrogen for leaf development and high potassium for flowering and fruiting.",
+                              "Fertigation directly supplies nutrients to the root zone, improving uptake.",
+                              "Moderate phosphorous ensures proper root development without oversaturation."]
+            }
         ;
             Nitrogen == moderate, Phosphorous == low, Potassium == moderate ->
-            Recommendation = "Use organic fertilizer with broadcasting, apply every 40 days."
+            Recommendation = {
+                "fertilizerType": "Organic",
+                "NPK": {"ratio": "Varied", "values": {"N": "Varied", "P": "Varied", "K": "Varied"}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 40 days",
+                "reasoning": ["Organic fertilizers improve soil microbiota and long-term fertility.",
+                              "Low phosphorous requirements can be met with slow-release nutrients.",
+                              "Broadcasting ensures consistent soil coverage."]
+            }
         )
     ;
-    Recommendation = "No suitable recommendation available."
-    ).
+    CropType == legume ->
+        ( Nitrogen == low, Phosphorous == moderate, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:20:20", "values": {"N": 0, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Legumes fix their own nitrogen; minimal nitrogen supplementation is needed.",
+                              "Phosphorous promotes root and nodule development.",
+                              "Potassium enhances resistance to diseases and improves pod quality.",
+                              "Basal application sets the foundation for growth."]
+            }
+        )
+    ;
+    CropType == fruit ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:20:10", "values": {"N": 20, "P": 20, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 45 days",
+                "reasoning": ["High nitrogen supports vegetative growth, especially in young trees.",
+                              "Phosphorous ensures strong roots and better fruit setting.",
+                              "Moderate potassium levels support overall plant health.",
+                              "Fertigation ensures targeted delivery to deep-rooted crops."]
+            }
+        )
+    ;
+    CropType == oilseed ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:20:20", "values": {"N": 10, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Oilseeds need high phosphorous for better seed quality.",
+                              "Potassium improves oil content and disease resistance.",
+                              "Moderate nitrogen supports growth without risking lodging."]
+            }
+        )
+    ;
+    CropType == tuber ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
+                "frequency": "every 45 days",
+                "reasoning": ["Tuber crops need high potassium for starch synthesis.",
+                              "Nitrogen supports vegetative growth and leaf area development.",
+                              "Moderate phosphorous aids in root expansion.",
+                              "Top-dressing provides nutrients as crops mature."]
+            }
+        )
+    ),
+    !. % Prevent fallback execution if successful.
+
+% Default recommendation if no matches
+fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
+    Recommendation = {
+        "fertilizerType": "None",
+        "NPK": {"ratio": "None", "values": {"N": "None", "P": "None", "K": "None"}, "units": "kg/ha"},
+        "applicationMode": "None",
+        "frequency": "None",
+        "reasoning": ["No suitable recommendation available for the provided conditions."]
+    }.

@@ -1,6 +1,15 @@
 % Crop facts
 % crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement).
 
+
+% Impractical crop combinations
+impractical_crop(_, _, _, low, high).    % Low fertilizer + High water
+impractical_crop(_, _, high, low, _).    % High yield + Low fertilizer
+impractical_crop(_, _, _, high, low).    % High fertilizer + Low water
+impractical_crop(_, _, high, _, low).    % High yield + Low water
+impractical_crop(_, early, _, high, _).  % Early growth stage + High fertilizer
+
+
 % Cereals
 crop(cereal, seedling, low, none, low).
 crop(cereal, seedling, low, none, moderate).
@@ -9,7 +18,6 @@ crop(cereal, seedling, low, none, veryHigh).
 crop(cereal, seedling, low, none, variable).
 crop(cereal, seedling, low, low, low).
 crop(cereal, seedling, low, low, moderate).
-crop(cereal, seedling, low, low, high).
 crop(cereal, seedling, low, low, veryHigh).
 crop(cereal, seedling, low, low, variable).
 crop(cereal, seedling, low, moderate, low).
@@ -17,7 +25,6 @@ crop(cereal, seedling, low, moderate, moderate).
 crop(cereal, seedling, low, moderate, high).
 crop(cereal, seedling, low, moderate, veryHigh).
 crop(cereal, seedling, low, moderate, variable).
-crop(cereal, seedling, low, high, low).
 crop(cereal, seedling, low, high, moderate).
 crop(cereal, seedling, low, high, high).
 crop(cereal, seedling, low, high, veryHigh).
@@ -29,7 +36,7 @@ crop(cereal, seedling, moderate, none, veryHigh).
 crop(cereal, seedling, moderate, none, variable).
 crop(cereal, seedling, moderate, low, low).
 crop(cereal, seedling, moderate, low, moderate).
-crop(cereal, seedling, moderate, low, high).
+
 crop(cereal, seedling, moderate, low, veryHigh).
 crop(cereal, seedling, moderate, low, variable).
 crop(cereal, seedling, moderate, moderate, low).
@@ -37,27 +44,22 @@ crop(cereal, seedling, moderate, moderate, moderate).
 crop(cereal, seedling, moderate, moderate, high).
 crop(cereal, seedling, moderate, moderate, veryHigh).
 crop(cereal, seedling, moderate, moderate, variable).
-crop(cereal, seedling, moderate, high, low).
 crop(cereal, seedling, moderate, high, moderate).
 crop(cereal, seedling, moderate, high, high).
 crop(cereal, seedling, moderate, high, veryHigh).
 crop(cereal, seedling, moderate, high, variable).
-crop(cereal, seedling, high, none, low).
 crop(cereal, seedling, high, none, moderate).
 crop(cereal, seedling, high, none, high).
 crop(cereal, seedling, high, none, veryHigh).
 crop(cereal, seedling, high, none, variable).
-crop(cereal, seedling, high, low, low).
-crop(cereal, seedling, high, low, moderate).
-crop(cereal, seedling, high, low, high).
-crop(cereal, seedling, high, low, veryHigh).
-crop(cereal, seedling, high, low, variable).
-crop(cereal, seedling, high, moderate, low).
+
+
+
+
 crop(cereal, seedling, high, moderate, moderate).
 crop(cereal, seedling, high, moderate, high).
 crop(cereal, seedling, high, moderate, veryHigh).
 crop(cereal, seedling, high, moderate, variable).
-crop(cereal, seedling, high, high, low).
 crop(cereal, seedling, high, high, moderate).
 crop(cereal, seedling, high, high, high).
 crop(cereal, seedling, high, high, veryHigh).
@@ -67,9 +69,8 @@ crop(cereal, seedling, slightlyHigh, none, moderate).
 crop(cereal, seedling, slightlyHigh, none, high).
 crop(cereal, seedling, slightlyHigh, none, veryHigh).
 crop(cereal, seedling, slightlyHigh, none, variable).
-crop(cereal, seedling, slightlyHigh, low, low).
+
 crop(cereal, seedling, slightlyHigh, low, moderate).
-crop(cereal, seedling, slightlyHigh, low, high).
 crop(cereal, seedling, slightlyHigh, low, veryHigh).
 crop(cereal, seedling, slightlyHigh, low, variable).
 crop(cereal, seedling, slightlyHigh, moderate, low).
@@ -77,7 +78,6 @@ crop(cereal, seedling, slightlyHigh, moderate, moderate).
 crop(cereal, seedling, slightlyHigh, moderate, high).
 crop(cereal, seedling, slightlyHigh, moderate, veryHigh).
 crop(cereal, seedling, slightlyHigh, moderate, variable).
-crop(cereal, seedling, slightlyHigh, high, low).
 crop(cereal, seedling, slightlyHigh, high, moderate).
 crop(cereal, seedling, slightlyHigh, high, high).
 crop(cereal, seedling, slightlyHigh, high, veryHigh).
@@ -89,7 +89,6 @@ crop(cereal, seedling, veryHigh, none, veryHigh).
 crop(cereal, seedling, veryHigh, none, variable).
 crop(cereal, seedling, veryHigh, low, low).
 crop(cereal, seedling, veryHigh, low, moderate).
-crop(cereal, seedling, veryHigh, low, high).
 crop(cereal, seedling, veryHigh, low, veryHigh).
 crop(cereal, seedling, veryHigh, low, variable).
 crop(cereal, seedling, veryHigh, moderate, low).
@@ -97,7 +96,6 @@ crop(cereal, seedling, veryHigh, moderate, moderate).
 crop(cereal, seedling, veryHigh, moderate, high).
 crop(cereal, seedling, veryHigh, moderate, veryHigh).
 crop(cereal, seedling, veryHigh, moderate, variable).
-crop(cereal, seedling, veryHigh, high, low).
 crop(cereal, seedling, veryHigh, high, moderate).
 crop(cereal, seedling, veryHigh, high, high).
 crop(cereal, seedling, veryHigh, high, veryHigh).
@@ -109,7 +107,6 @@ crop(cereal, vegetative, low, none, veryHigh).
 crop(cereal, vegetative, low, none, variable).
 crop(cereal, vegetative, low, low, low).
 crop(cereal, vegetative, low, low, moderate).
-crop(cereal, vegetative, low, low, high).
 crop(cereal, vegetative, low, low, veryHigh).
 crop(cereal, vegetative, low, low, variable).
 crop(cereal, vegetative, low, moderate, low).
@@ -117,7 +114,6 @@ crop(cereal, vegetative, low, moderate, moderate).
 crop(cereal, vegetative, low, moderate, high).
 crop(cereal, vegetative, low, moderate, veryHigh).
 crop(cereal, vegetative, low, moderate, variable).
-crop(cereal, vegetative, low, high, low).
 crop(cereal, vegetative, low, high, moderate).
 crop(cereal, vegetative, low, high, high).
 crop(cereal, vegetative, low, high, veryHigh).
@@ -129,7 +125,6 @@ crop(cereal, vegetative, moderate, none, veryHigh).
 crop(cereal, vegetative, moderate, none, variable).
 crop(cereal, vegetative, moderate, low, low).
 crop(cereal, vegetative, moderate, low, moderate).
-crop(cereal, vegetative, moderate, low, high).
 crop(cereal, vegetative, moderate, low, veryHigh).
 crop(cereal, vegetative, moderate, low, variable).
 crop(cereal, vegetative, moderate, moderate, low).
@@ -137,27 +132,18 @@ crop(cereal, vegetative, moderate, moderate, moderate).
 crop(cereal, vegetative, moderate, moderate, high).
 crop(cereal, vegetative, moderate, moderate, veryHigh).
 crop(cereal, vegetative, moderate, moderate, variable).
-crop(cereal, vegetative, moderate, high, low).
 crop(cereal, vegetative, moderate, high, moderate).
 crop(cereal, vegetative, moderate, high, high).
 crop(cereal, vegetative, moderate, high, veryHigh).
 crop(cereal, vegetative, moderate, high, variable).
-crop(cereal, vegetative, high, none, low).
 crop(cereal, vegetative, high, none, moderate).
 crop(cereal, vegetative, high, none, high).
 crop(cereal, vegetative, high, none, veryHigh).
 crop(cereal, vegetative, high, none, variable).
-crop(cereal, vegetative, high, low, low).
-crop(cereal, vegetative, high, low, moderate).
-crop(cereal, vegetative, high, low, high).
-crop(cereal, vegetative, high, low, veryHigh).
-crop(cereal, vegetative, high, low, variable).
-crop(cereal, vegetative, high, moderate, low).
 crop(cereal, vegetative, high, moderate, moderate).
 crop(cereal, vegetative, high, moderate, high).
 crop(cereal, vegetative, high, moderate, veryHigh).
 crop(cereal, vegetative, high, moderate, variable).
-crop(cereal, vegetative, high, high, low).
 crop(cereal, vegetative, high, high, moderate).
 crop(cereal, vegetative, high, high, high).
 crop(cereal, vegetative, high, high, veryHigh).
@@ -169,7 +155,6 @@ crop(cereal, vegetative, slightlyHigh, none, veryHigh).
 crop(cereal, vegetative, slightlyHigh, none, variable).
 crop(cereal, vegetative, slightlyHigh, low, low).
 crop(cereal, vegetative, slightlyHigh, low, moderate).
-crop(cereal, vegetative, slightlyHigh, low, high).
 crop(cereal, vegetative, slightlyHigh, low, veryHigh).
 crop(cereal, vegetative, slightlyHigh, low, variable).
 crop(cereal, vegetative, slightlyHigh, moderate, low).
@@ -177,7 +162,6 @@ crop(cereal, vegetative, slightlyHigh, moderate, moderate).
 crop(cereal, vegetative, slightlyHigh, moderate, high).
 crop(cereal, vegetative, slightlyHigh, moderate, veryHigh).
 crop(cereal, vegetative, slightlyHigh, moderate, variable).
-crop(cereal, vegetative, slightlyHigh, high, low).
 crop(cereal, vegetative, slightlyHigh, high, moderate).
 crop(cereal, vegetative, slightlyHigh, high, high).
 crop(cereal, vegetative, slightlyHigh, high, veryHigh).
@@ -189,7 +173,6 @@ crop(cereal, vegetative, veryHigh, none, veryHigh).
 crop(cereal, vegetative, veryHigh, none, variable).
 crop(cereal, vegetative, veryHigh, low, low).
 crop(cereal, vegetative, veryHigh, low, moderate).
-crop(cereal, vegetative, veryHigh, low, high).
 crop(cereal, vegetative, veryHigh, low, veryHigh).
 crop(cereal, vegetative, veryHigh, low, variable).
 crop(cereal, vegetative, veryHigh, moderate, low).
@@ -197,7 +180,6 @@ crop(cereal, vegetative, veryHigh, moderate, moderate).
 crop(cereal, vegetative, veryHigh, moderate, high).
 crop(cereal, vegetative, veryHigh, moderate, veryHigh).
 crop(cereal, vegetative, veryHigh, moderate, variable).
-crop(cereal, vegetative, veryHigh, high, low).
 crop(cereal, vegetative, veryHigh, high, moderate).
 crop(cereal, vegetative, veryHigh, high, high).
 crop(cereal, vegetative, veryHigh, high, veryHigh).
@@ -209,7 +191,6 @@ crop(cereal, flowering, low, none, veryHigh).
 crop(cereal, flowering, low, none, variable).
 crop(cereal, flowering, low, low, low).
 crop(cereal, flowering, low, low, moderate).
-crop(cereal, flowering, low, low, high).
 crop(cereal, flowering, low, low, veryHigh).
 crop(cereal, flowering, low, low, variable).
 crop(cereal, flowering, low, moderate, low).
@@ -217,7 +198,6 @@ crop(cereal, flowering, low, moderate, moderate).
 crop(cereal, flowering, low, moderate, high).
 crop(cereal, flowering, low, moderate, veryHigh).
 crop(cereal, flowering, low, moderate, variable).
-crop(cereal, flowering, low, high, low).
 crop(cereal, flowering, low, high, moderate).
 crop(cereal, flowering, low, high, high).
 crop(cereal, flowering, low, high, veryHigh).
@@ -229,7 +209,6 @@ crop(cereal, flowering, moderate, none, veryHigh).
 crop(cereal, flowering, moderate, none, variable).
 crop(cereal, flowering, moderate, low, low).
 crop(cereal, flowering, moderate, low, moderate).
-crop(cereal, flowering, moderate, low, high).
 crop(cereal, flowering, moderate, low, veryHigh).
 crop(cereal, flowering, moderate, low, variable).
 crop(cereal, flowering, moderate, moderate, low).
@@ -237,27 +216,18 @@ crop(cereal, flowering, moderate, moderate, moderate).
 crop(cereal, flowering, moderate, moderate, high).
 crop(cereal, flowering, moderate, moderate, veryHigh).
 crop(cereal, flowering, moderate, moderate, variable).
-crop(cereal, flowering, moderate, high, low).
 crop(cereal, flowering, moderate, high, moderate).
 crop(cereal, flowering, moderate, high, high).
 crop(cereal, flowering, moderate, high, veryHigh).
 crop(cereal, flowering, moderate, high, variable).
-crop(cereal, flowering, high, none, low).
 crop(cereal, flowering, high, none, moderate).
 crop(cereal, flowering, high, none, high).
 crop(cereal, flowering, high, none, veryHigh).
 crop(cereal, flowering, high, none, variable).
-crop(cereal, flowering, high, low, low).
-crop(cereal, flowering, high, low, moderate).
-crop(cereal, flowering, high, low, high).
-crop(cereal, flowering, high, low, veryHigh).
-crop(cereal, flowering, high, low, variable).
-crop(cereal, flowering, high, moderate, low).
 crop(cereal, flowering, high, moderate, moderate).
 crop(cereal, flowering, high, moderate, high).
 crop(cereal, flowering, high, moderate, veryHigh).
 crop(cereal, flowering, high, moderate, variable).
-crop(cereal, flowering, high, high, low).
 crop(cereal, flowering, high, high, moderate).
 crop(cereal, flowering, high, high, high).
 crop(cereal, flowering, high, high, veryHigh).
@@ -269,7 +239,6 @@ crop(cereal, flowering, slightlyHigh, none, veryHigh).
 crop(cereal, flowering, slightlyHigh, none, variable).
 crop(cereal, flowering, slightlyHigh, low, low).
 crop(cereal, flowering, slightlyHigh, low, moderate).
-crop(cereal, flowering, slightlyHigh, low, high).
 crop(cereal, flowering, slightlyHigh, low, veryHigh).
 crop(cereal, flowering, slightlyHigh, low, variable).
 crop(cereal, flowering, slightlyHigh, moderate, low).
@@ -277,7 +246,6 @@ crop(cereal, flowering, slightlyHigh, moderate, moderate).
 crop(cereal, flowering, slightlyHigh, moderate, high).
 crop(cereal, flowering, slightlyHigh, moderate, veryHigh).
 crop(cereal, flowering, slightlyHigh, moderate, variable).
-crop(cereal, flowering, slightlyHigh, high, low).
 crop(cereal, flowering, slightlyHigh, high, moderate).
 crop(cereal, flowering, slightlyHigh, high, high).
 crop(cereal, flowering, slightlyHigh, high, veryHigh).
@@ -289,7 +257,6 @@ crop(cereal, flowering, veryHigh, none, veryHigh).
 crop(cereal, flowering, veryHigh, none, variable).
 crop(cereal, flowering, veryHigh, low, low).
 crop(cereal, flowering, veryHigh, low, moderate).
-crop(cereal, flowering, veryHigh, low, high).
 crop(cereal, flowering, veryHigh, low, veryHigh).
 crop(cereal, flowering, veryHigh, low, variable).
 crop(cereal, flowering, veryHigh, moderate, low).
@@ -297,7 +264,6 @@ crop(cereal, flowering, veryHigh, moderate, moderate).
 crop(cereal, flowering, veryHigh, moderate, high).
 crop(cereal, flowering, veryHigh, moderate, veryHigh).
 crop(cereal, flowering, veryHigh, moderate, variable).
-crop(cereal, flowering, veryHigh, high, low).
 crop(cereal, flowering, veryHigh, high, moderate).
 crop(cereal, flowering, veryHigh, high, high).
 crop(cereal, flowering, veryHigh, high, veryHigh).
@@ -309,7 +275,6 @@ crop(cereal, fruiting, low, none, veryHigh).
 crop(cereal, fruiting, low, none, variable).
 crop(cereal, fruiting, low, low, low).
 crop(cereal, fruiting, low, low, moderate).
-crop(cereal, fruiting, low, low, high).
 crop(cereal, fruiting, low, low, veryHigh).
 crop(cereal, fruiting, low, low, variable).
 crop(cereal, fruiting, low, moderate, low).
@@ -317,7 +282,6 @@ crop(cereal, fruiting, low, moderate, moderate).
 crop(cereal, fruiting, low, moderate, high).
 crop(cereal, fruiting, low, moderate, veryHigh).
 crop(cereal, fruiting, low, moderate, variable).
-crop(cereal, fruiting, low, high, low).
 crop(cereal, fruiting, low, high, moderate).
 crop(cereal, fruiting, low, high, high).
 crop(cereal, fruiting, low, high, veryHigh).
@@ -329,7 +293,6 @@ crop(cereal, fruiting, moderate, none, veryHigh).
 crop(cereal, fruiting, moderate, none, variable).
 crop(cereal, fruiting, moderate, low, low).
 crop(cereal, fruiting, moderate, low, moderate).
-crop(cereal, fruiting, moderate, low, high).
 crop(cereal, fruiting, moderate, low, veryHigh).
 crop(cereal, fruiting, moderate, low, variable).
 crop(cereal, fruiting, moderate, moderate, low).
@@ -337,27 +300,18 @@ crop(cereal, fruiting, moderate, moderate, moderate).
 crop(cereal, fruiting, moderate, moderate, high).
 crop(cereal, fruiting, moderate, moderate, veryHigh).
 crop(cereal, fruiting, moderate, moderate, variable).
-crop(cereal, fruiting, moderate, high, low).
 crop(cereal, fruiting, moderate, high, moderate).
 crop(cereal, fruiting, moderate, high, high).
 crop(cereal, fruiting, moderate, high, veryHigh).
 crop(cereal, fruiting, moderate, high, variable).
-crop(cereal, fruiting, high, none, low).
 crop(cereal, fruiting, high, none, moderate).
 crop(cereal, fruiting, high, none, high).
 crop(cereal, fruiting, high, none, veryHigh).
 crop(cereal, fruiting, high, none, variable).
-crop(cereal, fruiting, high, low, low).
-crop(cereal, fruiting, high, low, moderate).
-crop(cereal, fruiting, high, low, high).
-crop(cereal, fruiting, high, low, veryHigh).
-crop(cereal, fruiting, high, low, variable).
-crop(cereal, fruiting, high, moderate, low).
 crop(cereal, fruiting, high, moderate, moderate).
 crop(cereal, fruiting, high, moderate, high).
 crop(cereal, fruiting, high, moderate, veryHigh).
 crop(cereal, fruiting, high, moderate, variable).
-crop(cereal, fruiting, high, high, low).
 crop(cereal, fruiting, high, high, moderate).
 crop(cereal, fruiting, high, high, high).
 crop(cereal, fruiting, high, high, veryHigh).
@@ -369,7 +323,6 @@ crop(cereal, fruiting, slightlyHigh, none, veryHigh).
 crop(cereal, fruiting, slightlyHigh, none, variable).
 crop(cereal, fruiting, slightlyHigh, low, low).
 crop(cereal, fruiting, slightlyHigh, low, moderate).
-crop(cereal, fruiting, slightlyHigh, low, high).
 crop(cereal, fruiting, slightlyHigh, low, veryHigh).
 crop(cereal, fruiting, slightlyHigh, low, variable).
 crop(cereal, fruiting, slightlyHigh, moderate, low).
@@ -377,7 +330,6 @@ crop(cereal, fruiting, slightlyHigh, moderate, moderate).
 crop(cereal, fruiting, slightlyHigh, moderate, high).
 crop(cereal, fruiting, slightlyHigh, moderate, veryHigh).
 crop(cereal, fruiting, slightlyHigh, moderate, variable).
-crop(cereal, fruiting, slightlyHigh, high, low).
 crop(cereal, fruiting, slightlyHigh, high, moderate).
 crop(cereal, fruiting, slightlyHigh, high, high).
 crop(cereal, fruiting, slightlyHigh, high, veryHigh).
@@ -389,7 +341,6 @@ crop(cereal, fruiting, veryHigh, none, veryHigh).
 crop(cereal, fruiting, veryHigh, none, variable).
 crop(cereal, fruiting, veryHigh, low, low).
 crop(cereal, fruiting, veryHigh, low, moderate).
-crop(cereal, fruiting, veryHigh, low, high).
 crop(cereal, fruiting, veryHigh, low, veryHigh).
 crop(cereal, fruiting, veryHigh, low, variable).
 crop(cereal, fruiting, veryHigh, moderate, low).
@@ -397,7 +348,6 @@ crop(cereal, fruiting, veryHigh, moderate, moderate).
 crop(cereal, fruiting, veryHigh, moderate, high).
 crop(cereal, fruiting, veryHigh, moderate, veryHigh).
 crop(cereal, fruiting, veryHigh, moderate, variable).
-crop(cereal, fruiting, veryHigh, high, low).
 crop(cereal, fruiting, veryHigh, high, moderate).
 crop(cereal, fruiting, veryHigh, high, high).
 crop(cereal, fruiting, veryHigh, high, veryHigh).
@@ -409,7 +359,6 @@ crop(cereal, harvest, low, none, veryHigh).
 crop(cereal, harvest, low, none, variable).
 crop(cereal, harvest, low, low, low).
 crop(cereal, harvest, low, low, moderate).
-crop(cereal, harvest, low, low, high).
 crop(cereal, harvest, low, low, veryHigh).
 crop(cereal, harvest, low, low, variable).
 crop(cereal, harvest, low, moderate, low).
@@ -417,7 +366,6 @@ crop(cereal, harvest, low, moderate, moderate).
 crop(cereal, harvest, low, moderate, high).
 crop(cereal, harvest, low, moderate, veryHigh).
 crop(cereal, harvest, low, moderate, variable).
-crop(cereal, harvest, low, high, low).
 crop(cereal, harvest, low, high, moderate).
 crop(cereal, harvest, low, high, high).
 crop(cereal, harvest, low, high, veryHigh).
@@ -429,7 +377,6 @@ crop(cereal, harvest, moderate, none, veryHigh).
 crop(cereal, harvest, moderate, none, variable).
 crop(cereal, harvest, moderate, low, low).
 crop(cereal, harvest, moderate, low, moderate).
-crop(cereal, harvest, moderate, low, high).
 crop(cereal, harvest, moderate, low, veryHigh).
 crop(cereal, harvest, moderate, low, variable).
 crop(cereal, harvest, moderate, moderate, low).
@@ -437,27 +384,18 @@ crop(cereal, harvest, moderate, moderate, moderate).
 crop(cereal, harvest, moderate, moderate, high).
 crop(cereal, harvest, moderate, moderate, veryHigh).
 crop(cereal, harvest, moderate, moderate, variable).
-crop(cereal, harvest, moderate, high, low).
 crop(cereal, harvest, moderate, high, moderate).
 crop(cereal, harvest, moderate, high, high).
 crop(cereal, harvest, moderate, high, veryHigh).
 crop(cereal, harvest, moderate, high, variable).
-crop(cereal, harvest, high, none, low).
 crop(cereal, harvest, high, none, moderate).
 crop(cereal, harvest, high, none, high).
 crop(cereal, harvest, high, none, veryHigh).
 crop(cereal, harvest, high, none, variable).
-crop(cereal, harvest, high, low, low).
-crop(cereal, harvest, high, low, moderate).
-crop(cereal, harvest, high, low, high).
-crop(cereal, harvest, high, low, veryHigh).
-crop(cereal, harvest, high, low, variable).
-crop(cereal, harvest, high, moderate, low).
 crop(cereal, harvest, high, moderate, moderate).
 crop(cereal, harvest, high, moderate, high).
 crop(cereal, harvest, high, moderate, veryHigh).
 crop(cereal, harvest, high, moderate, variable).
-crop(cereal, harvest, high, high, low).
 crop(cereal, harvest, high, high, moderate).
 crop(cereal, harvest, high, high, high).
 crop(cereal, harvest, high, high, veryHigh).
@@ -469,7 +407,6 @@ crop(cereal, harvest, slightlyHigh, none, veryHigh).
 crop(cereal, harvest, slightlyHigh, none, variable).
 crop(cereal, harvest, slightlyHigh, low, low).
 crop(cereal, harvest, slightlyHigh, low, moderate).
-crop(cereal, harvest, slightlyHigh, low, high).
 crop(cereal, harvest, slightlyHigh, low, veryHigh).
 crop(cereal, harvest, slightlyHigh, low, variable).
 crop(cereal, harvest, slightlyHigh, moderate, low).
@@ -477,7 +414,6 @@ crop(cereal, harvest, slightlyHigh, moderate, moderate).
 crop(cereal, harvest, slightlyHigh, moderate, high).
 crop(cereal, harvest, slightlyHigh, moderate, veryHigh).
 crop(cereal, harvest, slightlyHigh, moderate, variable).
-crop(cereal, harvest, slightlyHigh, high, low).
 crop(cereal, harvest, slightlyHigh, high, moderate).
 crop(cereal, harvest, slightlyHigh, high, high).
 crop(cereal, harvest, slightlyHigh, high, veryHigh).
@@ -489,7 +425,6 @@ crop(cereal, harvest, veryHigh, none, veryHigh).
 crop(cereal, harvest, veryHigh, none, variable).
 crop(cereal, harvest, veryHigh, low, low).
 crop(cereal, harvest, veryHigh, low, moderate).
-crop(cereal, harvest, veryHigh, low, high).
 crop(cereal, harvest, veryHigh, low, veryHigh).
 crop(cereal, harvest, veryHigh, low, variable).
 crop(cereal, harvest, veryHigh, moderate, low).
@@ -497,7 +432,6 @@ crop(cereal, harvest, veryHigh, moderate, moderate).
 crop(cereal, harvest, veryHigh, moderate, high).
 crop(cereal, harvest, veryHigh, moderate, veryHigh).
 crop(cereal, harvest, veryHigh, moderate, variable).
-crop(cereal, harvest, veryHigh, high, low).
 crop(cereal, harvest, veryHigh, high, moderate).
 crop(cereal, harvest, veryHigh, high, high).
 crop(cereal, harvest, veryHigh, high, veryHigh).
@@ -513,7 +447,6 @@ crop(vegetable, seedling, low, none, veryHigh).
 crop(vegetable, seedling, low, none, variable).
 crop(vegetable, seedling, low, low, low).
 crop(vegetable, seedling, low, low, moderate).
-crop(vegetable, seedling, low, low, high).
 crop(vegetable, seedling, low, low, veryHigh).
 crop(vegetable, seedling, low, low, variable).
 crop(vegetable, seedling, low, moderate, low).
@@ -521,7 +454,6 @@ crop(vegetable, seedling, low, moderate, moderate).
 crop(vegetable, seedling, low, moderate, high).
 crop(vegetable, seedling, low, moderate, veryHigh).
 crop(vegetable, seedling, low, moderate, variable).
-crop(vegetable, seedling, low, high, low).
 crop(vegetable, seedling, low, high, moderate).
 crop(vegetable, seedling, low, high, high).
 crop(vegetable, seedling, low, high, veryHigh).
@@ -533,7 +465,6 @@ crop(vegetable, seedling, moderate, none, veryHigh).
 crop(vegetable, seedling, moderate, none, variable).
 crop(vegetable, seedling, moderate, low, low).
 crop(vegetable, seedling, moderate, low, moderate).
-crop(vegetable, seedling, moderate, low, high).
 crop(vegetable, seedling, moderate, low, veryHigh).
 crop(vegetable, seedling, moderate, low, variable).
 crop(vegetable, seedling, moderate, moderate, low).
@@ -541,27 +472,18 @@ crop(vegetable, seedling, moderate, moderate, moderate).
 crop(vegetable, seedling, moderate, moderate, high).
 crop(vegetable, seedling, moderate, moderate, veryHigh).
 crop(vegetable, seedling, moderate, moderate, variable).
-crop(vegetable, seedling, moderate, high, low).
 crop(vegetable, seedling, moderate, high, moderate).
 crop(vegetable, seedling, moderate, high, high).
 crop(vegetable, seedling, moderate, high, veryHigh).
 crop(vegetable, seedling, moderate, high, variable).
-crop(vegetable, seedling, high, none, low).
 crop(vegetable, seedling, high, none, moderate).
 crop(vegetable, seedling, high, none, high).
 crop(vegetable, seedling, high, none, veryHigh).
 crop(vegetable, seedling, high, none, variable).
-crop(vegetable, seedling, high, low, low).
-crop(vegetable, seedling, high, low, moderate).
-crop(vegetable, seedling, high, low, high).
-crop(vegetable, seedling, high, low, veryHigh).
-crop(vegetable, seedling, high, low, variable).
-crop(vegetable, seedling, high, moderate, low).
 crop(vegetable, seedling, high, moderate, moderate).
 crop(vegetable, seedling, high, moderate, high).
 crop(vegetable, seedling, high, moderate, veryHigh).
 crop(vegetable, seedling, high, moderate, variable).
-crop(vegetable, seedling, high, high, low).
 crop(vegetable, seedling, high, high, moderate).
 crop(vegetable, seedling, high, high, high).
 crop(vegetable, seedling, high, high, veryHigh).
@@ -573,7 +495,6 @@ crop(vegetable, seedling, slightlyHigh, none, veryHigh).
 crop(vegetable, seedling, slightlyHigh, none, variable).
 crop(vegetable, seedling, slightlyHigh, low, low).
 crop(vegetable, seedling, slightlyHigh, low, moderate).
-crop(vegetable, seedling, slightlyHigh, low, high).
 crop(vegetable, seedling, slightlyHigh, low, veryHigh).
 crop(vegetable, seedling, slightlyHigh, low, variable).
 crop(vegetable, seedling, slightlyHigh, moderate, low).
@@ -581,7 +502,6 @@ crop(vegetable, seedling, slightlyHigh, moderate, moderate).
 crop(vegetable, seedling, slightlyHigh, moderate, high).
 crop(vegetable, seedling, slightlyHigh, moderate, veryHigh).
 crop(vegetable, seedling, slightlyHigh, moderate, variable).
-crop(vegetable, seedling, slightlyHigh, high, low).
 crop(vegetable, seedling, slightlyHigh, high, moderate).
 crop(vegetable, seedling, slightlyHigh, high, high).
 crop(vegetable, seedling, slightlyHigh, high, veryHigh).
@@ -593,7 +513,6 @@ crop(vegetable, seedling, veryHigh, none, veryHigh).
 crop(vegetable, seedling, veryHigh, none, variable).
 crop(vegetable, seedling, veryHigh, low, low).
 crop(vegetable, seedling, veryHigh, low, moderate).
-crop(vegetable, seedling, veryHigh, low, high).
 crop(vegetable, seedling, veryHigh, low, veryHigh).
 crop(vegetable, seedling, veryHigh, low, variable).
 crop(vegetable, seedling, veryHigh, moderate, low).
@@ -601,7 +520,6 @@ crop(vegetable, seedling, veryHigh, moderate, moderate).
 crop(vegetable, seedling, veryHigh, moderate, high).
 crop(vegetable, seedling, veryHigh, moderate, veryHigh).
 crop(vegetable, seedling, veryHigh, moderate, variable).
-crop(vegetable, seedling, veryHigh, high, low).
 crop(vegetable, seedling, veryHigh, high, moderate).
 crop(vegetable, seedling, veryHigh, high, high).
 crop(vegetable, seedling, veryHigh, high, veryHigh).
@@ -613,7 +531,6 @@ crop(vegetable, vegetative, low, none, veryHigh).
 crop(vegetable, vegetative, low, none, variable).
 crop(vegetable, vegetative, low, low, low).
 crop(vegetable, vegetative, low, low, moderate).
-crop(vegetable, vegetative, low, low, high).
 crop(vegetable, vegetative, low, low, veryHigh).
 crop(vegetable, vegetative, low, low, variable).
 crop(vegetable, vegetative, low, moderate, low).
@@ -621,7 +538,6 @@ crop(vegetable, vegetative, low, moderate, moderate).
 crop(vegetable, vegetative, low, moderate, high).
 crop(vegetable, vegetative, low, moderate, veryHigh).
 crop(vegetable, vegetative, low, moderate, variable).
-crop(vegetable, vegetative, low, high, low).
 crop(vegetable, vegetative, low, high, moderate).
 crop(vegetable, vegetative, low, high, high).
 crop(vegetable, vegetative, low, high, veryHigh).
@@ -633,7 +549,6 @@ crop(vegetable, vegetative, moderate, none, veryHigh).
 crop(vegetable, vegetative, moderate, none, variable).
 crop(vegetable, vegetative, moderate, low, low).
 crop(vegetable, vegetative, moderate, low, moderate).
-crop(vegetable, vegetative, moderate, low, high).
 crop(vegetable, vegetative, moderate, low, veryHigh).
 crop(vegetable, vegetative, moderate, low, variable).
 crop(vegetable, vegetative, moderate, moderate, low).
@@ -641,27 +556,18 @@ crop(vegetable, vegetative, moderate, moderate, moderate).
 crop(vegetable, vegetative, moderate, moderate, high).
 crop(vegetable, vegetative, moderate, moderate, veryHigh).
 crop(vegetable, vegetative, moderate, moderate, variable).
-crop(vegetable, vegetative, moderate, high, low).
 crop(vegetable, vegetative, moderate, high, moderate).
 crop(vegetable, vegetative, moderate, high, high).
 crop(vegetable, vegetative, moderate, high, veryHigh).
 crop(vegetable, vegetative, moderate, high, variable).
-crop(vegetable, vegetative, high, none, low).
 crop(vegetable, vegetative, high, none, moderate).
 crop(vegetable, vegetative, high, none, high).
 crop(vegetable, vegetative, high, none, veryHigh).
 crop(vegetable, vegetative, high, none, variable).
-crop(vegetable, vegetative, high, low, low).
-crop(vegetable, vegetative, high, low, moderate).
-crop(vegetable, vegetative, high, low, high).
-crop(vegetable, vegetative, high, low, veryHigh).
-crop(vegetable, vegetative, high, low, variable).
-crop(vegetable, vegetative, high, moderate, low).
 crop(vegetable, vegetative, high, moderate, moderate).
 crop(vegetable, vegetative, high, moderate, high).
 crop(vegetable, vegetative, high, moderate, veryHigh).
 crop(vegetable, vegetative, high, moderate, variable).
-crop(vegetable, vegetative, high, high, low).
 crop(vegetable, vegetative, high, high, moderate).
 crop(vegetable, vegetative, high, high, high).
 crop(vegetable, vegetative, high, high, veryHigh).
@@ -673,7 +579,6 @@ crop(vegetable, vegetative, slightlyHigh, none, veryHigh).
 crop(vegetable, vegetative, slightlyHigh, none, variable).
 crop(vegetable, vegetative, slightlyHigh, low, low).
 crop(vegetable, vegetative, slightlyHigh, low, moderate).
-crop(vegetable, vegetative, slightlyHigh, low, high).
 crop(vegetable, vegetative, slightlyHigh, low, veryHigh).
 crop(vegetable, vegetative, slightlyHigh, low, variable).
 crop(vegetable, vegetative, slightlyHigh, moderate, low).
@@ -681,7 +586,6 @@ crop(vegetable, vegetative, slightlyHigh, moderate, moderate).
 crop(vegetable, vegetative, slightlyHigh, moderate, high).
 crop(vegetable, vegetative, slightlyHigh, moderate, veryHigh).
 crop(vegetable, vegetative, slightlyHigh, moderate, variable).
-crop(vegetable, vegetative, slightlyHigh, high, low).
 crop(vegetable, vegetative, slightlyHigh, high, moderate).
 crop(vegetable, vegetative, slightlyHigh, high, high).
 crop(vegetable, vegetative, slightlyHigh, high, veryHigh).
@@ -693,7 +597,6 @@ crop(vegetable, vegetative, veryHigh, none, veryHigh).
 crop(vegetable, vegetative, veryHigh, none, variable).
 crop(vegetable, vegetative, veryHigh, low, low).
 crop(vegetable, vegetative, veryHigh, low, moderate).
-crop(vegetable, vegetative, veryHigh, low, high).
 crop(vegetable, vegetative, veryHigh, low, veryHigh).
 crop(vegetable, vegetative, veryHigh, low, variable).
 crop(vegetable, vegetative, veryHigh, moderate, low).
@@ -701,7 +604,6 @@ crop(vegetable, vegetative, veryHigh, moderate, moderate).
 crop(vegetable, vegetative, veryHigh, moderate, high).
 crop(vegetable, vegetative, veryHigh, moderate, veryHigh).
 crop(vegetable, vegetative, veryHigh, moderate, variable).
-crop(vegetable, vegetative, veryHigh, high, low).
 crop(vegetable, vegetative, veryHigh, high, moderate).
 crop(vegetable, vegetative, veryHigh, high, high).
 crop(vegetable, vegetative, veryHigh, high, veryHigh).
@@ -713,7 +615,6 @@ crop(vegetable, flowering, low, none, veryHigh).
 crop(vegetable, flowering, low, none, variable).
 crop(vegetable, flowering, low, low, low).
 crop(vegetable, flowering, low, low, moderate).
-crop(vegetable, flowering, low, low, high).
 crop(vegetable, flowering, low, low, veryHigh).
 crop(vegetable, flowering, low, low, variable).
 crop(vegetable, flowering, low, moderate, low).
@@ -721,7 +622,6 @@ crop(vegetable, flowering, low, moderate, moderate).
 crop(vegetable, flowering, low, moderate, high).
 crop(vegetable, flowering, low, moderate, veryHigh).
 crop(vegetable, flowering, low, moderate, variable).
-crop(vegetable, flowering, low, high, low).
 crop(vegetable, flowering, low, high, moderate).
 crop(vegetable, flowering, low, high, high).
 crop(vegetable, flowering, low, high, veryHigh).
@@ -733,7 +633,6 @@ crop(vegetable, flowering, moderate, none, veryHigh).
 crop(vegetable, flowering, moderate, none, variable).
 crop(vegetable, flowering, moderate, low, low).
 crop(vegetable, flowering, moderate, low, moderate).
-crop(vegetable, flowering, moderate, low, high).
 crop(vegetable, flowering, moderate, low, veryHigh).
 crop(vegetable, flowering, moderate, low, variable).
 crop(vegetable, flowering, moderate, moderate, low).
@@ -741,27 +640,18 @@ crop(vegetable, flowering, moderate, moderate, moderate).
 crop(vegetable, flowering, moderate, moderate, high).
 crop(vegetable, flowering, moderate, moderate, veryHigh).
 crop(vegetable, flowering, moderate, moderate, variable).
-crop(vegetable, flowering, moderate, high, low).
 crop(vegetable, flowering, moderate, high, moderate).
 crop(vegetable, flowering, moderate, high, high).
 crop(vegetable, flowering, moderate, high, veryHigh).
 crop(vegetable, flowering, moderate, high, variable).
-crop(vegetable, flowering, high, none, low).
 crop(vegetable, flowering, high, none, moderate).
 crop(vegetable, flowering, high, none, high).
 crop(vegetable, flowering, high, none, veryHigh).
 crop(vegetable, flowering, high, none, variable).
-crop(vegetable, flowering, high, low, low).
-crop(vegetable, flowering, high, low, moderate).
-crop(vegetable, flowering, high, low, high).
-crop(vegetable, flowering, high, low, veryHigh).
-crop(vegetable, flowering, high, low, variable).
-crop(vegetable, flowering, high, moderate, low).
 crop(vegetable, flowering, high, moderate, moderate).
 crop(vegetable, flowering, high, moderate, high).
 crop(vegetable, flowering, high, moderate, veryHigh).
 crop(vegetable, flowering, high, moderate, variable).
-crop(vegetable, flowering, high, high, low).
 crop(vegetable, flowering, high, high, moderate).
 crop(vegetable, flowering, high, high, high).
 crop(vegetable, flowering, high, high, veryHigh).
@@ -773,7 +663,6 @@ crop(vegetable, flowering, slightlyHigh, none, veryHigh).
 crop(vegetable, flowering, slightlyHigh, none, variable).
 crop(vegetable, flowering, slightlyHigh, low, low).
 crop(vegetable, flowering, slightlyHigh, low, moderate).
-crop(vegetable, flowering, slightlyHigh, low, high).
 crop(vegetable, flowering, slightlyHigh, low, veryHigh).
 crop(vegetable, flowering, slightlyHigh, low, variable).
 crop(vegetable, flowering, slightlyHigh, moderate, low).
@@ -781,7 +670,6 @@ crop(vegetable, flowering, slightlyHigh, moderate, moderate).
 crop(vegetable, flowering, slightlyHigh, moderate, high).
 crop(vegetable, flowering, slightlyHigh, moderate, veryHigh).
 crop(vegetable, flowering, slightlyHigh, moderate, variable).
-crop(vegetable, flowering, slightlyHigh, high, low).
 crop(vegetable, flowering, slightlyHigh, high, moderate).
 crop(vegetable, flowering, slightlyHigh, high, high).
 crop(vegetable, flowering, slightlyHigh, high, veryHigh).
@@ -793,7 +681,6 @@ crop(vegetable, flowering, veryHigh, none, veryHigh).
 crop(vegetable, flowering, veryHigh, none, variable).
 crop(vegetable, flowering, veryHigh, low, low).
 crop(vegetable, flowering, veryHigh, low, moderate).
-crop(vegetable, flowering, veryHigh, low, high).
 crop(vegetable, flowering, veryHigh, low, veryHigh).
 crop(vegetable, flowering, veryHigh, low, variable).
 crop(vegetable, flowering, veryHigh, moderate, low).
@@ -801,7 +688,6 @@ crop(vegetable, flowering, veryHigh, moderate, moderate).
 crop(vegetable, flowering, veryHigh, moderate, high).
 crop(vegetable, flowering, veryHigh, moderate, veryHigh).
 crop(vegetable, flowering, veryHigh, moderate, variable).
-crop(vegetable, flowering, veryHigh, high, low).
 crop(vegetable, flowering, veryHigh, high, moderate).
 crop(vegetable, flowering, veryHigh, high, high).
 crop(vegetable, flowering, veryHigh, high, veryHigh).
@@ -813,7 +699,6 @@ crop(vegetable, fruiting, low, none, veryHigh).
 crop(vegetable, fruiting, low, none, variable).
 crop(vegetable, fruiting, low, low, low).
 crop(vegetable, fruiting, low, low, moderate).
-crop(vegetable, fruiting, low, low, high).
 crop(vegetable, fruiting, low, low, veryHigh).
 crop(vegetable, fruiting, low, low, variable).
 crop(vegetable, fruiting, low, moderate, low).
@@ -821,7 +706,6 @@ crop(vegetable, fruiting, low, moderate, moderate).
 crop(vegetable, fruiting, low, moderate, high).
 crop(vegetable, fruiting, low, moderate, veryHigh).
 crop(vegetable, fruiting, low, moderate, variable).
-crop(vegetable, fruiting, low, high, low).
 crop(vegetable, fruiting, low, high, moderate).
 crop(vegetable, fruiting, low, high, high).
 crop(vegetable, fruiting, low, high, veryHigh).
@@ -833,7 +717,6 @@ crop(vegetable, fruiting, moderate, none, veryHigh).
 crop(vegetable, fruiting, moderate, none, variable).
 crop(vegetable, fruiting, moderate, low, low).
 crop(vegetable, fruiting, moderate, low, moderate).
-crop(vegetable, fruiting, moderate, low, high).
 crop(vegetable, fruiting, moderate, low, veryHigh).
 crop(vegetable, fruiting, moderate, low, variable).
 crop(vegetable, fruiting, moderate, moderate, low).
@@ -841,27 +724,18 @@ crop(vegetable, fruiting, moderate, moderate, moderate).
 crop(vegetable, fruiting, moderate, moderate, high).
 crop(vegetable, fruiting, moderate, moderate, veryHigh).
 crop(vegetable, fruiting, moderate, moderate, variable).
-crop(vegetable, fruiting, moderate, high, low).
 crop(vegetable, fruiting, moderate, high, moderate).
 crop(vegetable, fruiting, moderate, high, high).
 crop(vegetable, fruiting, moderate, high, veryHigh).
 crop(vegetable, fruiting, moderate, high, variable).
-crop(vegetable, fruiting, high, none, low).
 crop(vegetable, fruiting, high, none, moderate).
 crop(vegetable, fruiting, high, none, high).
 crop(vegetable, fruiting, high, none, veryHigh).
 crop(vegetable, fruiting, high, none, variable).
-crop(vegetable, fruiting, high, low, low).
-crop(vegetable, fruiting, high, low, moderate).
-crop(vegetable, fruiting, high, low, high).
-crop(vegetable, fruiting, high, low, veryHigh).
-crop(vegetable, fruiting, high, low, variable).
-crop(vegetable, fruiting, high, moderate, low).
 crop(vegetable, fruiting, high, moderate, moderate).
 crop(vegetable, fruiting, high, moderate, high).
 crop(vegetable, fruiting, high, moderate, veryHigh).
 crop(vegetable, fruiting, high, moderate, variable).
-crop(vegetable, fruiting, high, high, low).
 crop(vegetable, fruiting, high, high, moderate).
 crop(vegetable, fruiting, high, high, high).
 crop(vegetable, fruiting, high, high, veryHigh).
@@ -873,7 +747,6 @@ crop(vegetable, fruiting, slightlyHigh, none, veryHigh).
 crop(vegetable, fruiting, slightlyHigh, none, variable).
 crop(vegetable, fruiting, slightlyHigh, low, low).
 crop(vegetable, fruiting, slightlyHigh, low, moderate).
-crop(vegetable, fruiting, slightlyHigh, low, high).
 crop(vegetable, fruiting, slightlyHigh, low, veryHigh).
 crop(vegetable, fruiting, slightlyHigh, low, variable).
 crop(vegetable, fruiting, slightlyHigh, moderate, low).
@@ -881,7 +754,6 @@ crop(vegetable, fruiting, slightlyHigh, moderate, moderate).
 crop(vegetable, fruiting, slightlyHigh, moderate, high).
 crop(vegetable, fruiting, slightlyHigh, moderate, veryHigh).
 crop(vegetable, fruiting, slightlyHigh, moderate, variable).
-crop(vegetable, fruiting, slightlyHigh, high, low).
 crop(vegetable, fruiting, slightlyHigh, high, moderate).
 crop(vegetable, fruiting, slightlyHigh, high, high).
 crop(vegetable, fruiting, slightlyHigh, high, veryHigh).
@@ -893,7 +765,6 @@ crop(vegetable, fruiting, veryHigh, none, veryHigh).
 crop(vegetable, fruiting, veryHigh, none, variable).
 crop(vegetable, fruiting, veryHigh, low, low).
 crop(vegetable, fruiting, veryHigh, low, moderate).
-crop(vegetable, fruiting, veryHigh, low, high).
 crop(vegetable, fruiting, veryHigh, low, veryHigh).
 crop(vegetable, fruiting, veryHigh, low, variable).
 crop(vegetable, fruiting, veryHigh, moderate, low).
@@ -901,7 +772,6 @@ crop(vegetable, fruiting, veryHigh, moderate, moderate).
 crop(vegetable, fruiting, veryHigh, moderate, high).
 crop(vegetable, fruiting, veryHigh, moderate, veryHigh).
 crop(vegetable, fruiting, veryHigh, moderate, variable).
-crop(vegetable, fruiting, veryHigh, high, low).
 crop(vegetable, fruiting, veryHigh, high, moderate).
 crop(vegetable, fruiting, veryHigh, high, high).
 crop(vegetable, fruiting, veryHigh, high, veryHigh).
@@ -913,7 +783,6 @@ crop(vegetable, harvest, low, none, veryHigh).
 crop(vegetable, harvest, low, none, variable).
 crop(vegetable, harvest, low, low, low).
 crop(vegetable, harvest, low, low, moderate).
-crop(vegetable, harvest, low, low, high).
 crop(vegetable, harvest, low, low, veryHigh).
 crop(vegetable, harvest, low, low, variable).
 crop(vegetable, harvest, low, moderate, low).
@@ -921,7 +790,6 @@ crop(vegetable, harvest, low, moderate, moderate).
 crop(vegetable, harvest, low, moderate, high).
 crop(vegetable, harvest, low, moderate, veryHigh).
 crop(vegetable, harvest, low, moderate, variable).
-crop(vegetable, harvest, low, high, low).
 crop(vegetable, harvest, low, high, moderate).
 crop(vegetable, harvest, low, high, high).
 crop(vegetable, harvest, low, high, veryHigh).
@@ -933,7 +801,6 @@ crop(vegetable, harvest, moderate, none, veryHigh).
 crop(vegetable, harvest, moderate, none, variable).
 crop(vegetable, harvest, moderate, low, low).
 crop(vegetable, harvest, moderate, low, moderate).
-crop(vegetable, harvest, moderate, low, high).
 crop(vegetable, harvest, moderate, low, veryHigh).
 crop(vegetable, harvest, moderate, low, variable).
 crop(vegetable, harvest, moderate, moderate, low).
@@ -941,27 +808,18 @@ crop(vegetable, harvest, moderate, moderate, moderate).
 crop(vegetable, harvest, moderate, moderate, high).
 crop(vegetable, harvest, moderate, moderate, veryHigh).
 crop(vegetable, harvest, moderate, moderate, variable).
-crop(vegetable, harvest, moderate, high, low).
 crop(vegetable, harvest, moderate, high, moderate).
 crop(vegetable, harvest, moderate, high, high).
 crop(vegetable, harvest, moderate, high, veryHigh).
 crop(vegetable, harvest, moderate, high, variable).
-crop(vegetable, harvest, high, none, low).
 crop(vegetable, harvest, high, none, moderate).
 crop(vegetable, harvest, high, none, high).
 crop(vegetable, harvest, high, none, veryHigh).
 crop(vegetable, harvest, high, none, variable).
-crop(vegetable, harvest, high, low, low).
-crop(vegetable, harvest, high, low, moderate).
-crop(vegetable, harvest, high, low, high).
-crop(vegetable, harvest, high, low, veryHigh).
-crop(vegetable, harvest, high, low, variable).
-crop(vegetable, harvest, high, moderate, low).
 crop(vegetable, harvest, high, moderate, moderate).
 crop(vegetable, harvest, high, moderate, high).
 crop(vegetable, harvest, high, moderate, veryHigh).
 crop(vegetable, harvest, high, moderate, variable).
-crop(vegetable, harvest, high, high, low).
 crop(vegetable, harvest, high, high, moderate).
 crop(vegetable, harvest, high, high, high).
 crop(vegetable, harvest, high, high, veryHigh).
@@ -973,7 +831,6 @@ crop(vegetable, harvest, slightlyHigh, none, veryHigh).
 crop(vegetable, harvest, slightlyHigh, none, variable).
 crop(vegetable, harvest, slightlyHigh, low, low).
 crop(vegetable, harvest, slightlyHigh, low, moderate).
-crop(vegetable, harvest, slightlyHigh, low, high).
 crop(vegetable, harvest, slightlyHigh, low, veryHigh).
 crop(vegetable, harvest, slightlyHigh, low, variable).
 crop(vegetable, harvest, slightlyHigh, moderate, low).
@@ -981,7 +838,6 @@ crop(vegetable, harvest, slightlyHigh, moderate, moderate).
 crop(vegetable, harvest, slightlyHigh, moderate, high).
 crop(vegetable, harvest, slightlyHigh, moderate, veryHigh).
 crop(vegetable, harvest, slightlyHigh, moderate, variable).
-crop(vegetable, harvest, slightlyHigh, high, low).
 crop(vegetable, harvest, slightlyHigh, high, moderate).
 crop(vegetable, harvest, slightlyHigh, high, high).
 crop(vegetable, harvest, slightlyHigh, high, veryHigh).
@@ -993,7 +849,6 @@ crop(vegetable, harvest, veryHigh, none, veryHigh).
 crop(vegetable, harvest, veryHigh, none, variable).
 crop(vegetable, harvest, veryHigh, low, low).
 crop(vegetable, harvest, veryHigh, low, moderate).
-crop(vegetable, harvest, veryHigh, low, high).
 crop(vegetable, harvest, veryHigh, low, veryHigh).
 crop(vegetable, harvest, veryHigh, low, variable).
 crop(vegetable, harvest, veryHigh, moderate, low).
@@ -1001,7 +856,6 @@ crop(vegetable, harvest, veryHigh, moderate, moderate).
 crop(vegetable, harvest, veryHigh, moderate, high).
 crop(vegetable, harvest, veryHigh, moderate, veryHigh).
 crop(vegetable, harvest, veryHigh, moderate, variable).
-crop(vegetable, harvest, veryHigh, high, low).
 crop(vegetable, harvest, veryHigh, high, moderate).
 crop(vegetable, harvest, veryHigh, high, high).
 crop(vegetable, harvest, veryHigh, high, veryHigh).
@@ -1018,7 +872,6 @@ crop(legume, seedling, low, none, veryHigh).
 crop(legume, seedling, low, none, variable).
 crop(legume, seedling, low, low, low).
 crop(legume, seedling, low, low, moderate).
-crop(legume, seedling, low, low, high).
 crop(legume, seedling, low, low, veryHigh).
 crop(legume, seedling, low, low, variable).
 crop(legume, seedling, low, moderate, low).
@@ -1026,7 +879,6 @@ crop(legume, seedling, low, moderate, moderate).
 crop(legume, seedling, low, moderate, high).
 crop(legume, seedling, low, moderate, veryHigh).
 crop(legume, seedling, low, moderate, variable).
-crop(legume, seedling, low, high, low).
 crop(legume, seedling, low, high, moderate).
 crop(legume, seedling, low, high, high).
 crop(legume, seedling, low, high, veryHigh).
@@ -1038,7 +890,6 @@ crop(legume, seedling, moderate, none, veryHigh).
 crop(legume, seedling, moderate, none, variable).
 crop(legume, seedling, moderate, low, low).
 crop(legume, seedling, moderate, low, moderate).
-crop(legume, seedling, moderate, low, high).
 crop(legume, seedling, moderate, low, veryHigh).
 crop(legume, seedling, moderate, low, variable).
 crop(legume, seedling, moderate, moderate, low).
@@ -1046,27 +897,18 @@ crop(legume, seedling, moderate, moderate, moderate).
 crop(legume, seedling, moderate, moderate, high).
 crop(legume, seedling, moderate, moderate, veryHigh).
 crop(legume, seedling, moderate, moderate, variable).
-crop(legume, seedling, moderate, high, low).
 crop(legume, seedling, moderate, high, moderate).
 crop(legume, seedling, moderate, high, high).
 crop(legume, seedling, moderate, high, veryHigh).
 crop(legume, seedling, moderate, high, variable).
-crop(legume, seedling, high, none, low).
 crop(legume, seedling, high, none, moderate).
 crop(legume, seedling, high, none, high).
 crop(legume, seedling, high, none, veryHigh).
 crop(legume, seedling, high, none, variable).
-crop(legume, seedling, high, low, low).
-crop(legume, seedling, high, low, moderate).
-crop(legume, seedling, high, low, high).
-crop(legume, seedling, high, low, veryHigh).
-crop(legume, seedling, high, low, variable).
-crop(legume, seedling, high, moderate, low).
 crop(legume, seedling, high, moderate, moderate).
 crop(legume, seedling, high, moderate, high).
 crop(legume, seedling, high, moderate, veryHigh).
 crop(legume, seedling, high, moderate, variable).
-crop(legume, seedling, high, high, low).
 crop(legume, seedling, high, high, moderate).
 crop(legume, seedling, high, high, high).
 crop(legume, seedling, high, high, veryHigh).
@@ -1078,7 +920,6 @@ crop(legume, seedling, slightlyHigh, none, veryHigh).
 crop(legume, seedling, slightlyHigh, none, variable).
 crop(legume, seedling, slightlyHigh, low, low).
 crop(legume, seedling, slightlyHigh, low, moderate).
-crop(legume, seedling, slightlyHigh, low, high).
 crop(legume, seedling, slightlyHigh, low, veryHigh).
 crop(legume, seedling, slightlyHigh, low, variable).
 crop(legume, seedling, slightlyHigh, moderate, low).
@@ -1086,7 +927,6 @@ crop(legume, seedling, slightlyHigh, moderate, moderate).
 crop(legume, seedling, slightlyHigh, moderate, high).
 crop(legume, seedling, slightlyHigh, moderate, veryHigh).
 crop(legume, seedling, slightlyHigh, moderate, variable).
-crop(legume, seedling, slightlyHigh, high, low).
 crop(legume, seedling, slightlyHigh, high, moderate).
 crop(legume, seedling, slightlyHigh, high, high).
 crop(legume, seedling, slightlyHigh, high, veryHigh).
@@ -1098,7 +938,6 @@ crop(legume, seedling, veryHigh, none, veryHigh).
 crop(legume, seedling, veryHigh, none, variable).
 crop(legume, seedling, veryHigh, low, low).
 crop(legume, seedling, veryHigh, low, moderate).
-crop(legume, seedling, veryHigh, low, high).
 crop(legume, seedling, veryHigh, low, veryHigh).
 crop(legume, seedling, veryHigh, low, variable).
 crop(legume, seedling, veryHigh, moderate, low).
@@ -1106,7 +945,6 @@ crop(legume, seedling, veryHigh, moderate, moderate).
 crop(legume, seedling, veryHigh, moderate, high).
 crop(legume, seedling, veryHigh, moderate, veryHigh).
 crop(legume, seedling, veryHigh, moderate, variable).
-crop(legume, seedling, veryHigh, high, low).
 crop(legume, seedling, veryHigh, high, moderate).
 crop(legume, seedling, veryHigh, high, high).
 crop(legume, seedling, veryHigh, high, veryHigh).
@@ -1118,7 +956,6 @@ crop(legume, vegetative, low, none, veryHigh).
 crop(legume, vegetative, low, none, variable).
 crop(legume, vegetative, low, low, low).
 crop(legume, vegetative, low, low, moderate).
-crop(legume, vegetative, low, low, high).
 crop(legume, vegetative, low, low, veryHigh).
 crop(legume, vegetative, low, low, variable).
 crop(legume, vegetative, low, moderate, low).
@@ -1126,7 +963,6 @@ crop(legume, vegetative, low, moderate, moderate).
 crop(legume, vegetative, low, moderate, high).
 crop(legume, vegetative, low, moderate, veryHigh).
 crop(legume, vegetative, low, moderate, variable).
-crop(legume, vegetative, low, high, low).
 crop(legume, vegetative, low, high, moderate).
 crop(legume, vegetative, low, high, high).
 crop(legume, vegetative, low, high, veryHigh).
@@ -1138,7 +974,6 @@ crop(legume, vegetative, moderate, none, veryHigh).
 crop(legume, vegetative, moderate, none, variable).
 crop(legume, vegetative, moderate, low, low).
 crop(legume, vegetative, moderate, low, moderate).
-crop(legume, vegetative, moderate, low, high).
 crop(legume, vegetative, moderate, low, veryHigh).
 crop(legume, vegetative, moderate, low, variable).
 crop(legume, vegetative, moderate, moderate, low).
@@ -1146,27 +981,18 @@ crop(legume, vegetative, moderate, moderate, moderate).
 crop(legume, vegetative, moderate, moderate, high).
 crop(legume, vegetative, moderate, moderate, veryHigh).
 crop(legume, vegetative, moderate, moderate, variable).
-crop(legume, vegetative, moderate, high, low).
 crop(legume, vegetative, moderate, high, moderate).
 crop(legume, vegetative, moderate, high, high).
 crop(legume, vegetative, moderate, high, veryHigh).
 crop(legume, vegetative, moderate, high, variable).
-crop(legume, vegetative, high, none, low).
 crop(legume, vegetative, high, none, moderate).
 crop(legume, vegetative, high, none, high).
 crop(legume, vegetative, high, none, veryHigh).
 crop(legume, vegetative, high, none, variable).
-crop(legume, vegetative, high, low, low).
-crop(legume, vegetative, high, low, moderate).
-crop(legume, vegetative, high, low, high).
-crop(legume, vegetative, high, low, veryHigh).
-crop(legume, vegetative, high, low, variable).
-crop(legume, vegetative, high, moderate, low).
 crop(legume, vegetative, high, moderate, moderate).
 crop(legume, vegetative, high, moderate, high).
 crop(legume, vegetative, high, moderate, veryHigh).
 crop(legume, vegetative, high, moderate, variable).
-crop(legume, vegetative, high, high, low).
 crop(legume, vegetative, high, high, moderate).
 crop(legume, vegetative, high, high, high).
 crop(legume, vegetative, high, high, veryHigh).
@@ -1178,7 +1004,6 @@ crop(legume, vegetative, slightlyHigh, none, veryHigh).
 crop(legume, vegetative, slightlyHigh, none, variable).
 crop(legume, vegetative, slightlyHigh, low, low).
 crop(legume, vegetative, slightlyHigh, low, moderate).
-crop(legume, vegetative, slightlyHigh, low, high).
 crop(legume, vegetative, slightlyHigh, low, veryHigh).
 crop(legume, vegetative, slightlyHigh, low, variable).
 crop(legume, vegetative, slightlyHigh, moderate, low).
@@ -1186,7 +1011,6 @@ crop(legume, vegetative, slightlyHigh, moderate, moderate).
 crop(legume, vegetative, slightlyHigh, moderate, high).
 crop(legume, vegetative, slightlyHigh, moderate, veryHigh).
 crop(legume, vegetative, slightlyHigh, moderate, variable).
-crop(legume, vegetative, slightlyHigh, high, low).
 crop(legume, vegetative, slightlyHigh, high, moderate).
 crop(legume, vegetative, slightlyHigh, high, high).
 crop(legume, vegetative, slightlyHigh, high, veryHigh).
@@ -1198,7 +1022,6 @@ crop(legume, vegetative, veryHigh, none, veryHigh).
 crop(legume, vegetative, veryHigh, none, variable).
 crop(legume, vegetative, veryHigh, low, low).
 crop(legume, vegetative, veryHigh, low, moderate).
-crop(legume, vegetative, veryHigh, low, high).
 crop(legume, vegetative, veryHigh, low, veryHigh).
 crop(legume, vegetative, veryHigh, low, variable).
 crop(legume, vegetative, veryHigh, moderate, low).
@@ -1206,7 +1029,6 @@ crop(legume, vegetative, veryHigh, moderate, moderate).
 crop(legume, vegetative, veryHigh, moderate, high).
 crop(legume, vegetative, veryHigh, moderate, veryHigh).
 crop(legume, vegetative, veryHigh, moderate, variable).
-crop(legume, vegetative, veryHigh, high, low).
 crop(legume, vegetative, veryHigh, high, moderate).
 crop(legume, vegetative, veryHigh, high, high).
 crop(legume, vegetative, veryHigh, high, veryHigh).
@@ -1218,7 +1040,6 @@ crop(legume, flowering, low, none, veryHigh).
 crop(legume, flowering, low, none, variable).
 crop(legume, flowering, low, low, low).
 crop(legume, flowering, low, low, moderate).
-crop(legume, flowering, low, low, high).
 crop(legume, flowering, low, low, veryHigh).
 crop(legume, flowering, low, low, variable).
 crop(legume, flowering, low, moderate, low).
@@ -1226,7 +1047,6 @@ crop(legume, flowering, low, moderate, moderate).
 crop(legume, flowering, low, moderate, high).
 crop(legume, flowering, low, moderate, veryHigh).
 crop(legume, flowering, low, moderate, variable).
-crop(legume, flowering, low, high, low).
 crop(legume, flowering, low, high, moderate).
 crop(legume, flowering, low, high, high).
 crop(legume, flowering, low, high, veryHigh).
@@ -1238,7 +1058,6 @@ crop(legume, flowering, moderate, none, veryHigh).
 crop(legume, flowering, moderate, none, variable).
 crop(legume, flowering, moderate, low, low).
 crop(legume, flowering, moderate, low, moderate).
-crop(legume, flowering, moderate, low, high).
 crop(legume, flowering, moderate, low, veryHigh).
 crop(legume, flowering, moderate, low, variable).
 crop(legume, flowering, moderate, moderate, low).
@@ -1246,27 +1065,18 @@ crop(legume, flowering, moderate, moderate, moderate).
 crop(legume, flowering, moderate, moderate, high).
 crop(legume, flowering, moderate, moderate, veryHigh).
 crop(legume, flowering, moderate, moderate, variable).
-crop(legume, flowering, moderate, high, low).
 crop(legume, flowering, moderate, high, moderate).
 crop(legume, flowering, moderate, high, high).
 crop(legume, flowering, moderate, high, veryHigh).
 crop(legume, flowering, moderate, high, variable).
-crop(legume, flowering, high, none, low).
 crop(legume, flowering, high, none, moderate).
 crop(legume, flowering, high, none, high).
 crop(legume, flowering, high, none, veryHigh).
 crop(legume, flowering, high, none, variable).
-crop(legume, flowering, high, low, low).
-crop(legume, flowering, high, low, moderate).
-crop(legume, flowering, high, low, high).
-crop(legume, flowering, high, low, veryHigh).
-crop(legume, flowering, high, low, variable).
-crop(legume, flowering, high, moderate, low).
 crop(legume, flowering, high, moderate, moderate).
 crop(legume, flowering, high, moderate, high).
 crop(legume, flowering, high, moderate, veryHigh).
 crop(legume, flowering, high, moderate, variable).
-crop(legume, flowering, high, high, low).
 crop(legume, flowering, high, high, moderate).
 crop(legume, flowering, high, high, high).
 crop(legume, flowering, high, high, veryHigh).
@@ -1278,7 +1088,6 @@ crop(legume, flowering, slightlyHigh, none, veryHigh).
 crop(legume, flowering, slightlyHigh, none, variable).
 crop(legume, flowering, slightlyHigh, low, low).
 crop(legume, flowering, slightlyHigh, low, moderate).
-crop(legume, flowering, slightlyHigh, low, high).
 crop(legume, flowering, slightlyHigh, low, veryHigh).
 crop(legume, flowering, slightlyHigh, low, variable).
 crop(legume, flowering, slightlyHigh, moderate, low).
@@ -1286,7 +1095,6 @@ crop(legume, flowering, slightlyHigh, moderate, moderate).
 crop(legume, flowering, slightlyHigh, moderate, high).
 crop(legume, flowering, slightlyHigh, moderate, veryHigh).
 crop(legume, flowering, slightlyHigh, moderate, variable).
-crop(legume, flowering, slightlyHigh, high, low).
 crop(legume, flowering, slightlyHigh, high, moderate).
 crop(legume, flowering, slightlyHigh, high, high).
 crop(legume, flowering, slightlyHigh, high, veryHigh).
@@ -1298,7 +1106,6 @@ crop(legume, flowering, veryHigh, none, veryHigh).
 crop(legume, flowering, veryHigh, none, variable).
 crop(legume, flowering, veryHigh, low, low).
 crop(legume, flowering, veryHigh, low, moderate).
-crop(legume, flowering, veryHigh, low, high).
 crop(legume, flowering, veryHigh, low, veryHigh).
 crop(legume, flowering, veryHigh, low, variable).
 crop(legume, flowering, veryHigh, moderate, low).
@@ -1306,7 +1113,6 @@ crop(legume, flowering, veryHigh, moderate, moderate).
 crop(legume, flowering, veryHigh, moderate, high).
 crop(legume, flowering, veryHigh, moderate, veryHigh).
 crop(legume, flowering, veryHigh, moderate, variable).
-crop(legume, flowering, veryHigh, high, low).
 crop(legume, flowering, veryHigh, high, moderate).
 crop(legume, flowering, veryHigh, high, high).
 crop(legume, flowering, veryHigh, high, veryHigh).
@@ -1318,7 +1124,6 @@ crop(legume, fruiting, low, none, veryHigh).
 crop(legume, fruiting, low, none, variable).
 crop(legume, fruiting, low, low, low).
 crop(legume, fruiting, low, low, moderate).
-crop(legume, fruiting, low, low, high).
 crop(legume, fruiting, low, low, veryHigh).
 crop(legume, fruiting, low, low, variable).
 crop(legume, fruiting, low, moderate, low).
@@ -1326,7 +1131,6 @@ crop(legume, fruiting, low, moderate, moderate).
 crop(legume, fruiting, low, moderate, high).
 crop(legume, fruiting, low, moderate, veryHigh).
 crop(legume, fruiting, low, moderate, variable).
-crop(legume, fruiting, low, high, low).
 crop(legume, fruiting, low, high, moderate).
 crop(legume, fruiting, low, high, high).
 crop(legume, fruiting, low, high, veryHigh).
@@ -1338,7 +1142,6 @@ crop(legume, fruiting, moderate, none, veryHigh).
 crop(legume, fruiting, moderate, none, variable).
 crop(legume, fruiting, moderate, low, low).
 crop(legume, fruiting, moderate, low, moderate).
-crop(legume, fruiting, moderate, low, high).
 crop(legume, fruiting, moderate, low, veryHigh).
 crop(legume, fruiting, moderate, low, variable).
 crop(legume, fruiting, moderate, moderate, low).
@@ -1346,27 +1149,18 @@ crop(legume, fruiting, moderate, moderate, moderate).
 crop(legume, fruiting, moderate, moderate, high).
 crop(legume, fruiting, moderate, moderate, veryHigh).
 crop(legume, fruiting, moderate, moderate, variable).
-crop(legume, fruiting, moderate, high, low).
 crop(legume, fruiting, moderate, high, moderate).
 crop(legume, fruiting, moderate, high, high).
 crop(legume, fruiting, moderate, high, veryHigh).
 crop(legume, fruiting, moderate, high, variable).
-crop(legume, fruiting, high, none, low).
 crop(legume, fruiting, high, none, moderate).
 crop(legume, fruiting, high, none, high).
 crop(legume, fruiting, high, none, veryHigh).
 crop(legume, fruiting, high, none, variable).
-crop(legume, fruiting, high, low, low).
-crop(legume, fruiting, high, low, moderate).
-crop(legume, fruiting, high, low, high).
-crop(legume, fruiting, high, low, veryHigh).
-crop(legume, fruiting, high, low, variable).
-crop(legume, fruiting, high, moderate, low).
 crop(legume, fruiting, high, moderate, moderate).
 crop(legume, fruiting, high, moderate, high).
 crop(legume, fruiting, high, moderate, veryHigh).
 crop(legume, fruiting, high, moderate, variable).
-crop(legume, fruiting, high, high, low).
 crop(legume, fruiting, high, high, moderate).
 crop(legume, fruiting, high, high, high).
 crop(legume, fruiting, high, high, veryHigh).
@@ -1378,7 +1172,6 @@ crop(legume, fruiting, slightlyHigh, none, veryHigh).
 crop(legume, fruiting, slightlyHigh, none, variable).
 crop(legume, fruiting, slightlyHigh, low, low).
 crop(legume, fruiting, slightlyHigh, low, moderate).
-crop(legume, fruiting, slightlyHigh, low, high).
 crop(legume, fruiting, slightlyHigh, low, veryHigh).
 crop(legume, fruiting, slightlyHigh, low, variable).
 crop(legume, fruiting, slightlyHigh, moderate, low).
@@ -1386,7 +1179,6 @@ crop(legume, fruiting, slightlyHigh, moderate, moderate).
 crop(legume, fruiting, slightlyHigh, moderate, high).
 crop(legume, fruiting, slightlyHigh, moderate, veryHigh).
 crop(legume, fruiting, slightlyHigh, moderate, variable).
-crop(legume, fruiting, slightlyHigh, high, low).
 crop(legume, fruiting, slightlyHigh, high, moderate).
 crop(legume, fruiting, slightlyHigh, high, high).
 crop(legume, fruiting, slightlyHigh, high, veryHigh).
@@ -1398,7 +1190,6 @@ crop(legume, fruiting, veryHigh, none, veryHigh).
 crop(legume, fruiting, veryHigh, none, variable).
 crop(legume, fruiting, veryHigh, low, low).
 crop(legume, fruiting, veryHigh, low, moderate).
-crop(legume, fruiting, veryHigh, low, high).
 crop(legume, fruiting, veryHigh, low, veryHigh).
 crop(legume, fruiting, veryHigh, low, variable).
 crop(legume, fruiting, veryHigh, moderate, low).
@@ -1406,7 +1197,6 @@ crop(legume, fruiting, veryHigh, moderate, moderate).
 crop(legume, fruiting, veryHigh, moderate, high).
 crop(legume, fruiting, veryHigh, moderate, veryHigh).
 crop(legume, fruiting, veryHigh, moderate, variable).
-crop(legume, fruiting, veryHigh, high, low).
 crop(legume, fruiting, veryHigh, high, moderate).
 crop(legume, fruiting, veryHigh, high, high).
 crop(legume, fruiting, veryHigh, high, veryHigh).
@@ -1418,7 +1208,6 @@ crop(legume, harvest, low, none, veryHigh).
 crop(legume, harvest, low, none, variable).
 crop(legume, harvest, low, low, low).
 crop(legume, harvest, low, low, moderate).
-crop(legume, harvest, low, low, high).
 crop(legume, harvest, low, low, veryHigh).
 crop(legume, harvest, low, low, variable).
 crop(legume, harvest, low, moderate, low).
@@ -1426,7 +1215,6 @@ crop(legume, harvest, low, moderate, moderate).
 crop(legume, harvest, low, moderate, high).
 crop(legume, harvest, low, moderate, veryHigh).
 crop(legume, harvest, low, moderate, variable).
-crop(legume, harvest, low, high, low).
 crop(legume, harvest, low, high, moderate).
 crop(legume, harvest, low, high, high).
 crop(legume, harvest, low, high, veryHigh).
@@ -1438,7 +1226,6 @@ crop(legume, harvest, moderate, none, veryHigh).
 crop(legume, harvest, moderate, none, variable).
 crop(legume, harvest, moderate, low, low).
 crop(legume, harvest, moderate, low, moderate).
-crop(legume, harvest, moderate, low, high).
 crop(legume, harvest, moderate, low, veryHigh).
 crop(legume, harvest, moderate, low, variable).
 crop(legume, harvest, moderate, moderate, low).
@@ -1446,27 +1233,18 @@ crop(legume, harvest, moderate, moderate, moderate).
 crop(legume, harvest, moderate, moderate, high).
 crop(legume, harvest, moderate, moderate, veryHigh).
 crop(legume, harvest, moderate, moderate, variable).
-crop(legume, harvest, moderate, high, low).
 crop(legume, harvest, moderate, high, moderate).
 crop(legume, harvest, moderate, high, high).
 crop(legume, harvest, moderate, high, veryHigh).
 crop(legume, harvest, moderate, high, variable).
-crop(legume, harvest, high, none, low).
 crop(legume, harvest, high, none, moderate).
 crop(legume, harvest, high, none, high).
 crop(legume, harvest, high, none, veryHigh).
 crop(legume, harvest, high, none, variable).
-crop(legume, harvest, high, low, low).
-crop(legume, harvest, high, low, moderate).
-crop(legume, harvest, high, low, high).
-crop(legume, harvest, high, low, veryHigh).
-crop(legume, harvest, high, low, variable).
-crop(legume, harvest, high, moderate, low).
 crop(legume, harvest, high, moderate, moderate).
 crop(legume, harvest, high, moderate, high).
 crop(legume, harvest, high, moderate, veryHigh).
 crop(legume, harvest, high, moderate, variable).
-crop(legume, harvest, high, high, low).
 crop(legume, harvest, high, high, moderate).
 crop(legume, harvest, high, high, high).
 crop(legume, harvest, high, high, veryHigh).
@@ -1478,7 +1256,6 @@ crop(legume, harvest, slightlyHigh, none, veryHigh).
 crop(legume, harvest, slightlyHigh, none, variable).
 crop(legume, harvest, slightlyHigh, low, low).
 crop(legume, harvest, slightlyHigh, low, moderate).
-crop(legume, harvest, slightlyHigh, low, high).
 crop(legume, harvest, slightlyHigh, low, veryHigh).
 crop(legume, harvest, slightlyHigh, low, variable).
 crop(legume, harvest, slightlyHigh, moderate, low).
@@ -1486,7 +1263,6 @@ crop(legume, harvest, slightlyHigh, moderate, moderate).
 crop(legume, harvest, slightlyHigh, moderate, high).
 crop(legume, harvest, slightlyHigh, moderate, veryHigh).
 crop(legume, harvest, slightlyHigh, moderate, variable).
-crop(legume, harvest, slightlyHigh, high, low).
 crop(legume, harvest, slightlyHigh, high, moderate).
 crop(legume, harvest, slightlyHigh, high, high).
 crop(legume, harvest, slightlyHigh, high, veryHigh).
@@ -1498,7 +1274,6 @@ crop(legume, harvest, veryHigh, none, veryHigh).
 crop(legume, harvest, veryHigh, none, variable).
 crop(legume, harvest, veryHigh, low, low).
 crop(legume, harvest, veryHigh, low, moderate).
-crop(legume, harvest, veryHigh, low, high).
 crop(legume, harvest, veryHigh, low, veryHigh).
 crop(legume, harvest, veryHigh, low, variable).
 crop(legume, harvest, veryHigh, moderate, low).
@@ -1506,7 +1281,6 @@ crop(legume, harvest, veryHigh, moderate, moderate).
 crop(legume, harvest, veryHigh, moderate, high).
 crop(legume, harvest, veryHigh, moderate, veryHigh).
 crop(legume, harvest, veryHigh, moderate, variable).
-crop(legume, harvest, veryHigh, high, low).
 crop(legume, harvest, veryHigh, high, moderate).
 crop(legume, harvest, veryHigh, high, high).
 crop(legume, harvest, veryHigh, high, veryHigh).
@@ -1524,7 +1298,6 @@ crop(fruit, seedling, low, none, veryHigh).
 crop(fruit, seedling, low, none, variable).
 crop(fruit, seedling, low, low, low).
 crop(fruit, seedling, low, low, moderate).
-crop(fruit, seedling, low, low, high).
 crop(fruit, seedling, low, low, veryHigh).
 crop(fruit, seedling, low, low, variable).
 crop(fruit, seedling, low, moderate, low).
@@ -1532,7 +1305,6 @@ crop(fruit, seedling, low, moderate, moderate).
 crop(fruit, seedling, low, moderate, high).
 crop(fruit, seedling, low, moderate, veryHigh).
 crop(fruit, seedling, low, moderate, variable).
-crop(fruit, seedling, low, high, low).
 crop(fruit, seedling, low, high, moderate).
 crop(fruit, seedling, low, high, high).
 crop(fruit, seedling, low, high, veryHigh).
@@ -1544,7 +1316,6 @@ crop(fruit, seedling, moderate, none, veryHigh).
 crop(fruit, seedling, moderate, none, variable).
 crop(fruit, seedling, moderate, low, low).
 crop(fruit, seedling, moderate, low, moderate).
-crop(fruit, seedling, moderate, low, high).
 crop(fruit, seedling, moderate, low, veryHigh).
 crop(fruit, seedling, moderate, low, variable).
 crop(fruit, seedling, moderate, moderate, low).
@@ -1552,27 +1323,18 @@ crop(fruit, seedling, moderate, moderate, moderate).
 crop(fruit, seedling, moderate, moderate, high).
 crop(fruit, seedling, moderate, moderate, veryHigh).
 crop(fruit, seedling, moderate, moderate, variable).
-crop(fruit, seedling, moderate, high, low).
 crop(fruit, seedling, moderate, high, moderate).
 crop(fruit, seedling, moderate, high, high).
 crop(fruit, seedling, moderate, high, veryHigh).
 crop(fruit, seedling, moderate, high, variable).
-crop(fruit, seedling, high, none, low).
 crop(fruit, seedling, high, none, moderate).
 crop(fruit, seedling, high, none, high).
 crop(fruit, seedling, high, none, veryHigh).
 crop(fruit, seedling, high, none, variable).
-crop(fruit, seedling, high, low, low).
-crop(fruit, seedling, high, low, moderate).
-crop(fruit, seedling, high, low, high).
-crop(fruit, seedling, high, low, veryHigh).
-crop(fruit, seedling, high, low, variable).
-crop(fruit, seedling, high, moderate, low).
 crop(fruit, seedling, high, moderate, moderate).
 crop(fruit, seedling, high, moderate, high).
 crop(fruit, seedling, high, moderate, veryHigh).
 crop(fruit, seedling, high, moderate, variable).
-crop(fruit, seedling, high, high, low).
 crop(fruit, seedling, high, high, moderate).
 crop(fruit, seedling, high, high, high).
 crop(fruit, seedling, high, high, veryHigh).
@@ -1584,7 +1346,6 @@ crop(fruit, seedling, slightlyHigh, none, veryHigh).
 crop(fruit, seedling, slightlyHigh, none, variable).
 crop(fruit, seedling, slightlyHigh, low, low).
 crop(fruit, seedling, slightlyHigh, low, moderate).
-crop(fruit, seedling, slightlyHigh, low, high).
 crop(fruit, seedling, slightlyHigh, low, veryHigh).
 crop(fruit, seedling, slightlyHigh, low, variable).
 crop(fruit, seedling, slightlyHigh, moderate, low).
@@ -1592,7 +1353,6 @@ crop(fruit, seedling, slightlyHigh, moderate, moderate).
 crop(fruit, seedling, slightlyHigh, moderate, high).
 crop(fruit, seedling, slightlyHigh, moderate, veryHigh).
 crop(fruit, seedling, slightlyHigh, moderate, variable).
-crop(fruit, seedling, slightlyHigh, high, low).
 crop(fruit, seedling, slightlyHigh, high, moderate).
 crop(fruit, seedling, slightlyHigh, high, high).
 crop(fruit, seedling, slightlyHigh, high, veryHigh).
@@ -1604,7 +1364,6 @@ crop(fruit, seedling, veryHigh, none, veryHigh).
 crop(fruit, seedling, veryHigh, none, variable).
 crop(fruit, seedling, veryHigh, low, low).
 crop(fruit, seedling, veryHigh, low, moderate).
-crop(fruit, seedling, veryHigh, low, high).
 crop(fruit, seedling, veryHigh, low, veryHigh).
 crop(fruit, seedling, veryHigh, low, variable).
 crop(fruit, seedling, veryHigh, moderate, low).
@@ -1612,7 +1371,6 @@ crop(fruit, seedling, veryHigh, moderate, moderate).
 crop(fruit, seedling, veryHigh, moderate, high).
 crop(fruit, seedling, veryHigh, moderate, veryHigh).
 crop(fruit, seedling, veryHigh, moderate, variable).
-crop(fruit, seedling, veryHigh, high, low).
 crop(fruit, seedling, veryHigh, high, moderate).
 crop(fruit, seedling, veryHigh, high, high).
 crop(fruit, seedling, veryHigh, high, veryHigh).
@@ -1624,7 +1382,6 @@ crop(fruit, vegetative, low, none, veryHigh).
 crop(fruit, vegetative, low, none, variable).
 crop(fruit, vegetative, low, low, low).
 crop(fruit, vegetative, low, low, moderate).
-crop(fruit, vegetative, low, low, high).
 crop(fruit, vegetative, low, low, veryHigh).
 crop(fruit, vegetative, low, low, variable).
 crop(fruit, vegetative, low, moderate, low).
@@ -1632,7 +1389,6 @@ crop(fruit, vegetative, low, moderate, moderate).
 crop(fruit, vegetative, low, moderate, high).
 crop(fruit, vegetative, low, moderate, veryHigh).
 crop(fruit, vegetative, low, moderate, variable).
-crop(fruit, vegetative, low, high, low).
 crop(fruit, vegetative, low, high, moderate).
 crop(fruit, vegetative, low, high, high).
 crop(fruit, vegetative, low, high, veryHigh).
@@ -1644,7 +1400,6 @@ crop(fruit, vegetative, moderate, none, veryHigh).
 crop(fruit, vegetative, moderate, none, variable).
 crop(fruit, vegetative, moderate, low, low).
 crop(fruit, vegetative, moderate, low, moderate).
-crop(fruit, vegetative, moderate, low, high).
 crop(fruit, vegetative, moderate, low, veryHigh).
 crop(fruit, vegetative, moderate, low, variable).
 crop(fruit, vegetative, moderate, moderate, low).
@@ -1652,27 +1407,18 @@ crop(fruit, vegetative, moderate, moderate, moderate).
 crop(fruit, vegetative, moderate, moderate, high).
 crop(fruit, vegetative, moderate, moderate, veryHigh).
 crop(fruit, vegetative, moderate, moderate, variable).
-crop(fruit, vegetative, moderate, high, low).
 crop(fruit, vegetative, moderate, high, moderate).
 crop(fruit, vegetative, moderate, high, high).
 crop(fruit, vegetative, moderate, high, veryHigh).
 crop(fruit, vegetative, moderate, high, variable).
-crop(fruit, vegetative, high, none, low).
 crop(fruit, vegetative, high, none, moderate).
 crop(fruit, vegetative, high, none, high).
 crop(fruit, vegetative, high, none, veryHigh).
 crop(fruit, vegetative, high, none, variable).
-crop(fruit, vegetative, high, low, low).
-crop(fruit, vegetative, high, low, moderate).
-crop(fruit, vegetative, high, low, high).
-crop(fruit, vegetative, high, low, veryHigh).
-crop(fruit, vegetative, high, low, variable).
-crop(fruit, vegetative, high, moderate, low).
 crop(fruit, vegetative, high, moderate, moderate).
 crop(fruit, vegetative, high, moderate, high).
 crop(fruit, vegetative, high, moderate, veryHigh).
 crop(fruit, vegetative, high, moderate, variable).
-crop(fruit, vegetative, high, high, low).
 crop(fruit, vegetative, high, high, moderate).
 crop(fruit, vegetative, high, high, high).
 crop(fruit, vegetative, high, high, veryHigh).
@@ -1684,7 +1430,6 @@ crop(fruit, vegetative, slightlyHigh, none, veryHigh).
 crop(fruit, vegetative, slightlyHigh, none, variable).
 crop(fruit, vegetative, slightlyHigh, low, low).
 crop(fruit, vegetative, slightlyHigh, low, moderate).
-crop(fruit, vegetative, slightlyHigh, low, high).
 crop(fruit, vegetative, slightlyHigh, low, veryHigh).
 crop(fruit, vegetative, slightlyHigh, low, variable).
 crop(fruit, vegetative, slightlyHigh, moderate, low).
@@ -1692,7 +1437,6 @@ crop(fruit, vegetative, slightlyHigh, moderate, moderate).
 crop(fruit, vegetative, slightlyHigh, moderate, high).
 crop(fruit, vegetative, slightlyHigh, moderate, veryHigh).
 crop(fruit, vegetative, slightlyHigh, moderate, variable).
-crop(fruit, vegetative, slightlyHigh, high, low).
 crop(fruit, vegetative, slightlyHigh, high, moderate).
 crop(fruit, vegetative, slightlyHigh, high, high).
 crop(fruit, vegetative, slightlyHigh, high, veryHigh).
@@ -1704,7 +1448,6 @@ crop(fruit, vegetative, veryHigh, none, veryHigh).
 crop(fruit, vegetative, veryHigh, none, variable).
 crop(fruit, vegetative, veryHigh, low, low).
 crop(fruit, vegetative, veryHigh, low, moderate).
-crop(fruit, vegetative, veryHigh, low, high).
 crop(fruit, vegetative, veryHigh, low, veryHigh).
 crop(fruit, vegetative, veryHigh, low, variable).
 crop(fruit, vegetative, veryHigh, moderate, low).
@@ -1712,7 +1455,6 @@ crop(fruit, vegetative, veryHigh, moderate, moderate).
 crop(fruit, vegetative, veryHigh, moderate, high).
 crop(fruit, vegetative, veryHigh, moderate, veryHigh).
 crop(fruit, vegetative, veryHigh, moderate, variable).
-crop(fruit, vegetative, veryHigh, high, low).
 crop(fruit, vegetative, veryHigh, high, moderate).
 crop(fruit, vegetative, veryHigh, high, high).
 crop(fruit, vegetative, veryHigh, high, veryHigh).
@@ -1724,7 +1466,6 @@ crop(fruit, flowering, low, none, veryHigh).
 crop(fruit, flowering, low, none, variable).
 crop(fruit, flowering, low, low, low).
 crop(fruit, flowering, low, low, moderate).
-crop(fruit, flowering, low, low, high).
 crop(fruit, flowering, low, low, veryHigh).
 crop(fruit, flowering, low, low, variable).
 crop(fruit, flowering, low, moderate, low).
@@ -1732,7 +1473,6 @@ crop(fruit, flowering, low, moderate, moderate).
 crop(fruit, flowering, low, moderate, high).
 crop(fruit, flowering, low, moderate, veryHigh).
 crop(fruit, flowering, low, moderate, variable).
-crop(fruit, flowering, low, high, low).
 crop(fruit, flowering, low, high, moderate).
 crop(fruit, flowering, low, high, high).
 crop(fruit, flowering, low, high, veryHigh).
@@ -1744,7 +1484,6 @@ crop(fruit, flowering, moderate, none, veryHigh).
 crop(fruit, flowering, moderate, none, variable).
 crop(fruit, flowering, moderate, low, low).
 crop(fruit, flowering, moderate, low, moderate).
-crop(fruit, flowering, moderate, low, high).
 crop(fruit, flowering, moderate, low, veryHigh).
 crop(fruit, flowering, moderate, low, variable).
 crop(fruit, flowering, moderate, moderate, low).
@@ -1752,27 +1491,18 @@ crop(fruit, flowering, moderate, moderate, moderate).
 crop(fruit, flowering, moderate, moderate, high).
 crop(fruit, flowering, moderate, moderate, veryHigh).
 crop(fruit, flowering, moderate, moderate, variable).
-crop(fruit, flowering, moderate, high, low).
 crop(fruit, flowering, moderate, high, moderate).
 crop(fruit, flowering, moderate, high, high).
 crop(fruit, flowering, moderate, high, veryHigh).
 crop(fruit, flowering, moderate, high, variable).
-crop(fruit, flowering, high, none, low).
 crop(fruit, flowering, high, none, moderate).
 crop(fruit, flowering, high, none, high).
 crop(fruit, flowering, high, none, veryHigh).
 crop(fruit, flowering, high, none, variable).
-crop(fruit, flowering, high, low, low).
-crop(fruit, flowering, high, low, moderate).
-crop(fruit, flowering, high, low, high).
-crop(fruit, flowering, high, low, veryHigh).
-crop(fruit, flowering, high, low, variable).
-crop(fruit, flowering, high, moderate, low).
 crop(fruit, flowering, high, moderate, moderate).
 crop(fruit, flowering, high, moderate, high).
 crop(fruit, flowering, high, moderate, veryHigh).
 crop(fruit, flowering, high, moderate, variable).
-crop(fruit, flowering, high, high, low).
 crop(fruit, flowering, high, high, moderate).
 crop(fruit, flowering, high, high, high).
 crop(fruit, flowering, high, high, veryHigh).
@@ -1784,7 +1514,6 @@ crop(fruit, flowering, slightlyHigh, none, veryHigh).
 crop(fruit, flowering, slightlyHigh, none, variable).
 crop(fruit, flowering, slightlyHigh, low, low).
 crop(fruit, flowering, slightlyHigh, low, moderate).
-crop(fruit, flowering, slightlyHigh, low, high).
 crop(fruit, flowering, slightlyHigh, low, veryHigh).
 crop(fruit, flowering, slightlyHigh, low, variable).
 crop(fruit, flowering, slightlyHigh, moderate, low).
@@ -1792,7 +1521,6 @@ crop(fruit, flowering, slightlyHigh, moderate, moderate).
 crop(fruit, flowering, slightlyHigh, moderate, high).
 crop(fruit, flowering, slightlyHigh, moderate, veryHigh).
 crop(fruit, flowering, slightlyHigh, moderate, variable).
-crop(fruit, flowering, slightlyHigh, high, low).
 crop(fruit, flowering, slightlyHigh, high, moderate).
 crop(fruit, flowering, slightlyHigh, high, high).
 crop(fruit, flowering, slightlyHigh, high, veryHigh).
@@ -1804,7 +1532,6 @@ crop(fruit, flowering, veryHigh, none, veryHigh).
 crop(fruit, flowering, veryHigh, none, variable).
 crop(fruit, flowering, veryHigh, low, low).
 crop(fruit, flowering, veryHigh, low, moderate).
-crop(fruit, flowering, veryHigh, low, high).
 crop(fruit, flowering, veryHigh, low, veryHigh).
 crop(fruit, flowering, veryHigh, low, variable).
 crop(fruit, flowering, veryHigh, moderate, low).
@@ -1812,7 +1539,6 @@ crop(fruit, flowering, veryHigh, moderate, moderate).
 crop(fruit, flowering, veryHigh, moderate, high).
 crop(fruit, flowering, veryHigh, moderate, veryHigh).
 crop(fruit, flowering, veryHigh, moderate, variable).
-crop(fruit, flowering, veryHigh, high, low).
 crop(fruit, flowering, veryHigh, high, moderate).
 crop(fruit, flowering, veryHigh, high, high).
 crop(fruit, flowering, veryHigh, high, veryHigh).
@@ -1824,7 +1550,6 @@ crop(fruit, fruiting, low, none, veryHigh).
 crop(fruit, fruiting, low, none, variable).
 crop(fruit, fruiting, low, low, low).
 crop(fruit, fruiting, low, low, moderate).
-crop(fruit, fruiting, low, low, high).
 crop(fruit, fruiting, low, low, veryHigh).
 crop(fruit, fruiting, low, low, variable).
 crop(fruit, fruiting, low, moderate, low).
@@ -1832,7 +1557,6 @@ crop(fruit, fruiting, low, moderate, moderate).
 crop(fruit, fruiting, low, moderate, high).
 crop(fruit, fruiting, low, moderate, veryHigh).
 crop(fruit, fruiting, low, moderate, variable).
-crop(fruit, fruiting, low, high, low).
 crop(fruit, fruiting, low, high, moderate).
 crop(fruit, fruiting, low, high, high).
 crop(fruit, fruiting, low, high, veryHigh).
@@ -1844,7 +1568,6 @@ crop(fruit, fruiting, moderate, none, veryHigh).
 crop(fruit, fruiting, moderate, none, variable).
 crop(fruit, fruiting, moderate, low, low).
 crop(fruit, fruiting, moderate, low, moderate).
-crop(fruit, fruiting, moderate, low, high).
 crop(fruit, fruiting, moderate, low, veryHigh).
 crop(fruit, fruiting, moderate, low, variable).
 crop(fruit, fruiting, moderate, moderate, low).
@@ -1852,27 +1575,18 @@ crop(fruit, fruiting, moderate, moderate, moderate).
 crop(fruit, fruiting, moderate, moderate, high).
 crop(fruit, fruiting, moderate, moderate, veryHigh).
 crop(fruit, fruiting, moderate, moderate, variable).
-crop(fruit, fruiting, moderate, high, low).
 crop(fruit, fruiting, moderate, high, moderate).
 crop(fruit, fruiting, moderate, high, high).
 crop(fruit, fruiting, moderate, high, veryHigh).
 crop(fruit, fruiting, moderate, high, variable).
-crop(fruit, fruiting, high, none, low).
 crop(fruit, fruiting, high, none, moderate).
 crop(fruit, fruiting, high, none, high).
 crop(fruit, fruiting, high, none, veryHigh).
 crop(fruit, fruiting, high, none, variable).
-crop(fruit, fruiting, high, low, low).
-crop(fruit, fruiting, high, low, moderate).
-crop(fruit, fruiting, high, low, high).
-crop(fruit, fruiting, high, low, veryHigh).
-crop(fruit, fruiting, high, low, variable).
-crop(fruit, fruiting, high, moderate, low).
 crop(fruit, fruiting, high, moderate, moderate).
 crop(fruit, fruiting, high, moderate, high).
 crop(fruit, fruiting, high, moderate, veryHigh).
 crop(fruit, fruiting, high, moderate, variable).
-crop(fruit, fruiting, high, high, low).
 crop(fruit, fruiting, high, high, moderate).
 crop(fruit, fruiting, high, high, high).
 crop(fruit, fruiting, high, high, veryHigh).
@@ -1884,7 +1598,6 @@ crop(fruit, fruiting, slightlyHigh, none, veryHigh).
 crop(fruit, fruiting, slightlyHigh, none, variable).
 crop(fruit, fruiting, slightlyHigh, low, low).
 crop(fruit, fruiting, slightlyHigh, low, moderate).
-crop(fruit, fruiting, slightlyHigh, low, high).
 crop(fruit, fruiting, slightlyHigh, low, veryHigh).
 crop(fruit, fruiting, slightlyHigh, low, variable).
 crop(fruit, fruiting, slightlyHigh, moderate, low).
@@ -1892,7 +1605,6 @@ crop(fruit, fruiting, slightlyHigh, moderate, moderate).
 crop(fruit, fruiting, slightlyHigh, moderate, high).
 crop(fruit, fruiting, slightlyHigh, moderate, veryHigh).
 crop(fruit, fruiting, slightlyHigh, moderate, variable).
-crop(fruit, fruiting, slightlyHigh, high, low).
 crop(fruit, fruiting, slightlyHigh, high, moderate).
 crop(fruit, fruiting, slightlyHigh, high, high).
 crop(fruit, fruiting, slightlyHigh, high, veryHigh).
@@ -1904,7 +1616,6 @@ crop(fruit, fruiting, veryHigh, none, veryHigh).
 crop(fruit, fruiting, veryHigh, none, variable).
 crop(fruit, fruiting, veryHigh, low, low).
 crop(fruit, fruiting, veryHigh, low, moderate).
-crop(fruit, fruiting, veryHigh, low, high).
 crop(fruit, fruiting, veryHigh, low, veryHigh).
 crop(fruit, fruiting, veryHigh, low, variable).
 crop(fruit, fruiting, veryHigh, moderate, low).
@@ -1912,7 +1623,6 @@ crop(fruit, fruiting, veryHigh, moderate, moderate).
 crop(fruit, fruiting, veryHigh, moderate, high).
 crop(fruit, fruiting, veryHigh, moderate, veryHigh).
 crop(fruit, fruiting, veryHigh, moderate, variable).
-crop(fruit, fruiting, veryHigh, high, low).
 crop(fruit, fruiting, veryHigh, high, moderate).
 crop(fruit, fruiting, veryHigh, high, high).
 crop(fruit, fruiting, veryHigh, high, veryHigh).
@@ -1924,7 +1634,6 @@ crop(fruit, harvest, low, none, veryHigh).
 crop(fruit, harvest, low, none, variable).
 crop(fruit, harvest, low, low, low).
 crop(fruit, harvest, low, low, moderate).
-crop(fruit, harvest, low, low, high).
 crop(fruit, harvest, low, low, veryHigh).
 crop(fruit, harvest, low, low, variable).
 crop(fruit, harvest, low, moderate, low).
@@ -1932,7 +1641,6 @@ crop(fruit, harvest, low, moderate, moderate).
 crop(fruit, harvest, low, moderate, high).
 crop(fruit, harvest, low, moderate, veryHigh).
 crop(fruit, harvest, low, moderate, variable).
-crop(fruit, harvest, low, high, low).
 crop(fruit, harvest, low, high, moderate).
 crop(fruit, harvest, low, high, high).
 crop(fruit, harvest, low, high, veryHigh).
@@ -1944,7 +1652,6 @@ crop(fruit, harvest, moderate, none, veryHigh).
 crop(fruit, harvest, moderate, none, variable).
 crop(fruit, harvest, moderate, low, low).
 crop(fruit, harvest, moderate, low, moderate).
-crop(fruit, harvest, moderate, low, high).
 crop(fruit, harvest, moderate, low, veryHigh).
 crop(fruit, harvest, moderate, low, variable).
 crop(fruit, harvest, moderate, moderate, low).
@@ -1952,27 +1659,18 @@ crop(fruit, harvest, moderate, moderate, moderate).
 crop(fruit, harvest, moderate, moderate, high).
 crop(fruit, harvest, moderate, moderate, veryHigh).
 crop(fruit, harvest, moderate, moderate, variable).
-crop(fruit, harvest, moderate, high, low).
 crop(fruit, harvest, moderate, high, moderate).
 crop(fruit, harvest, moderate, high, high).
 crop(fruit, harvest, moderate, high, veryHigh).
 crop(fruit, harvest, moderate, high, variable).
-crop(fruit, harvest, high, none, low).
 crop(fruit, harvest, high, none, moderate).
 crop(fruit, harvest, high, none, high).
 crop(fruit, harvest, high, none, veryHigh).
 crop(fruit, harvest, high, none, variable).
-crop(fruit, harvest, high, low, low).
-crop(fruit, harvest, high, low, moderate).
-crop(fruit, harvest, high, low, high).
-crop(fruit, harvest, high, low, veryHigh).
-crop(fruit, harvest, high, low, variable).
-crop(fruit, harvest, high, moderate, low).
 crop(fruit, harvest, high, moderate, moderate).
 crop(fruit, harvest, high, moderate, high).
 crop(fruit, harvest, high, moderate, veryHigh).
 crop(fruit, harvest, high, moderate, variable).
-crop(fruit, harvest, high, high, low).
 crop(fruit, harvest, high, high, moderate).
 crop(fruit, harvest, high, high, high).
 crop(fruit, harvest, high, high, veryHigh).
@@ -1984,7 +1682,6 @@ crop(fruit, harvest, slightlyHigh, none, veryHigh).
 crop(fruit, harvest, slightlyHigh, none, variable).
 crop(fruit, harvest, slightlyHigh, low, low).
 crop(fruit, harvest, slightlyHigh, low, moderate).
-crop(fruit, harvest, slightlyHigh, low, high).
 crop(fruit, harvest, slightlyHigh, low, veryHigh).
 crop(fruit, harvest, slightlyHigh, low, variable).
 crop(fruit, harvest, slightlyHigh, moderate, low).
@@ -1992,7 +1689,6 @@ crop(fruit, harvest, slightlyHigh, moderate, moderate).
 crop(fruit, harvest, slightlyHigh, moderate, high).
 crop(fruit, harvest, slightlyHigh, moderate, veryHigh).
 crop(fruit, harvest, slightlyHigh, moderate, variable).
-crop(fruit, harvest, slightlyHigh, high, low).
 crop(fruit, harvest, slightlyHigh, high, moderate).
 crop(fruit, harvest, slightlyHigh, high, high).
 crop(fruit, harvest, slightlyHigh, high, veryHigh).
@@ -2004,7 +1700,6 @@ crop(fruit, harvest, veryHigh, none, veryHigh).
 crop(fruit, harvest, veryHigh, none, variable).
 crop(fruit, harvest, veryHigh, low, low).
 crop(fruit, harvest, veryHigh, low, moderate).
-crop(fruit, harvest, veryHigh, low, high).
 crop(fruit, harvest, veryHigh, low, veryHigh).
 crop(fruit, harvest, veryHigh, low, variable).
 crop(fruit, harvest, veryHigh, moderate, low).
@@ -2012,7 +1707,6 @@ crop(fruit, harvest, veryHigh, moderate, moderate).
 crop(fruit, harvest, veryHigh, moderate, high).
 crop(fruit, harvest, veryHigh, moderate, veryHigh).
 crop(fruit, harvest, veryHigh, moderate, variable).
-crop(fruit, harvest, veryHigh, high, low).
 crop(fruit, harvest, veryHigh, high, moderate).
 crop(fruit, harvest, veryHigh, high, high).
 crop(fruit, harvest, veryHigh, high, veryHigh).
@@ -2030,7 +1724,6 @@ crop(oilseed, seedling, low, none, veryHigh).
 crop(oilseed, seedling, low, none, variable).
 crop(oilseed, seedling, low, low, low).
 crop(oilseed, seedling, low, low, moderate).
-crop(oilseed, seedling, low, low, high).
 crop(oilseed, seedling, low, low, veryHigh).
 crop(oilseed, seedling, low, low, variable).
 crop(oilseed, seedling, low, moderate, low).
@@ -2038,7 +1731,6 @@ crop(oilseed, seedling, low, moderate, moderate).
 crop(oilseed, seedling, low, moderate, high).
 crop(oilseed, seedling, low, moderate, veryHigh).
 crop(oilseed, seedling, low, moderate, variable).
-crop(oilseed, seedling, low, high, low).
 crop(oilseed, seedling, low, high, moderate).
 crop(oilseed, seedling, low, high, high).
 crop(oilseed, seedling, low, high, veryHigh).
@@ -2050,7 +1742,6 @@ crop(oilseed, seedling, moderate, none, veryHigh).
 crop(oilseed, seedling, moderate, none, variable).
 crop(oilseed, seedling, moderate, low, low).
 crop(oilseed, seedling, moderate, low, moderate).
-crop(oilseed, seedling, moderate, low, high).
 crop(oilseed, seedling, moderate, low, veryHigh).
 crop(oilseed, seedling, moderate, low, variable).
 crop(oilseed, seedling, moderate, moderate, low).
@@ -2058,27 +1749,18 @@ crop(oilseed, seedling, moderate, moderate, moderate).
 crop(oilseed, seedling, moderate, moderate, high).
 crop(oilseed, seedling, moderate, moderate, veryHigh).
 crop(oilseed, seedling, moderate, moderate, variable).
-crop(oilseed, seedling, moderate, high, low).
 crop(oilseed, seedling, moderate, high, moderate).
 crop(oilseed, seedling, moderate, high, high).
 crop(oilseed, seedling, moderate, high, veryHigh).
 crop(oilseed, seedling, moderate, high, variable).
-crop(oilseed, seedling, high, none, low).
 crop(oilseed, seedling, high, none, moderate).
 crop(oilseed, seedling, high, none, high).
 crop(oilseed, seedling, high, none, veryHigh).
 crop(oilseed, seedling, high, none, variable).
-crop(oilseed, seedling, high, low, low).
-crop(oilseed, seedling, high, low, moderate).
-crop(oilseed, seedling, high, low, high).
-crop(oilseed, seedling, high, low, veryHigh).
-crop(oilseed, seedling, high, low, variable).
-crop(oilseed, seedling, high, moderate, low).
 crop(oilseed, seedling, high, moderate, moderate).
 crop(oilseed, seedling, high, moderate, high).
 crop(oilseed, seedling, high, moderate, veryHigh).
 crop(oilseed, seedling, high, moderate, variable).
-crop(oilseed, seedling, high, high, low).
 crop(oilseed, seedling, high, high, moderate).
 crop(oilseed, seedling, high, high, high).
 crop(oilseed, seedling, high, high, veryHigh).
@@ -2090,7 +1772,6 @@ crop(oilseed, seedling, slightlyHigh, none, veryHigh).
 crop(oilseed, seedling, slightlyHigh, none, variable).
 crop(oilseed, seedling, slightlyHigh, low, low).
 crop(oilseed, seedling, slightlyHigh, low, moderate).
-crop(oilseed, seedling, slightlyHigh, low, high).
 crop(oilseed, seedling, slightlyHigh, low, veryHigh).
 crop(oilseed, seedling, slightlyHigh, low, variable).
 crop(oilseed, seedling, slightlyHigh, moderate, low).
@@ -2098,7 +1779,6 @@ crop(oilseed, seedling, slightlyHigh, moderate, moderate).
 crop(oilseed, seedling, slightlyHigh, moderate, high).
 crop(oilseed, seedling, slightlyHigh, moderate, veryHigh).
 crop(oilseed, seedling, slightlyHigh, moderate, variable).
-crop(oilseed, seedling, slightlyHigh, high, low).
 crop(oilseed, seedling, slightlyHigh, high, moderate).
 crop(oilseed, seedling, slightlyHigh, high, high).
 crop(oilseed, seedling, slightlyHigh, high, veryHigh).
@@ -2110,7 +1790,6 @@ crop(oilseed, seedling, veryHigh, none, veryHigh).
 crop(oilseed, seedling, veryHigh, none, variable).
 crop(oilseed, seedling, veryHigh, low, low).
 crop(oilseed, seedling, veryHigh, low, moderate).
-crop(oilseed, seedling, veryHigh, low, high).
 crop(oilseed, seedling, veryHigh, low, veryHigh).
 crop(oilseed, seedling, veryHigh, low, variable).
 crop(oilseed, seedling, veryHigh, moderate, low).
@@ -2118,7 +1797,6 @@ crop(oilseed, seedling, veryHigh, moderate, moderate).
 crop(oilseed, seedling, veryHigh, moderate, high).
 crop(oilseed, seedling, veryHigh, moderate, veryHigh).
 crop(oilseed, seedling, veryHigh, moderate, variable).
-crop(oilseed, seedling, veryHigh, high, low).
 crop(oilseed, seedling, veryHigh, high, moderate).
 crop(oilseed, seedling, veryHigh, high, high).
 crop(oilseed, seedling, veryHigh, high, veryHigh).
@@ -2130,7 +1808,6 @@ crop(oilseed, vegetative, low, none, veryHigh).
 crop(oilseed, vegetative, low, none, variable).
 crop(oilseed, vegetative, low, low, low).
 crop(oilseed, vegetative, low, low, moderate).
-crop(oilseed, vegetative, low, low, high).
 crop(oilseed, vegetative, low, low, veryHigh).
 crop(oilseed, vegetative, low, low, variable).
 crop(oilseed, vegetative, low, moderate, low).
@@ -2138,7 +1815,6 @@ crop(oilseed, vegetative, low, moderate, moderate).
 crop(oilseed, vegetative, low, moderate, high).
 crop(oilseed, vegetative, low, moderate, veryHigh).
 crop(oilseed, vegetative, low, moderate, variable).
-crop(oilseed, vegetative, low, high, low).
 crop(oilseed, vegetative, low, high, moderate).
 crop(oilseed, vegetative, low, high, high).
 crop(oilseed, vegetative, low, high, veryHigh).
@@ -2150,7 +1826,6 @@ crop(oilseed, vegetative, moderate, none, veryHigh).
 crop(oilseed, vegetative, moderate, none, variable).
 crop(oilseed, vegetative, moderate, low, low).
 crop(oilseed, vegetative, moderate, low, moderate).
-crop(oilseed, vegetative, moderate, low, high).
 crop(oilseed, vegetative, moderate, low, veryHigh).
 crop(oilseed, vegetative, moderate, low, variable).
 crop(oilseed, vegetative, moderate, moderate, low).
@@ -2158,27 +1833,18 @@ crop(oilseed, vegetative, moderate, moderate, moderate).
 crop(oilseed, vegetative, moderate, moderate, high).
 crop(oilseed, vegetative, moderate, moderate, veryHigh).
 crop(oilseed, vegetative, moderate, moderate, variable).
-crop(oilseed, vegetative, moderate, high, low).
 crop(oilseed, vegetative, moderate, high, moderate).
 crop(oilseed, vegetative, moderate, high, high).
 crop(oilseed, vegetative, moderate, high, veryHigh).
 crop(oilseed, vegetative, moderate, high, variable).
-crop(oilseed, vegetative, high, none, low).
 crop(oilseed, vegetative, high, none, moderate).
 crop(oilseed, vegetative, high, none, high).
 crop(oilseed, vegetative, high, none, veryHigh).
 crop(oilseed, vegetative, high, none, variable).
-crop(oilseed, vegetative, high, low, low).
-crop(oilseed, vegetative, high, low, moderate).
-crop(oilseed, vegetative, high, low, high).
-crop(oilseed, vegetative, high, low, veryHigh).
-crop(oilseed, vegetative, high, low, variable).
-crop(oilseed, vegetative, high, moderate, low).
 crop(oilseed, vegetative, high, moderate, moderate).
 crop(oilseed, vegetative, high, moderate, high).
 crop(oilseed, vegetative, high, moderate, veryHigh).
 crop(oilseed, vegetative, high, moderate, variable).
-crop(oilseed, vegetative, high, high, low).
 crop(oilseed, vegetative, high, high, moderate).
 crop(oilseed, vegetative, high, high, high).
 crop(oilseed, vegetative, high, high, veryHigh).
@@ -2190,7 +1856,6 @@ crop(oilseed, vegetative, slightlyHigh, none, veryHigh).
 crop(oilseed, vegetative, slightlyHigh, none, variable).
 crop(oilseed, vegetative, slightlyHigh, low, low).
 crop(oilseed, vegetative, slightlyHigh, low, moderate).
-crop(oilseed, vegetative, slightlyHigh, low, high).
 crop(oilseed, vegetative, slightlyHigh, low, veryHigh).
 crop(oilseed, vegetative, slightlyHigh, low, variable).
 crop(oilseed, vegetative, slightlyHigh, moderate, low).
@@ -2198,7 +1863,6 @@ crop(oilseed, vegetative, slightlyHigh, moderate, moderate).
 crop(oilseed, vegetative, slightlyHigh, moderate, high).
 crop(oilseed, vegetative, slightlyHigh, moderate, veryHigh).
 crop(oilseed, vegetative, slightlyHigh, moderate, variable).
-crop(oilseed, vegetative, slightlyHigh, high, low).
 crop(oilseed, vegetative, slightlyHigh, high, moderate).
 crop(oilseed, vegetative, slightlyHigh, high, high).
 crop(oilseed, vegetative, slightlyHigh, high, veryHigh).
@@ -2210,7 +1874,6 @@ crop(oilseed, vegetative, veryHigh, none, veryHigh).
 crop(oilseed, vegetative, veryHigh, none, variable).
 crop(oilseed, vegetative, veryHigh, low, low).
 crop(oilseed, vegetative, veryHigh, low, moderate).
-crop(oilseed, vegetative, veryHigh, low, high).
 crop(oilseed, vegetative, veryHigh, low, veryHigh).
 crop(oilseed, vegetative, veryHigh, low, variable).
 crop(oilseed, vegetative, veryHigh, moderate, low).
@@ -2218,7 +1881,6 @@ crop(oilseed, vegetative, veryHigh, moderate, moderate).
 crop(oilseed, vegetative, veryHigh, moderate, high).
 crop(oilseed, vegetative, veryHigh, moderate, veryHigh).
 crop(oilseed, vegetative, veryHigh, moderate, variable).
-crop(oilseed, vegetative, veryHigh, high, low).
 crop(oilseed, vegetative, veryHigh, high, moderate).
 crop(oilseed, vegetative, veryHigh, high, high).
 crop(oilseed, vegetative, veryHigh, high, veryHigh).
@@ -2230,7 +1892,6 @@ crop(oilseed, flowering, low, none, veryHigh).
 crop(oilseed, flowering, low, none, variable).
 crop(oilseed, flowering, low, low, low).
 crop(oilseed, flowering, low, low, moderate).
-crop(oilseed, flowering, low, low, high).
 crop(oilseed, flowering, low, low, veryHigh).
 crop(oilseed, flowering, low, low, variable).
 crop(oilseed, flowering, low, moderate, low).
@@ -2238,7 +1899,6 @@ crop(oilseed, flowering, low, moderate, moderate).
 crop(oilseed, flowering, low, moderate, high).
 crop(oilseed, flowering, low, moderate, veryHigh).
 crop(oilseed, flowering, low, moderate, variable).
-crop(oilseed, flowering, low, high, low).
 crop(oilseed, flowering, low, high, moderate).
 crop(oilseed, flowering, low, high, high).
 crop(oilseed, flowering, low, high, veryHigh).
@@ -2250,7 +1910,6 @@ crop(oilseed, flowering, moderate, none, veryHigh).
 crop(oilseed, flowering, moderate, none, variable).
 crop(oilseed, flowering, moderate, low, low).
 crop(oilseed, flowering, moderate, low, moderate).
-crop(oilseed, flowering, moderate, low, high).
 crop(oilseed, flowering, moderate, low, veryHigh).
 crop(oilseed, flowering, moderate, low, variable).
 crop(oilseed, flowering, moderate, moderate, low).
@@ -2258,27 +1917,18 @@ crop(oilseed, flowering, moderate, moderate, moderate).
 crop(oilseed, flowering, moderate, moderate, high).
 crop(oilseed, flowering, moderate, moderate, veryHigh).
 crop(oilseed, flowering, moderate, moderate, variable).
-crop(oilseed, flowering, moderate, high, low).
 crop(oilseed, flowering, moderate, high, moderate).
 crop(oilseed, flowering, moderate, high, high).
 crop(oilseed, flowering, moderate, high, veryHigh).
 crop(oilseed, flowering, moderate, high, variable).
-crop(oilseed, flowering, high, none, low).
 crop(oilseed, flowering, high, none, moderate).
 crop(oilseed, flowering, high, none, high).
 crop(oilseed, flowering, high, none, veryHigh).
 crop(oilseed, flowering, high, none, variable).
-crop(oilseed, flowering, high, low, low).
-crop(oilseed, flowering, high, low, moderate).
-crop(oilseed, flowering, high, low, high).
-crop(oilseed, flowering, high, low, veryHigh).
-crop(oilseed, flowering, high, low, variable).
-crop(oilseed, flowering, high, moderate, low).
 crop(oilseed, flowering, high, moderate, moderate).
 crop(oilseed, flowering, high, moderate, high).
 crop(oilseed, flowering, high, moderate, veryHigh).
 crop(oilseed, flowering, high, moderate, variable).
-crop(oilseed, flowering, high, high, low).
 crop(oilseed, flowering, high, high, moderate).
 crop(oilseed, flowering, high, high, high).
 crop(oilseed, flowering, high, high, veryHigh).
@@ -2290,7 +1940,6 @@ crop(oilseed, flowering, slightlyHigh, none, veryHigh).
 crop(oilseed, flowering, slightlyHigh, none, variable).
 crop(oilseed, flowering, slightlyHigh, low, low).
 crop(oilseed, flowering, slightlyHigh, low, moderate).
-crop(oilseed, flowering, slightlyHigh, low, high).
 crop(oilseed, flowering, slightlyHigh, low, veryHigh).
 crop(oilseed, flowering, slightlyHigh, low, variable).
 crop(oilseed, flowering, slightlyHigh, moderate, low).
@@ -2298,7 +1947,6 @@ crop(oilseed, flowering, slightlyHigh, moderate, moderate).
 crop(oilseed, flowering, slightlyHigh, moderate, high).
 crop(oilseed, flowering, slightlyHigh, moderate, veryHigh).
 crop(oilseed, flowering, slightlyHigh, moderate, variable).
-crop(oilseed, flowering, slightlyHigh, high, low).
 crop(oilseed, flowering, slightlyHigh, high, moderate).
 crop(oilseed, flowering, slightlyHigh, high, high).
 crop(oilseed, flowering, slightlyHigh, high, veryHigh).
@@ -2310,7 +1958,6 @@ crop(oilseed, flowering, veryHigh, none, veryHigh).
 crop(oilseed, flowering, veryHigh, none, variable).
 crop(oilseed, flowering, veryHigh, low, low).
 crop(oilseed, flowering, veryHigh, low, moderate).
-crop(oilseed, flowering, veryHigh, low, high).
 crop(oilseed, flowering, veryHigh, low, veryHigh).
 crop(oilseed, flowering, veryHigh, low, variable).
 crop(oilseed, flowering, veryHigh, moderate, low).
@@ -2318,7 +1965,6 @@ crop(oilseed, flowering, veryHigh, moderate, moderate).
 crop(oilseed, flowering, veryHigh, moderate, high).
 crop(oilseed, flowering, veryHigh, moderate, veryHigh).
 crop(oilseed, flowering, veryHigh, moderate, variable).
-crop(oilseed, flowering, veryHigh, high, low).
 crop(oilseed, flowering, veryHigh, high, moderate).
 crop(oilseed, flowering, veryHigh, high, high).
 crop(oilseed, flowering, veryHigh, high, veryHigh).
@@ -2330,7 +1976,6 @@ crop(oilseed, fruiting, low, none, veryHigh).
 crop(oilseed, fruiting, low, none, variable).
 crop(oilseed, fruiting, low, low, low).
 crop(oilseed, fruiting, low, low, moderate).
-crop(oilseed, fruiting, low, low, high).
 crop(oilseed, fruiting, low, low, veryHigh).
 crop(oilseed, fruiting, low, low, variable).
 crop(oilseed, fruiting, low, moderate, low).
@@ -2338,7 +1983,6 @@ crop(oilseed, fruiting, low, moderate, moderate).
 crop(oilseed, fruiting, low, moderate, high).
 crop(oilseed, fruiting, low, moderate, veryHigh).
 crop(oilseed, fruiting, low, moderate, variable).
-crop(oilseed, fruiting, low, high, low).
 crop(oilseed, fruiting, low, high, moderate).
 crop(oilseed, fruiting, low, high, high).
 crop(oilseed, fruiting, low, high, veryHigh).
@@ -2350,7 +1994,6 @@ crop(oilseed, fruiting, moderate, none, veryHigh).
 crop(oilseed, fruiting, moderate, none, variable).
 crop(oilseed, fruiting, moderate, low, low).
 crop(oilseed, fruiting, moderate, low, moderate).
-crop(oilseed, fruiting, moderate, low, high).
 crop(oilseed, fruiting, moderate, low, veryHigh).
 crop(oilseed, fruiting, moderate, low, variable).
 crop(oilseed, fruiting, moderate, moderate, low).
@@ -2358,27 +2001,18 @@ crop(oilseed, fruiting, moderate, moderate, moderate).
 crop(oilseed, fruiting, moderate, moderate, high).
 crop(oilseed, fruiting, moderate, moderate, veryHigh).
 crop(oilseed, fruiting, moderate, moderate, variable).
-crop(oilseed, fruiting, moderate, high, low).
 crop(oilseed, fruiting, moderate, high, moderate).
 crop(oilseed, fruiting, moderate, high, high).
 crop(oilseed, fruiting, moderate, high, veryHigh).
 crop(oilseed, fruiting, moderate, high, variable).
-crop(oilseed, fruiting, high, none, low).
 crop(oilseed, fruiting, high, none, moderate).
 crop(oilseed, fruiting, high, none, high).
 crop(oilseed, fruiting, high, none, veryHigh).
 crop(oilseed, fruiting, high, none, variable).
-crop(oilseed, fruiting, high, low, low).
-crop(oilseed, fruiting, high, low, moderate).
-crop(oilseed, fruiting, high, low, high).
-crop(oilseed, fruiting, high, low, veryHigh).
-crop(oilseed, fruiting, high, low, variable).
-crop(oilseed, fruiting, high, moderate, low).
 crop(oilseed, fruiting, high, moderate, moderate).
 crop(oilseed, fruiting, high, moderate, high).
 crop(oilseed, fruiting, high, moderate, veryHigh).
 crop(oilseed, fruiting, high, moderate, variable).
-crop(oilseed, fruiting, high, high, low).
 crop(oilseed, fruiting, high, high, moderate).
 crop(oilseed, fruiting, high, high, high).
 crop(oilseed, fruiting, high, high, veryHigh).
@@ -2390,7 +2024,6 @@ crop(oilseed, fruiting, slightlyHigh, none, veryHigh).
 crop(oilseed, fruiting, slightlyHigh, none, variable).
 crop(oilseed, fruiting, slightlyHigh, low, low).
 crop(oilseed, fruiting, slightlyHigh, low, moderate).
-crop(oilseed, fruiting, slightlyHigh, low, high).
 crop(oilseed, fruiting, slightlyHigh, low, veryHigh).
 crop(oilseed, fruiting, slightlyHigh, low, variable).
 crop(oilseed, fruiting, slightlyHigh, moderate, low).
@@ -2398,7 +2031,6 @@ crop(oilseed, fruiting, slightlyHigh, moderate, moderate).
 crop(oilseed, fruiting, slightlyHigh, moderate, high).
 crop(oilseed, fruiting, slightlyHigh, moderate, veryHigh).
 crop(oilseed, fruiting, slightlyHigh, moderate, variable).
-crop(oilseed, fruiting, slightlyHigh, high, low).
 crop(oilseed, fruiting, slightlyHigh, high, moderate).
 crop(oilseed, fruiting, slightlyHigh, high, high).
 crop(oilseed, fruiting, slightlyHigh, high, veryHigh).
@@ -2410,7 +2042,6 @@ crop(oilseed, fruiting, veryHigh, none, veryHigh).
 crop(oilseed, fruiting, veryHigh, none, variable).
 crop(oilseed, fruiting, veryHigh, low, low).
 crop(oilseed, fruiting, veryHigh, low, moderate).
-crop(oilseed, fruiting, veryHigh, low, high).
 crop(oilseed, fruiting, veryHigh, low, veryHigh).
 crop(oilseed, fruiting, veryHigh, low, variable).
 crop(oilseed, fruiting, veryHigh, moderate, low).
@@ -2418,7 +2049,6 @@ crop(oilseed, fruiting, veryHigh, moderate, moderate).
 crop(oilseed, fruiting, veryHigh, moderate, high).
 crop(oilseed, fruiting, veryHigh, moderate, veryHigh).
 crop(oilseed, fruiting, veryHigh, moderate, variable).
-crop(oilseed, fruiting, veryHigh, high, low).
 crop(oilseed, fruiting, veryHigh, high, moderate).
 crop(oilseed, fruiting, veryHigh, high, high).
 crop(oilseed, fruiting, veryHigh, high, veryHigh).
@@ -2430,7 +2060,6 @@ crop(oilseed, harvest, low, none, veryHigh).
 crop(oilseed, harvest, low, none, variable).
 crop(oilseed, harvest, low, low, low).
 crop(oilseed, harvest, low, low, moderate).
-crop(oilseed, harvest, low, low, high).
 crop(oilseed, harvest, low, low, veryHigh).
 crop(oilseed, harvest, low, low, variable).
 crop(oilseed, harvest, low, moderate, low).
@@ -2438,7 +2067,6 @@ crop(oilseed, harvest, low, moderate, moderate).
 crop(oilseed, harvest, low, moderate, high).
 crop(oilseed, harvest, low, moderate, veryHigh).
 crop(oilseed, harvest, low, moderate, variable).
-crop(oilseed, harvest, low, high, low).
 crop(oilseed, harvest, low, high, moderate).
 crop(oilseed, harvest, low, high, high).
 crop(oilseed, harvest, low, high, veryHigh).
@@ -2450,7 +2078,6 @@ crop(oilseed, harvest, moderate, none, veryHigh).
 crop(oilseed, harvest, moderate, none, variable).
 crop(oilseed, harvest, moderate, low, low).
 crop(oilseed, harvest, moderate, low, moderate).
-crop(oilseed, harvest, moderate, low, high).
 crop(oilseed, harvest, moderate, low, veryHigh).
 crop(oilseed, harvest, moderate, low, variable).
 crop(oilseed, harvest, moderate, moderate, low).
@@ -2458,27 +2085,18 @@ crop(oilseed, harvest, moderate, moderate, moderate).
 crop(oilseed, harvest, moderate, moderate, high).
 crop(oilseed, harvest, moderate, moderate, veryHigh).
 crop(oilseed, harvest, moderate, moderate, variable).
-crop(oilseed, harvest, moderate, high, low).
 crop(oilseed, harvest, moderate, high, moderate).
 crop(oilseed, harvest, moderate, high, high).
 crop(oilseed, harvest, moderate, high, veryHigh).
 crop(oilseed, harvest, moderate, high, variable).
-crop(oilseed, harvest, high, none, low).
 crop(oilseed, harvest, high, none, moderate).
 crop(oilseed, harvest, high, none, high).
 crop(oilseed, harvest, high, none, veryHigh).
 crop(oilseed, harvest, high, none, variable).
-crop(oilseed, harvest, high, low, low).
-crop(oilseed, harvest, high, low, moderate).
-crop(oilseed, harvest, high, low, high).
-crop(oilseed, harvest, high, low, veryHigh).
-crop(oilseed, harvest, high, low, variable).
-crop(oilseed, harvest, high, moderate, low).
 crop(oilseed, harvest, high, moderate, moderate).
 crop(oilseed, harvest, high, moderate, high).
 crop(oilseed, harvest, high, moderate, veryHigh).
 crop(oilseed, harvest, high, moderate, variable).
-crop(oilseed, harvest, high, high, low).
 crop(oilseed, harvest, high, high, moderate).
 crop(oilseed, harvest, high, high, high).
 crop(oilseed, harvest, high, high, veryHigh).
@@ -2490,7 +2108,6 @@ crop(oilseed, harvest, slightlyHigh, none, veryHigh).
 crop(oilseed, harvest, slightlyHigh, none, variable).
 crop(oilseed, harvest, slightlyHigh, low, low).
 crop(oilseed, harvest, slightlyHigh, low, moderate).
-crop(oilseed, harvest, slightlyHigh, low, high).
 crop(oilseed, harvest, slightlyHigh, low, veryHigh).
 crop(oilseed, harvest, slightlyHigh, low, variable).
 crop(oilseed, harvest, slightlyHigh, moderate, low).
@@ -2498,7 +2115,6 @@ crop(oilseed, harvest, slightlyHigh, moderate, moderate).
 crop(oilseed, harvest, slightlyHigh, moderate, high).
 crop(oilseed, harvest, slightlyHigh, moderate, veryHigh).
 crop(oilseed, harvest, slightlyHigh, moderate, variable).
-crop(oilseed, harvest, slightlyHigh, high, low).
 crop(oilseed, harvest, slightlyHigh, high, moderate).
 crop(oilseed, harvest, slightlyHigh, high, high).
 crop(oilseed, harvest, slightlyHigh, high, veryHigh).
@@ -2510,7 +2126,6 @@ crop(oilseed, harvest, veryHigh, none, veryHigh).
 crop(oilseed, harvest, veryHigh, none, variable).
 crop(oilseed, harvest, veryHigh, low, low).
 crop(oilseed, harvest, veryHigh, low, moderate).
-crop(oilseed, harvest, veryHigh, low, high).
 crop(oilseed, harvest, veryHigh, low, veryHigh).
 crop(oilseed, harvest, veryHigh, low, variable).
 crop(oilseed, harvest, veryHigh, moderate, low).
@@ -2518,7 +2133,6 @@ crop(oilseed, harvest, veryHigh, moderate, moderate).
 crop(oilseed, harvest, veryHigh, moderate, high).
 crop(oilseed, harvest, veryHigh, moderate, veryHigh).
 crop(oilseed, harvest, veryHigh, moderate, variable).
-crop(oilseed, harvest, veryHigh, high, low).
 crop(oilseed, harvest, veryHigh, high, moderate).
 crop(oilseed, harvest, veryHigh, high, high).
 crop(oilseed, harvest, veryHigh, high, veryHigh).
@@ -2535,7 +2149,6 @@ crop(tuber, seedling, low, none, veryHigh).
 crop(tuber, seedling, low, none, variable).
 crop(tuber, seedling, low, low, low).
 crop(tuber, seedling, low, low, moderate).
-crop(tuber, seedling, low, low, high).
 crop(tuber, seedling, low, low, veryHigh).
 crop(tuber, seedling, low, low, variable).
 crop(tuber, seedling, low, moderate, low).
@@ -2543,7 +2156,6 @@ crop(tuber, seedling, low, moderate, moderate).
 crop(tuber, seedling, low, moderate, high).
 crop(tuber, seedling, low, moderate, veryHigh).
 crop(tuber, seedling, low, moderate, variable).
-crop(tuber, seedling, low, high, low).
 crop(tuber, seedling, low, high, moderate).
 crop(tuber, seedling, low, high, high).
 crop(tuber, seedling, low, high, veryHigh).
@@ -2555,7 +2167,6 @@ crop(tuber, seedling, moderate, none, veryHigh).
 crop(tuber, seedling, moderate, none, variable).
 crop(tuber, seedling, moderate, low, low).
 crop(tuber, seedling, moderate, low, moderate).
-crop(tuber, seedling, moderate, low, high).
 crop(tuber, seedling, moderate, low, veryHigh).
 crop(tuber, seedling, moderate, low, variable).
 crop(tuber, seedling, moderate, moderate, low).
@@ -2563,27 +2174,18 @@ crop(tuber, seedling, moderate, moderate, moderate).
 crop(tuber, seedling, moderate, moderate, high).
 crop(tuber, seedling, moderate, moderate, veryHigh).
 crop(tuber, seedling, moderate, moderate, variable).
-crop(tuber, seedling, moderate, high, low).
 crop(tuber, seedling, moderate, high, moderate).
 crop(tuber, seedling, moderate, high, high).
 crop(tuber, seedling, moderate, high, veryHigh).
 crop(tuber, seedling, moderate, high, variable).
-crop(tuber, seedling, high, none, low).
 crop(tuber, seedling, high, none, moderate).
 crop(tuber, seedling, high, none, high).
 crop(tuber, seedling, high, none, veryHigh).
 crop(tuber, seedling, high, none, variable).
-crop(tuber, seedling, high, low, low).
-crop(tuber, seedling, high, low, moderate).
-crop(tuber, seedling, high, low, high).
-crop(tuber, seedling, high, low, veryHigh).
-crop(tuber, seedling, high, low, variable).
-crop(tuber, seedling, high, moderate, low).
 crop(tuber, seedling, high, moderate, moderate).
 crop(tuber, seedling, high, moderate, high).
 crop(tuber, seedling, high, moderate, veryHigh).
 crop(tuber, seedling, high, moderate, variable).
-crop(tuber, seedling, high, high, low).
 crop(tuber, seedling, high, high, moderate).
 crop(tuber, seedling, high, high, high).
 crop(tuber, seedling, high, high, veryHigh).
@@ -2595,7 +2197,6 @@ crop(tuber, seedling, slightlyHigh, none, veryHigh).
 crop(tuber, seedling, slightlyHigh, none, variable).
 crop(tuber, seedling, slightlyHigh, low, low).
 crop(tuber, seedling, slightlyHigh, low, moderate).
-crop(tuber, seedling, slightlyHigh, low, high).
 crop(tuber, seedling, slightlyHigh, low, veryHigh).
 crop(tuber, seedling, slightlyHigh, low, variable).
 crop(tuber, seedling, slightlyHigh, moderate, low).
@@ -2603,7 +2204,6 @@ crop(tuber, seedling, slightlyHigh, moderate, moderate).
 crop(tuber, seedling, slightlyHigh, moderate, high).
 crop(tuber, seedling, slightlyHigh, moderate, veryHigh).
 crop(tuber, seedling, slightlyHigh, moderate, variable).
-crop(tuber, seedling, slightlyHigh, high, low).
 crop(tuber, seedling, slightlyHigh, high, moderate).
 crop(tuber, seedling, slightlyHigh, high, high).
 crop(tuber, seedling, slightlyHigh, high, veryHigh).
@@ -2613,17 +2213,12 @@ crop(tuber, seedling, veryHigh, none, moderate).
 crop(tuber, seedling, veryHigh, none, high).
 crop(tuber, seedling, veryHigh, none, veryHigh).
 crop(tuber, seedling, veryHigh, none, variable).
-crop(tuber, seedling, veryHigh, low, low).
-crop(tuber, seedling, veryHigh, low, moderate).
-crop(tuber, seedling, veryHigh, low, high).
-crop(tuber, seedling, veryHigh, low, veryHigh).
-crop(tuber, seedling, veryHigh, low, variable).
+
 crop(tuber, seedling, veryHigh, moderate, low).
 crop(tuber, seedling, veryHigh, moderate, moderate).
 crop(tuber, seedling, veryHigh, moderate, high).
 crop(tuber, seedling, veryHigh, moderate, veryHigh).
 crop(tuber, seedling, veryHigh, moderate, variable).
-crop(tuber, seedling, veryHigh, high, low).
 crop(tuber, seedling, veryHigh, high, moderate).
 crop(tuber, seedling, veryHigh, high, high).
 crop(tuber, seedling, veryHigh, high, veryHigh).
@@ -2635,7 +2230,6 @@ crop(tuber, vegetative, low, none, veryHigh).
 crop(tuber, vegetative, low, none, variable).
 crop(tuber, vegetative, low, low, low).
 crop(tuber, vegetative, low, low, moderate).
-crop(tuber, vegetative, low, low, high).
 crop(tuber, vegetative, low, low, veryHigh).
 crop(tuber, vegetative, low, low, variable).
 crop(tuber, vegetative, low, moderate, low).
@@ -2643,7 +2237,6 @@ crop(tuber, vegetative, low, moderate, moderate).
 crop(tuber, vegetative, low, moderate, high).
 crop(tuber, vegetative, low, moderate, veryHigh).
 crop(tuber, vegetative, low, moderate, variable).
-crop(tuber, vegetative, low, high, low).
 crop(tuber, vegetative, low, high, moderate).
 crop(tuber, vegetative, low, high, high).
 crop(tuber, vegetative, low, high, veryHigh).
@@ -2655,7 +2248,6 @@ crop(tuber, vegetative, moderate, none, veryHigh).
 crop(tuber, vegetative, moderate, none, variable).
 crop(tuber, vegetative, moderate, low, low).
 crop(tuber, vegetative, moderate, low, moderate).
-crop(tuber, vegetative, moderate, low, high).
 crop(tuber, vegetative, moderate, low, veryHigh).
 crop(tuber, vegetative, moderate, low, variable).
 crop(tuber, vegetative, moderate, moderate, low).
@@ -2663,27 +2255,19 @@ crop(tuber, vegetative, moderate, moderate, moderate).
 crop(tuber, vegetative, moderate, moderate, high).
 crop(tuber, vegetative, moderate, moderate, veryHigh).
 crop(tuber, vegetative, moderate, moderate, variable).
-crop(tuber, vegetative, moderate, high, low).
 crop(tuber, vegetative, moderate, high, moderate).
 crop(tuber, vegetative, moderate, high, high).
 crop(tuber, vegetative, moderate, high, veryHigh).
 crop(tuber, vegetative, moderate, high, variable).
-crop(tuber, vegetative, high, none, low).
 crop(tuber, vegetative, high, none, moderate).
 crop(tuber, vegetative, high, none, high).
 crop(tuber, vegetative, high, none, veryHigh).
 crop(tuber, vegetative, high, none, variable).
-crop(tuber, vegetative, high, low, low).
-crop(tuber, vegetative, high, low, moderate).
-crop(tuber, vegetative, high, low, high).
-crop(tuber, vegetative, high, low, veryHigh).
-crop(tuber, vegetative, high, low, variable).
-crop(tuber, vegetative, high, moderate, low).
+
 crop(tuber, vegetative, high, moderate, moderate).
 crop(tuber, vegetative, high, moderate, high).
 crop(tuber, vegetative, high, moderate, veryHigh).
 crop(tuber, vegetative, high, moderate, variable).
-crop(tuber, vegetative, high, high, low).
 crop(tuber, vegetative, high, high, moderate).
 crop(tuber, vegetative, high, high, high).
 crop(tuber, vegetative, high, high, veryHigh).
@@ -2693,17 +2277,12 @@ crop(tuber, vegetative, slightlyHigh, none, moderate).
 crop(tuber, vegetative, slightlyHigh, none, high).
 crop(tuber, vegetative, slightlyHigh, none, veryHigh).
 crop(tuber, vegetative, slightlyHigh, none, variable).
-crop(tuber, vegetative, slightlyHigh, low, low).
-crop(tuber, vegetative, slightlyHigh, low, moderate).
-crop(tuber, vegetative, slightlyHigh, low, high).
-crop(tuber, vegetative, slightlyHigh, low, veryHigh).
-crop(tuber, vegetative, slightlyHigh, low, variable).
+
 crop(tuber, vegetative, slightlyHigh, moderate, low).
 crop(tuber, vegetative, slightlyHigh, moderate, moderate).
 crop(tuber, vegetative, slightlyHigh, moderate, high).
 crop(tuber, vegetative, slightlyHigh, moderate, veryHigh).
 crop(tuber, vegetative, slightlyHigh, moderate, variable).
-crop(tuber, vegetative, slightlyHigh, high, low).
 crop(tuber, vegetative, slightlyHigh, high, moderate).
 crop(tuber, vegetative, slightlyHigh, high, high).
 crop(tuber, vegetative, slightlyHigh, high, veryHigh).
@@ -2713,17 +2292,12 @@ crop(tuber, vegetative, veryHigh, none, moderate).
 crop(tuber, vegetative, veryHigh, none, high).
 crop(tuber, vegetative, veryHigh, none, veryHigh).
 crop(tuber, vegetative, veryHigh, none, variable).
-crop(tuber, vegetative, veryHigh, low, low).
-crop(tuber, vegetative, veryHigh, low, moderate).
-crop(tuber, vegetative, veryHigh, low, high).
-crop(tuber, vegetative, veryHigh, low, veryHigh).
-crop(tuber, vegetative, veryHigh, low, variable).
+
 crop(tuber, vegetative, veryHigh, moderate, low).
 crop(tuber, vegetative, veryHigh, moderate, moderate).
 crop(tuber, vegetative, veryHigh, moderate, high).
 crop(tuber, vegetative, veryHigh, moderate, veryHigh).
 crop(tuber, vegetative, veryHigh, moderate, variable).
-crop(tuber, vegetative, veryHigh, high, low).
 crop(tuber, vegetative, veryHigh, high, moderate).
 crop(tuber, vegetative, veryHigh, high, high).
 crop(tuber, vegetative, veryHigh, high, veryHigh).
@@ -2735,7 +2309,6 @@ crop(tuber, flowering, low, none, veryHigh).
 crop(tuber, flowering, low, none, variable).
 crop(tuber, flowering, low, low, low).
 crop(tuber, flowering, low, low, moderate).
-crop(tuber, flowering, low, low, high).
 crop(tuber, flowering, low, low, veryHigh).
 crop(tuber, flowering, low, low, variable).
 crop(tuber, flowering, low, moderate, low).
@@ -2743,7 +2316,6 @@ crop(tuber, flowering, low, moderate, moderate).
 crop(tuber, flowering, low, moderate, high).
 crop(tuber, flowering, low, moderate, veryHigh).
 crop(tuber, flowering, low, moderate, variable).
-crop(tuber, flowering, low, high, low).
 crop(tuber, flowering, low, high, moderate).
 crop(tuber, flowering, low, high, high).
 crop(tuber, flowering, low, high, veryHigh).
@@ -2755,7 +2327,6 @@ crop(tuber, flowering, moderate, none, veryHigh).
 crop(tuber, flowering, moderate, none, variable).
 crop(tuber, flowering, moderate, low, low).
 crop(tuber, flowering, moderate, low, moderate).
-crop(tuber, flowering, moderate, low, high).
 crop(tuber, flowering, moderate, low, veryHigh).
 crop(tuber, flowering, moderate, low, variable).
 crop(tuber, flowering, moderate, moderate, low).
@@ -2763,27 +2334,19 @@ crop(tuber, flowering, moderate, moderate, moderate).
 crop(tuber, flowering, moderate, moderate, high).
 crop(tuber, flowering, moderate, moderate, veryHigh).
 crop(tuber, flowering, moderate, moderate, variable).
-crop(tuber, flowering, moderate, high, low).
 crop(tuber, flowering, moderate, high, moderate).
 crop(tuber, flowering, moderate, high, high).
 crop(tuber, flowering, moderate, high, veryHigh).
 crop(tuber, flowering, moderate, high, variable).
-crop(tuber, flowering, high, none, low).
 crop(tuber, flowering, high, none, moderate).
 crop(tuber, flowering, high, none, high).
 crop(tuber, flowering, high, none, veryHigh).
 crop(tuber, flowering, high, none, variable).
-crop(tuber, flowering, high, low, low).
-crop(tuber, flowering, high, low, moderate).
-crop(tuber, flowering, high, low, high).
-crop(tuber, flowering, high, low, veryHigh).
-crop(tuber, flowering, high, low, variable).
-crop(tuber, flowering, high, moderate, low).
+
 crop(tuber, flowering, high, moderate, moderate).
 crop(tuber, flowering, high, moderate, high).
 crop(tuber, flowering, high, moderate, veryHigh).
 crop(tuber, flowering, high, moderate, variable).
-crop(tuber, flowering, high, high, low).
 crop(tuber, flowering, high, high, moderate).
 crop(tuber, flowering, high, high, high).
 crop(tuber, flowering, high, high, veryHigh).
@@ -2793,17 +2356,12 @@ crop(tuber, flowering, slightlyHigh, none, moderate).
 crop(tuber, flowering, slightlyHigh, none, high).
 crop(tuber, flowering, slightlyHigh, none, veryHigh).
 crop(tuber, flowering, slightlyHigh, none, variable).
-crop(tuber, flowering, slightlyHigh, low, low).
-crop(tuber, flowering, slightlyHigh, low, moderate).
-crop(tuber, flowering, slightlyHigh, low, high).
-crop(tuber, flowering, slightlyHigh, low, veryHigh).
-crop(tuber, flowering, slightlyHigh, low, variable).
+
 crop(tuber, flowering, slightlyHigh, moderate, low).
 crop(tuber, flowering, slightlyHigh, moderate, moderate).
 crop(tuber, flowering, slightlyHigh, moderate, high).
 crop(tuber, flowering, slightlyHigh, moderate, veryHigh).
 crop(tuber, flowering, slightlyHigh, moderate, variable).
-crop(tuber, flowering, slightlyHigh, high, low).
 crop(tuber, flowering, slightlyHigh, high, moderate).
 crop(tuber, flowering, slightlyHigh, high, high).
 crop(tuber, flowering, slightlyHigh, high, veryHigh).
@@ -2813,17 +2371,12 @@ crop(tuber, flowering, veryHigh, none, moderate).
 crop(tuber, flowering, veryHigh, none, high).
 crop(tuber, flowering, veryHigh, none, veryHigh).
 crop(tuber, flowering, veryHigh, none, variable).
-crop(tuber, flowering, veryHigh, low, low).
-crop(tuber, flowering, veryHigh, low, moderate).
-crop(tuber, flowering, veryHigh, low, high).
-crop(tuber, flowering, veryHigh, low, veryHigh).
-crop(tuber, flowering, veryHigh, low, variable).
+
 crop(tuber, flowering, veryHigh, moderate, low).
 crop(tuber, flowering, veryHigh, moderate, moderate).
 crop(tuber, flowering, veryHigh, moderate, high).
 crop(tuber, flowering, veryHigh, moderate, veryHigh).
 crop(tuber, flowering, veryHigh, moderate, variable).
-crop(tuber, flowering, veryHigh, high, low).
 crop(tuber, flowering, veryHigh, high, moderate).
 crop(tuber, flowering, veryHigh, high, high).
 crop(tuber, flowering, veryHigh, high, veryHigh).
@@ -2835,7 +2388,6 @@ crop(tuber, fruiting, low, none, veryHigh).
 crop(tuber, fruiting, low, none, variable).
 crop(tuber, fruiting, low, low, low).
 crop(tuber, fruiting, low, low, moderate).
-crop(tuber, fruiting, low, low, high).
 crop(tuber, fruiting, low, low, veryHigh).
 crop(tuber, fruiting, low, low, variable).
 crop(tuber, fruiting, low, moderate, low).
@@ -2843,7 +2395,6 @@ crop(tuber, fruiting, low, moderate, moderate).
 crop(tuber, fruiting, low, moderate, high).
 crop(tuber, fruiting, low, moderate, veryHigh).
 crop(tuber, fruiting, low, moderate, variable).
-crop(tuber, fruiting, low, high, low).
 crop(tuber, fruiting, low, high, moderate).
 crop(tuber, fruiting, low, high, high).
 crop(tuber, fruiting, low, high, veryHigh).
@@ -2855,7 +2406,6 @@ crop(tuber, fruiting, moderate, none, veryHigh).
 crop(tuber, fruiting, moderate, none, variable).
 crop(tuber, fruiting, moderate, low, low).
 crop(tuber, fruiting, moderate, low, moderate).
-crop(tuber, fruiting, moderate, low, high).
 crop(tuber, fruiting, moderate, low, veryHigh).
 crop(tuber, fruiting, moderate, low, variable).
 crop(tuber, fruiting, moderate, moderate, low).
@@ -2863,27 +2413,19 @@ crop(tuber, fruiting, moderate, moderate, moderate).
 crop(tuber, fruiting, moderate, moderate, high).
 crop(tuber, fruiting, moderate, moderate, veryHigh).
 crop(tuber, fruiting, moderate, moderate, variable).
-crop(tuber, fruiting, moderate, high, low).
 crop(tuber, fruiting, moderate, high, moderate).
 crop(tuber, fruiting, moderate, high, high).
 crop(tuber, fruiting, moderate, high, veryHigh).
 crop(tuber, fruiting, moderate, high, variable).
-crop(tuber, fruiting, high, none, low).
 crop(tuber, fruiting, high, none, moderate).
 crop(tuber, fruiting, high, none, high).
 crop(tuber, fruiting, high, none, veryHigh).
 crop(tuber, fruiting, high, none, variable).
-crop(tuber, fruiting, high, low, low).
-crop(tuber, fruiting, high, low, moderate).
-crop(tuber, fruiting, high, low, high).
-crop(tuber, fruiting, high, low, veryHigh).
-crop(tuber, fruiting, high, low, variable).
-crop(tuber, fruiting, high, moderate, low).
+
 crop(tuber, fruiting, high, moderate, moderate).
 crop(tuber, fruiting, high, moderate, high).
 crop(tuber, fruiting, high, moderate, veryHigh).
 crop(tuber, fruiting, high, moderate, variable).
-crop(tuber, fruiting, high, high, low).
 crop(tuber, fruiting, high, high, moderate).
 crop(tuber, fruiting, high, high, high).
 crop(tuber, fruiting, high, high, veryHigh).
@@ -2893,17 +2435,12 @@ crop(tuber, fruiting, slightlyHigh, none, moderate).
 crop(tuber, fruiting, slightlyHigh, none, high).
 crop(tuber, fruiting, slightlyHigh, none, veryHigh).
 crop(tuber, fruiting, slightlyHigh, none, variable).
-crop(tuber, fruiting, slightlyHigh, low, low).
-crop(tuber, fruiting, slightlyHigh, low, moderate).
-crop(tuber, fruiting, slightlyHigh, low, high).
-crop(tuber, fruiting, slightlyHigh, low, veryHigh).
-crop(tuber, fruiting, slightlyHigh, low, variable).
+
 crop(tuber, fruiting, slightlyHigh, moderate, low).
 crop(tuber, fruiting, slightlyHigh, moderate, moderate).
 crop(tuber, fruiting, slightlyHigh, moderate, high).
 crop(tuber, fruiting, slightlyHigh, moderate, veryHigh).
 crop(tuber, fruiting, slightlyHigh, moderate, variable).
-crop(tuber, fruiting, slightlyHigh, high, low).
 crop(tuber, fruiting, slightlyHigh, high, moderate).
 crop(tuber, fruiting, slightlyHigh, high, high).
 crop(tuber, fruiting, slightlyHigh, high, veryHigh).
@@ -2913,17 +2450,12 @@ crop(tuber, fruiting, veryHigh, none, moderate).
 crop(tuber, fruiting, veryHigh, none, high).
 crop(tuber, fruiting, veryHigh, none, veryHigh).
 crop(tuber, fruiting, veryHigh, none, variable).
-crop(tuber, fruiting, veryHigh, low, low).
-crop(tuber, fruiting, veryHigh, low, moderate).
-crop(tuber, fruiting, veryHigh, low, high).
-crop(tuber, fruiting, veryHigh, low, veryHigh).
-crop(tuber, fruiting, veryHigh, low, variable).
+
 crop(tuber, fruiting, veryHigh, moderate, low).
 crop(tuber, fruiting, veryHigh, moderate, moderate).
 crop(tuber, fruiting, veryHigh, moderate, high).
 crop(tuber, fruiting, veryHigh, moderate, veryHigh).
 crop(tuber, fruiting, veryHigh, moderate, variable).
-crop(tuber, fruiting, veryHigh, high, low).
 crop(tuber, fruiting, veryHigh, high, moderate).
 crop(tuber, fruiting, veryHigh, high, high).
 crop(tuber, fruiting, veryHigh, high, veryHigh).
@@ -2935,7 +2467,6 @@ crop(tuber, harvest, low, none, veryHigh).
 crop(tuber, harvest, low, none, variable).
 crop(tuber, harvest, low, low, low).
 crop(tuber, harvest, low, low, moderate).
-crop(tuber, harvest, low, low, high).
 crop(tuber, harvest, low, low, veryHigh).
 crop(tuber, harvest, low, low, variable).
 crop(tuber, harvest, low, moderate, low).
@@ -2943,7 +2474,6 @@ crop(tuber, harvest, low, moderate, moderate).
 crop(tuber, harvest, low, moderate, high).
 crop(tuber, harvest, low, moderate, veryHigh).
 crop(tuber, harvest, low, moderate, variable).
-crop(tuber, harvest, low, high, low).
 crop(tuber, harvest, low, high, moderate).
 crop(tuber, harvest, low, high, high).
 crop(tuber, harvest, low, high, veryHigh).
@@ -2955,7 +2485,6 @@ crop(tuber, harvest, moderate, none, veryHigh).
 crop(tuber, harvest, moderate, none, variable).
 crop(tuber, harvest, moderate, low, low).
 crop(tuber, harvest, moderate, low, moderate).
-crop(tuber, harvest, moderate, low, high).
 crop(tuber, harvest, moderate, low, veryHigh).
 crop(tuber, harvest, moderate, low, variable).
 crop(tuber, harvest, moderate, moderate, low).
@@ -2963,27 +2492,19 @@ crop(tuber, harvest, moderate, moderate, moderate).
 crop(tuber, harvest, moderate, moderate, high).
 crop(tuber, harvest, moderate, moderate, veryHigh).
 crop(tuber, harvest, moderate, moderate, variable).
-crop(tuber, harvest, moderate, high, low).
 crop(tuber, harvest, moderate, high, moderate).
 crop(tuber, harvest, moderate, high, high).
 crop(tuber, harvest, moderate, high, veryHigh).
 crop(tuber, harvest, moderate, high, variable).
-crop(tuber, harvest, high, none, low).
 crop(tuber, harvest, high, none, moderate).
 crop(tuber, harvest, high, none, high).
 crop(tuber, harvest, high, none, veryHigh).
 crop(tuber, harvest, high, none, variable).
-crop(tuber, harvest, high, low, low).
-crop(tuber, harvest, high, low, moderate).
-crop(tuber, harvest, high, low, high).
-crop(tuber, harvest, high, low, veryHigh).
-crop(tuber, harvest, high, low, variable).
-crop(tuber, harvest, high, moderate, low).
+
 crop(tuber, harvest, high, moderate, moderate).
 crop(tuber, harvest, high, moderate, high).
 crop(tuber, harvest, high, moderate, veryHigh).
 crop(tuber, harvest, high, moderate, variable).
-crop(tuber, harvest, high, high, low).
 crop(tuber, harvest, high, high, moderate).
 crop(tuber, harvest, high, high, high).
 crop(tuber, harvest, high, high, veryHigh).
@@ -2993,17 +2514,12 @@ crop(tuber, harvest, slightlyHigh, none, moderate).
 crop(tuber, harvest, slightlyHigh, none, high).
 crop(tuber, harvest, slightlyHigh, none, veryHigh).
 crop(tuber, harvest, slightlyHigh, none, variable).
-crop(tuber, harvest, slightlyHigh, low, low).
-crop(tuber, harvest, slightlyHigh, low, moderate).
-crop(tuber, harvest, slightlyHigh, low, high).
-crop(tuber, harvest, slightlyHigh, low, veryHigh).
-crop(tuber, harvest, slightlyHigh, low, variable).
+
 crop(tuber, harvest, slightlyHigh, moderate, low).
 crop(tuber, harvest, slightlyHigh, moderate, moderate).
 crop(tuber, harvest, slightlyHigh, moderate, high).
 crop(tuber, harvest, slightlyHigh, moderate, veryHigh).
 crop(tuber, harvest, slightlyHigh, moderate, variable).
-crop(tuber, harvest, slightlyHigh, high, low).
 crop(tuber, harvest, slightlyHigh, high, moderate).
 crop(tuber, harvest, slightlyHigh, high, high).
 crop(tuber, harvest, slightlyHigh, high, veryHigh).
@@ -3013,17 +2529,12 @@ crop(tuber, harvest, veryHigh, none, moderate).
 crop(tuber, harvest, veryHigh, none, high).
 crop(tuber, harvest, veryHigh, none, veryHigh).
 crop(tuber, harvest, veryHigh, none, variable).
-crop(tuber, harvest, veryHigh, low, low).
-crop(tuber, harvest, veryHigh, low, moderate).
-crop(tuber, harvest, veryHigh, low, high).
-crop(tuber, harvest, veryHigh, low, veryHigh).
-crop(tuber, harvest, veryHigh, low, variable).
+
 crop(tuber, harvest, veryHigh, moderate, low).
 crop(tuber, harvest, veryHigh, moderate, moderate).
 crop(tuber, harvest, veryHigh, moderate, high).
 crop(tuber, harvest, veryHigh, moderate, veryHigh).
 crop(tuber, harvest, veryHigh, moderate, variable).
-crop(tuber, harvest, veryHigh, high, low).
 crop(tuber, harvest, veryHigh, high, moderate).
 crop(tuber, harvest, veryHigh, high, high).
 crop(tuber, harvest, veryHigh, high, veryHigh).
