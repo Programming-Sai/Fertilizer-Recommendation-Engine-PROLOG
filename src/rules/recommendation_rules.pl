@@ -1,104 +1,228 @@
-% Rule for Fertilizer Recommendations Based on Conditions
-% This rule evaluates different crop conditions and provides appropriate fertilizer recommendations.
+% Import the fact files (soil facts split by crop type, and other fact files)
+:- consult('../facts/crop_facts.pl').         % Import crop facts
+:- consult('../facts/environmental_facts.pl').  % Import environment facts
+:- consult('../facts/soil_facts/cereal_soil_facts.pl').  % Import soil facts for cereal (replace with your actual files)
+:- consult('../facts/soil_facts/vegetable_soil_facts.pl').  % Import soil facts for vegetables (replace with your actual files)
+:- consult('../facts/soil_facts/fruit_soil_facts.pl').  % Import soil facts for fruits (replace with your actual files)
+:- consult('../facts/soil_facts/legume_soil_facts.pl').  % Import soil facts for legumes (replace with your actual files)
+:- consult('../facts/soil_facts/oilseed_soil_facts.pl').  % Import soil facts for oilseeds (replace with your actual files)
+:- consult('../facts/soil_facts/tuber_soil_facts.pl').  % Import soil facts for tubers (replace with your actual files)
 
-% Example rule for cereal crops in the vegetative stage with moderate yield target, moderate water requirement, and moderate nitrogen
-recommend_fertilizer(cereal, vegetative, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, NPK, [N=30, P=20, K=20], broadcasting, "every 3 weeks") :-
-    water_requirement(cereal, moderate),
-    nitrogen(cereal, moderate),
-    phosphorous(cereal, moderate),
-    potassium(cereal, moderate),
-    season(cereal, spring),
-    location(cereal, temperate),
-    ideal_ph(cereal, neutral),
-    soil_type(cereal, loamy),
-    organic_matter(cereal, moderate),
-    soil_moisture(cereal, moderate),
-    electrical_conductivity(cereal, moderate),
-    preferred_fertilizer_type(cereal, NPK),
-    preferred_application_method(cereal, broadcasting),
-    yield_target(cereal, moderate).
 
-% Rule for vegetable crops in the flowering stage with high yield target, high water requirement, and high nitrogen
-recommend_fertilizer(vegetable, flowering, high, high, high, high, high, high, high, high, high, high, compost, [], fertigation, "every 2 weeks") :-
-    water_requirement(vegetable, high),
-    nitrogen(vegetable, high),
-    phosphorous(vegetable, high),
-    potassium(vegetable, high),
-    season(vegetable, summer),
-    location(vegetable, tropical),
-    ideal_ph(vegetable, slightly_alkaline),
-    soil_type(vegetable, loamy),
-    organic_matter(vegetable, high),
-    soil_moisture(vegetable, high),
-    electrical_conductivity(vegetable, high),
-    preferred_fertilizer_type(vegetable, compost),
-    preferred_application_method(vegetable, fertigation),
-    yield_target(vegetable, high).
 
-% Rule for legume crops in the seedling stage with moderate yield target, moderate water requirement, and low nitrogen
-recommend_fertilizer(legume, seedling, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, organic, [], side_dressing, "every 4 weeks") :-
-    water_requirement(legume, moderate),
-    nitrogen(legume, low),
-    phosphorous(legume, moderate),
-    potassium(legume, moderate),
-    season(legume, spring),
-    location(legume, arid),
-    ideal_ph(legume, slightly_acidic),
-    soil_type(legume, sandy),
-    organic_matter(legume, moderate),
-    soil_moisture(legume, moderate),
-    electrical_conductivity(legume, moderate),
-    preferred_fertilizer_type(legume, organic),
-    preferred_application_method(legume, side_dressing),
-    yield_target(legume, moderate).
 
-% Rule for fruit crops in the fruiting stage with very high yield target, high water requirement, and high nitrogen
-recommend_fertilizer(fruit, fruiting, veryHigh, high, high, high, high, high, high, high, high, high, NPK, [N=50, P=30, K=30], broadcasting, "every 3 weeks") :-
-    water_requirement(fruit, high),
-    nitrogen(fruit, high),
-    phosphorous(fruit, high),
-    potassium(fruit, high),
-    season(fruit, autumn),
-    location(fruit, tropical),
-    ideal_ph(fruit, slightly_alkaline),
-    soil_type(fruit, loamy),
-    organic_matter(fruit, high),
-    soil_moisture(fruit, high),
-    electrical_conductivity(fruit, high),
-    preferred_fertilizer_type(fruit, NPK),
-    preferred_application_method(fruit, broadcasting),
-    yield_target(fruit, veryHigh).
 
-% Rule for oilseed crops in the flowering stage with moderate yield target, moderate water requirement, and moderate nitrogen
-recommend_fertilizer(oilseed, flowering, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, moderate, slow_release, [], fertigation, "every 6 weeks") :-
-    water_requirement(oilseed, moderate),
-    nitrogen(oilseed, moderate),
-    phosphorous(oilseed, moderate),
-    potassium(oilseed, moderate),
-    season(oilseed, spring),
-    location(oilseed, temperate),
-    ideal_ph(oilseed, neutral),
-    soil_type(oilseed, sandy),
-    organic_matter(oilseed, moderate),
-    soil_moisture(oilseed, moderate),
-    electrical_conductivity(oilseed, moderate),
-    preferred_fertilizer_type(oilseed, slow_release),
-    preferred_application_method(oilseed, fertigation),
-    yield_target(oilseed, moderate).
 
-% Rule for tuber crops in the harvest stage with low yield target, low water requirement, and low nitrogen
-recommend_fertilizer(tuber, harvest, low, low, low, low, low, low, low, low, low, low, compost, [], side_dressing, "every 8 weeks") :-
-    water_requirement(tuber, low),
-    nitrogen(tuber, low),
-    phosphorous(tuber, low),
-    potassium(tuber, low),
-    season(tuber, winter),
-    location(tuber, temperate),
-    ideal_ph(tuber, slightly_acidic),
-    soil_type(tuber, loamy),
-    organic_matter(tuber, low),
-    soil_moisture(tuber, low),
-    electrical_conductivity(tuber, low),
-    preferred_fertilizer_type(tuber, compost),
-    preferred_application_method(tuber, side_dressing),
-    yield_target(tuber, low).
+% General soil checking predicate
+check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) :-
+    % List of soil predicates based on crop types
+    (   CropType == cereal -> soil_cereal(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ;   CropType == vegetable -> soil_vegetable(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ;   CropType == oilseed -> soil_oilseed(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ;   CropType == legume -> soil_legume(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ;   CropType == tuber -> soil_tuber(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ;   CropType == fruit -> soil_fruit(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
+    ).
+
+% Recommendation Rule
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
+    % Check crop facts
+    ( crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
+        format("Crop fact found: ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement])
+    ;
+        format("Crop fact NOT found: ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement]),
+        fail
+    ),
+
+    % Check environmental facts
+    ( environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
+        format("Environment fact found: ~w, ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, Temperature, Humidity, Rainfall, Season, Location])
+    ;
+        format("Environment fact NOT found: ~w, ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, Temperature, Humidity, Rainfall, Season, Location]),
+        fail
+    ),
+
+    % Check soil facts
+    ( check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
+        format("Soil fact found: ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity])
+    ;
+        format("Soil fact NOT found: ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w~n", 
+               [CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity]),
+        fail
+    ),
+
+    % If all facts match, provide a recommendation
+    fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
+
+
+
+
+% Rule for fertilizer recommendation with impracticality checks
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                     SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, 
+                     Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
+    % Check for impractical conditions
+    check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity),
+    check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
+    check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location),
+
+    % If no impracticalities are found, proceed with recommendations
+    fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
+
+
+
+
+
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Recommendation) :-
+    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
+    Recommendation = 'Impractical combination: adjust fertilizer or water levels.'.
+
+
+
+
+% Check for impractical soil conditions
+check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) :-
+    ( impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
+        write("Impractical soil conditions detected."), nl
+    ;
+        true
+    ).
+
+% Check for impractical crop conditions
+check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) :-
+    ( impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
+        write("Impractical crop conditions detected."), nl
+    ;
+        true
+    ).
+
+% Check for impractical environmental conditions
+check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location) :-
+    ( impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
+        write("Impractical environmental conditions detected."), nl
+    ;
+        true
+    ).
+
+% Expanded fertilizer recommendation rules
+fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation) :-
+    ( CropType == cereal ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:10:10", "values": {"N": 10, "P": 10, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Cereal crops have high nutrient demand, particularly in the vegetative stage.",
+                              "Balanced NPK ratio ensures optimal growth and grain formation.",
+                              "Broadcasting allows even distribution over the field."]
+            }
+        ;
+            Nitrogen == moderate, Phosphorous == moderate, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "Compost",
+                "NPK": {"ratio": "Varied", "values": {"N": "Varied", "P": "Varied", "K": "Varied"}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "every 60 days",
+                "reasoning": ["Moderate nutrient demand can be fulfilled with organic compost.",
+                              "Compost improves soil texture and water retention.",
+                              "Side-dressing focuses nutrient availability to growing plants.",
+                              "Promotes long-term soil health."]
+            }
+        )
+    ;
+    CropType == vegetable ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "15:5:10", "values": {"N": 15, "P": 5, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 30 days",
+                "reasoning": ["Vegetables require high nitrogen for leaf development and high potassium for flowering and fruiting.",
+                              "Fertigation directly supplies nutrients to the root zone, improving uptake.",
+                              "Moderate phosphorous ensures proper root development without oversaturation."]
+            }
+        ;
+            Nitrogen == moderate, Phosphorous == low, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "Organic",
+                "NPK": {"ratio": "Varied", "values": {"N": "Varied", "P": "Varied", "K": "Varied"}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 40 days",
+                "reasoning": ["Organic fertilizers improve soil microbiota and long-term fertility.",
+                              "Low phosphorous requirements can be met with slow-release nutrients.",
+                              "Broadcasting ensures consistent soil coverage."]
+            }
+        )
+    ;
+    CropType == legume ->
+        ( Nitrogen == low, Phosphorous == moderate, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:20:20", "values": {"N": 0, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Legumes fix their own nitrogen; minimal nitrogen supplementation is needed.",
+                              "Phosphorous promotes root and nodule development.",
+                              "Potassium enhances resistance to diseases and improves pod quality.",
+                              "Basal application sets the foundation for growth."]
+            }
+        )
+    ;
+    CropType == fruit ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:20:10", "values": {"N": 20, "P": 20, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 45 days",
+                "reasoning": ["High nitrogen supports vegetative growth, especially in young trees.",
+                              "Phosphorous ensures strong roots and better fruit setting.",
+                              "Moderate potassium levels support overall plant health.",
+                              "Fertigation ensures targeted delivery to deep-rooted crops."]
+            }
+        )
+    ;
+    CropType == oilseed ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:20:20", "values": {"N": 10, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Oilseeds need high phosphorous for better seed quality.",
+                              "Potassium improves oil content and disease resistance.",
+                              "Moderate nitrogen supports growth without risking lodging."]
+            }
+        )
+    ;
+    CropType == tuber ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
+                "frequency": "every 45 days",
+                "reasoning": ["Tuber crops need high potassium for starch synthesis.",
+                              "Nitrogen supports vegetative growth and leaf area development.",
+                              "Moderate phosphorous aids in root expansion.",
+                              "Top-dressing provides nutrients as crops mature."]
+            }
+        )
+    ),
+    !. % Prevent fallback execution if successful.
+
+% Default recommendation if no matches
+fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
+    Recommendation = {
+        "fertilizerType": "None",
+        "NPK": {"ratio": "None", "values": {"N": "None", "P": "None", "K": "None"}, "units": "kg/ha"},
+        "applicationMode": "None",
+        "frequency": "None",
+        "reasoning": ["No suitable recommendation available for the provided conditions."]
+    }.
