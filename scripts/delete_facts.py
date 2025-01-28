@@ -128,3 +128,5 @@ if __name__ == "__main__":
 
 
     # print_impracticals(input_file, impractical_patterns)
+
+
