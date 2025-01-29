@@ -13,7 +13,7 @@
 %	- electrical conductivity
 
 % All suited for Cereal growth.
-% soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Pottassium, OrganicMatter, soilMoisture, ElectricalConductivity).
+% soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Pottassium, OrganicMatter, SoilMoisture, ElectricalConductivity).
 
 
 impractical_soil(_, _, _, low, low, low, low, _, _).  % Insufficient nutrients and organic matter

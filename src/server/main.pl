@@ -96,12 +96,45 @@ process_json_request(Request) :-
     % Call handler with extracted data
     handle_request_params(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity).
 
+
+recommendation_to_json(Recommendation, JsonResponse) :-
+    Recommendation = json{
+        fertilizerType: Type,
+        NPK: NPK,
+        applicationMode: Mode,
+        frequency: Frequency,
+        reasoning: Reasoning
+    },
+    NPK = json{
+        ratio: Ratio,
+        values: json{N: N, P: P, K: K},
+        units: Units
+    },
+    JsonResponse = json{
+        fertilizerType: Type,
+        NPK: json{
+            ratio: Ratio,
+            values: json{N: N, P: P, K: K},
+            units: Units
+        },
+        applicationMode: Mode,
+        frequency: Frequency,
+        reasoning: Reasoning
+    }.
+
+
+
 % Handle request parameters and send JSON response
 handle_request_params(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity) :-
     % Call recommendation logic
     recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity, Recommendation),
+    % Convert to JSON-friendly format
+    recommendation_to_json(Recommendation, JsonResponse),
     % Return the result as JSON
-    reply_json(Recommendation).
+    reply_json(JsonResponse).
+
+
+
 
 
 % HTTP handler for serving HTML file (Hello World or Custom HTML)

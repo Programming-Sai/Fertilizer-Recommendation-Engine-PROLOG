@@ -26,35 +26,30 @@ check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, 
 
 % Recommendation Rule
 recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
-    % Check crop facts
-    ( crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
-        format("Crop fact found: ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement])
-    ;
-        format("Crop fact NOT found: ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement]),
-        fail
-    ),
+    % % Check crop facts
+    % ( crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
+    %     FactStatus = 'Crop fact found'
+    % ;
+    %     FactStatus = 'Crop fact NOT found',
+    %     fail
+    % ),
 
-    % Check environmental facts
-    ( environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
-        format("Environment fact found: ~w, ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, Temperature, Humidity, Rainfall, Season, Location])
-    ;
-        format("Environment fact NOT found: ~w, ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, Temperature, Humidity, Rainfall, Season, Location]),
-        fail
-    ),
+    % % Check environmental facts
+    % ( environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
+    %     EnvStatus = 'Environment fact found'
+    % ;
+    %     EnvStatus = 'Environment fact NOT found',
+    %     fail
+    % ),
 
-    % Check soil facts
-    ( check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
-        format("Soil fact found: ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity])
-    ;
-        format("Soil fact NOT found: ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w, ~w~n", 
-               [CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity]),
-        fail
-    ),
+    % % Check soil facts
+    % ( check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
+    %     SoilStatus = 'Soil fact found'
+    % ;
+    %     SoilStatus = 'Soil fact NOT found',
+    %     fail
+    % ),
+
 
     % If all facts match, provide a recommendation
     fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
@@ -63,9 +58,7 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
 
 % Rule for fertilizer recommendation with impracticality checks
-recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
-                     SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, 
-                     Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
     % Check for impractical conditions
     check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity),
     check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
@@ -76,11 +69,6 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
 
 
-
-
-recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Recommendation) :-
-    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
-    Recommendation = 'Impractical combination: adjust fertilizer or water levels.'.
 
 
 

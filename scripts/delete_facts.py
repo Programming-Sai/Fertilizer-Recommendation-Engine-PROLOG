@@ -99,7 +99,7 @@ if __name__ == "__main__":
             r'soil_oilseed\([^,]*, [^,]*, [^,]*, low, low, low, low, [^,]*, [^)]*\)\.',  # Insufficient nutrients
             r'soil_oilseed\([^,]*, [^,]*, [^,]*, high|veryHigh, [^,]*, [^,]*, [^,]*, low, [^)]*\)\.',  # Excessive nitrogen + low moisture
             r'soil_oilseed\([^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, low|moderate, [^,]*, high|veryHigh|extreme\)\.',  # Poor organic matter + high conductivity
-            r'soil_oilseed\([^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, high|veryHigh, low\)\.',  # High moisture + low conductivity
+            r'soil_oilseed\([^,]*, [^,]*, [^,   ]*, [^,]*, [^,]*, [^,]*, [^,]*, high|veryHigh, low\)\.',  # High moisture + low conductivity
             r'soil_oilseed\([^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, extreme\)\.',  # Unknown conductivity
             r'soil_oilseed\([^,]*, clay, acidic|slightlyAcidic, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^)]*\)\.',  # Low pH in clay soil
             r'soil_oilseed\([^,]*, sandy, alkaline|slightlyAlkaline, [^,]*, [^,]*, [^,]*, [^,]*, [^,]*, [^)]*\)\.'  # High pH in sandy soil
