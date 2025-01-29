@@ -2,6 +2,7 @@
 :- use_module(library(http/http_parameters)).
 :- use_module(library(http/http_json)).
 :- use_module(library(filesex)).
+:- use_module(library(http/json_convert)).
 
 :- consult('../rules/recommendation_rules.pl').  % Import soil facts for tubers (replace with your actual files)
 
@@ -39,13 +40,15 @@ stop :-
 % HTTP handler to process fertilizer recommendation (GET request)
 % HTTP handler to process fertilizer recommendation (GET or POST request)
 recommend_fertilizer_request(Request) :-
-    member(method(Method), Request),
-    (   Method = post
+    (   member(method(post), Request)
     ->  process_json_request(Request)
-    ;   Method = get
+    ;   member(method(get), Request)
     ->  process_query_params(Request)
     ;   reply_json(json{error: "Unsupported HTTP method"}, [status(405)])
-    ).
+    ),
+    !.
+
+
 
 % Process GET requests with query parameters
 process_query_params(Request) :-
@@ -74,6 +77,9 @@ process_query_params(Request) :-
 % Process POST requests with JSON data
 process_json_request(Request) :-
     http_read_json_dict(Request, Data),
+    % Log incoming data
+    write('Received data: '), write(Data), nl,
+    
     % Extract data from JSON dictionary
     CropType = Data.get(cropType),
     GrowthStage = Data.get(growthStage),
@@ -93,34 +99,53 @@ process_json_request(Request) :-
     OrganicMatter = Data.get(organicMatter),
     SoilMoisture = Data.get(soilMoisture),
     ElectricalConductivity = Data.get(electricalConductivity),
-    % Call handler with extracted data
-    handle_request_params(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity).
+
+    % Log parsed parameters
+    write('Parsed parameters: '), nl,
+    write('CropType: '), write(CropType), nl,
+    write('GrowthStage: '), write(GrowthStage), nl,
+    write('YieldTarget: '), write(YieldTarget), nl,
+    % Continue logging other fields as needed...
+
+    % Call recommendation logic
+    recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity, Recommendation),
+
+    % Log the recommendation
+    write('Recommendation: '), write(Recommendation), nl,
+
+    % Respond with JSON
+    format('Content-type: application/json~n~n'),  % Set Content-Type header to application/json
+    reply_json_dict(Recommendation).
 
 
-recommendation_to_json(Recommendation, JsonResponse) :-
-    Recommendation = json{
-        fertilizerType: Type,
-        NPK: NPK,
-        applicationMode: Mode,
-        frequency: Frequency,
-        reasoning: Reasoning
-    },
-    NPK = json{
-        ratio: Ratio,
-        values: json{N: N, P: P, K: K},
-        units: Units
-    },
-    JsonResponse = json{
-        fertilizerType: Type,
-        NPK: json{
-            ratio: Ratio,
-            values: json{N: N, P: P, K: K},
-            units: Units
-        },
-        applicationMode: Mode,
-        frequency: Frequency,
-        reasoning: Reasoning
-    }.
+
+
+
+% recommendation_to_json(Recommendation, JsonResponse) :-
+%     Recommendation = json{
+%         fertilizerType := Type,
+%         NPK := NPK,
+%         applicationMode := Mode,
+%         frequency := Frequency,
+%         reasoning := Reasoning
+%     },
+%     NPK = json{
+%         ratio := Ratio,
+%         values := json{N := N, P := P, K := K},
+%         units := Units
+%     },
+%     JsonResponse = json{
+%         fertilizerType := Type,
+%         NPK := json{
+%             ratio := Ratio,
+%             values := json{N := N, P := P, K := K},
+%             units := Units
+%         },
+%         applicationMode := Mode,
+%         frequency := Frequency,
+%         reasoning := Reasoning
+%     }.
+
 
 
 
@@ -128,10 +153,10 @@ recommendation_to_json(Recommendation, JsonResponse) :-
 handle_request_params(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity) :-
     % Call recommendation logic
     recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, Temperature, Humidity, Rainfall, Season, Location, PhLevel, Nitrogen, Phosphorous, Potassium, SoilType, OrganicMatter, SoilMoisture, ElectricalConductivity, Recommendation),
-    % Convert to JSON-friendly format
-    recommendation_to_json(Recommendation, JsonResponse),
+    % Set the Content-Type header
+    format('Content-type: application/json~n~n'),
     % Return the result as JSON
-    reply_json(JsonResponse).
+    reply_json(Recommendation).
 
 
 
