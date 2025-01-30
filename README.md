@@ -1,73 +1,22 @@
-Here's an improved version of your project documentation, emphasizing that it's an initial setup and detailing the steps clearly for the users:
-
----
-
 # **Fertilizer Recommendation Engine - PROLOG**
 
-This project is an early-stage implementation of a Prolog-based expert system designed to help farmers make fertilizer recommendations based on various factors such as soil types, weather conditions, and crop requirements. Currently, the system is in its initial phase, and the backend serves only a simple "Hello, World!" message. As we continue development, the system will integrate logical inference for making more complex fertilizer recommendations.
+This project provides a Prolog-based backend for recommending fertilizers based on crop, soil and environmental inputs. It integrates with a Flask server to deliver recommendations via a RESTful API. The system utilizes Prolog for inference and supports querying for fertilizer recommendations via a `GET` request.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Project Structure](#project-structure)
+- [How It Works](#how-it-works)
+- [Files Explanation](#files-explanation)
+  - [Prolog Facts Files](#prolog-facts-files)
+  - [Flask Application](#flask-application)
+- [API Usage](#api-usage)
 
 ---
 
-## **Project Structure**
+## Installation
 
-```graphql
-fertilizer-recommendation-backend/
-│
-├── docker/
-│   ├── Dockerfile            # Docker configuration for the backend
-│   ├── entrypoint.sh         # Entrypoint script to run the Prolog server
-│   └── .dockerignore         # Files to ignore during Docker build
-│
-├── src/
-│   ├── facts/
-│   │   ├── soil_facts.pl     # Facts about soil types, pH levels, etc.
-│   │   ├── crop_facts.pl     # Facts about crops, growth stages, etc.
-│   │   ├── fertilizer_facts.pl # Facts about fertilizers and their compositions
-│   │   └── weather_facts.pl  # Facts about weather, seasons, etc.
-│   │
-│   ├── rules/
-│   │   ├── recommendation_rules.pl # Core logic and rules for fertilizer recommendations
-│   │   └── validation_rules.pl     # Validation rules for user inputs or data
-│   │
-│   ├── queries/
-│   │   └── recommendation_query.pl # Query definitions to interact with rules
-│   │
-│   └── server/
-│       ├── main.pl           # Main entry point for the Prolog server
-│       ├── routes.pl         # Defines API routes for handling requests
-│       └── utils.pl          # Helper predicates and utilities
-│
-├── tests/
-│   ├── test_facts.pl         # Tests for facts
-│   ├── test_rules.pl         # Tests for rules
-│   ├── test_queries.pl       # Tests for queries
-│   └── test_integration.pl   # Integration tests for the full system
-│
-├── docs/
-│   └── README.md             # Documentation for setting up and using the backend
-│
-├── .gitignore                # Git ignore file
-├── LICENSE                   # License for the project
-├── package.json              # Metadata for npm (if you want to manage scripts like testing with npm)
-└── docker-compose.yml        # Docker Compose to manage backend services
-```
-
----
-
-## **Prerequisites**
-
-Before running the project locally, make sure you have the following installed:
-
-1. **SWI-Prolog**:  
-   This project uses SWI-Prolog as the Prolog interpreter. You can download it from the official website:  
-   [SWI-Prolog Downloads](https://www.swi-prolog.org/Download.html)
-
-2. **Web Browser**:  
-   A web browser (e.g., Google Chrome, Firefox, Safari) is required to access the application via a local server.
-
----
-
-## **Installation Steps**
+To get the system up and running, follow these steps:
 
 1. **Clone the repository**:
 
@@ -78,112 +27,187 @@ Before running the project locally, make sure you have the following installed:
    cd Fertilizer-Recommendation-Engine-PROLOG
    ```
 
-2. **Install SWI-Prolog**:
+2. **Install Swi-Prolog**  
+   This project requires Swi-Prolog for running Prolog queries.
 
-   If SWI-Prolog isn't installed, follow the installation instructions on the [SWI-Prolog Download page](https://www.swi-prolog.org/Download.html) based on your operating system.
+   - Download and install Swi-Prolog from [Swi-Prolog's official site](https://www.swi-prolog.org/Download.html).
 
----
-
-## **Running the Project Locally**
-
-### Step 1: Start the Prolog HTTP Server
-
-1. **Launch SWI-Prolog**:
-
-   Open a terminal and type:
+3. **Setup Python Virtual Environment**  
+   Make sure you have Python 3.x installed. Set up a virtual environment for this project:
 
    ```bash
-   swipl
+   python -m venv .prolog-backend
    ```
 
-2. **Load the Prolog file**:
+4. **Activate Virtual Environment**  
+   Activate the virtual environment:
 
-   Once in the Prolog terminal, load the Prolog file (`hello_world_server.pl`) using:
+   - On Windows:
+     ```bash
+     .\.prolog-backend\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     source .prolog-backend/bin/activate
+     ```
 
-   ```prolog
-   [hello_world_server].
+5. **Install Required Python Packages**  
+   Install necessary Python packages using pip:
+
+   ```bash
+   pip install -r requirements.txt
    ```
 
-3. **Start the server**:
+6. **Start the Flask Server**  
+   Run the Flask server with the following command:
 
-   Run the following to start the server:
-
-   ```prolog
-   start.
+   ```bash
+   python /scripts/server.py
    ```
 
-   The server will be available at `http://localhost:8080`. You'll see a confirmation message in the terminal indicating the server is running.
-
-4. **Access the application**:
-
-   Open a browser and navigate to:
-
-   ```
-   http://localhost:8080
-   ```
-
-   The page should show a "Hello, World!" message, as the root URL currently returns that response.
+   The server should now be running at `http://127.0.0.1:5000/`.
 
 ---
 
-### Step 2: Restarting the Server
+## Project Structure
 
-- If you make any changes to the Prolog code and need to restart the server, run:
+Here’s a brief overview of the project structure:
 
-  ```prolog
-  restart.
-  ```
-
-  This stops the server, reloads the Prolog files, and restarts it with the updated code.
-
----
-
-### Step 3: Stopping the Server
-
-- To stop the Prolog HTTP server, run:
-
-  ```prolog
-  stop.
-  ```
-
-  This will terminate the HTTP server.
-
----
-
-### Step 4: Stopping the Entire Application
-
-- To stop the entire application, including the Prolog process, run:
-
-  ```prolog
-  halt.
-  ```
-
-  This will exit the `swipl` instance completely.
-
----
-
-## **How the System Works (Current State)**
-
-- **Initial Setup**:  
-   The current version of the system is set up with SWI-Prolog’s HTTP server library. At this stage, when you visit the root URL (`http://localhost:8080`), it calls the `say_hello/1` predicate, which simply returns a "Hello, World!" message.
-
-- **Future Updates**:  
-   Future versions will integrate the logic for fertilizer recommendations based on a set of rules and facts related to soil, weather, crop types, and fertilizers. This current setup provides the foundational structure for handling HTTP requests and will evolve into a full-fledged expert system.
+```
+Fertilizer-Recommendation-Engine-PROLOG/
+├── src/
+│   ├── facts/
+│   │   ├── environmental_facts.pl
+│   │   ├── crop_facts.pl
+│   │   └── soil_facts/
+│   |          ├── cereal_soil_facts.pl
+│   |          ├── vegetable_soil_facts.pl
+│   |          ├── oilseed_soil_facts.pl
+│   |          ├── legume_soil_facts.pl
+│   |          ├── fruit_soil_facts.pl
+│   |          └── tuber_soil_facts.pl
+│   └──  rules/
+│           └── recommendation_rules.pl
+├── scripts/
+│   ├── delete_facts.py
+│   ├── fact_generation.py
+│   ├── predicate_to_params.py
+│   └── read_prolog_output.py
+│   └── server.py
+|   └── static/
+│   |   └── favicon.ico
+│   └── templates/
+│           └── index.html
+├── data/
+│   └── knowledge_base_skeleton.json
+├── .gitignore
+├── requirements.txt
+└── README.md
+```
 
 ---
 
-## **Next Steps (What’s Coming)**
+## How It Works
 
-- **Fertilizer Recommendations**:  
-   We'll add rules for fertilizer recommendations based on soil pH, crop requirements, and weather patterns.
+The **Fertilizer Recommendation System** uses Prolog for inference based on a set of facts and rules. The system is exposed through a Flask API, which receives crop and environmental parameters and returns a fertilizer recommendation.
 
-- **APIs**:  
-   The backend will expose APIs to allow the frontend to interact with the system, send user data, and receive fertilizer suggestions.
-
----
-
-This documentation provides the basics for getting started with the project. Since we are just beginning, expect more functionality to be added as the system evolves. Stay tuned for future updates where we will dive into the expert system logic for fertilizer recommendations.
+- **Prolog Backend**: Prolog rules and facts define how fertilizers are recommended based on crop type, soil type, and other environmental factors.
+- **Flask API**: The Flask server provides an endpoint (`/recommend`) to accept GET requests with query parameters. These parameters are sent to the Prolog engine, and a recommendation is returned.
 
 ---
 
-Let me know if you need further changes or additions!
+## Files Explanation
+
+### Prolog Facts Files
+
+The **Prolog Facts Files** are essential for the system to function. They contain data about crops, soils, and fertilizers, which are used by the Prolog rules to generate recommendations. Below is a summary of each file:
+
+1. **crop_facts.pl**  
+   This file contains information about different crops, their growth stages, and their nutritional requirements. It also includes relevant data about environmental conditions suitable for each crop type.
+
+2. **soil_facts**  
+   This folder holds data related to different soil types, their properties, and the impact on crop growth. It includes soil pH levels, moisture content, and other factors crucial for determining the appropriate fertilizer.
+
+3. **environmental_rules.pl**  
+   This file contains information about different crops and their corresponding environmental conditions. It includes data about suitable temperature, humidity, rainfall, season, and location for each crop type.
+
+### Flask Application
+
+- **app.py**  
+  This is the main entry point for the application. It sets up the Flask server and defines the `/recommend` route that accepts parameters like crop type, growth stage, soil type, etc. The route processes the request, constructs a Prolog query, and returns the recommendation in JSON format.
+
+  - **/recommend route**:  
+    Accepts the following parameters:
+    - `cropType`
+    - `growthStage`
+    - `yieldTarget`
+    - `fertilizerHistory`
+    - `waterRequirements`
+    - `soilType`
+    - `pHLevel`
+    - `nitrogen`
+    - `phosphorous`
+    - `potassium`
+    - `organicMatter`
+    - `soilMoisture`
+    - `electricalConductivity`
+    - `temperature`
+    - `humidity`
+    - `rainfall`
+    - `season`
+    - `location`
+
+  The API then returns a JSON object containing the fertilizer recommendation.
+
+- **requirements.txt**  
+  Lists all the necessary Python libraries, including Flask and any other dependencies required to run the application.
+
+---
+
+## API Usage
+
+You can test the API by sending a `GET` request to the `/recommend` route with the required parameters.
+
+**Example Request:**
+
+```bash
+curl "http://127.0.0.1:5000/recommend?cropType=tuber&growthStage=vegetative&yieldTarget=moderate&fertilizerHistory=low&waterRequirements=moderate&temperature=cool&humidity=moderate&rainfall=high&season=moderate&location=high&pHLevel=neutral&nitrogen=high&phosphorous=moderate&potassium=high&soilType=loamy&organicMatter=moderate&soilMoisture=moderate&electricalConductivity=moderate"
+```
+
+**Example Response:**
+
+```json
+{
+  "recommendation": {
+    "NPK": {
+      "ratio": "20:10:20",
+      "units": "'kg/ha'",
+      "values": {
+        "K": "20",
+        "N": "20",
+        "P": "10"
+      }
+    },
+    "applicationMode": "top-dressing",
+    "fertilizerType": "NPK",
+    "frequency": "every 45 days",
+    "reasoning": [
+      "Tuer crops need high potassium for starch synthesis.",
+      "Nitrogen supports vegetative growth and leaf area development.",
+      "Moderate phosphorous aids in root expansion.",
+      "Top-dressing provides nutrients as crops mature."
+    ]
+  }
+}
+```
+
+### Notes:
+
+- Ensure that all required parameters are passed in the query string; otherwise, the API will return an error.
+- You can access the status of the backend at the root (`/`).
+
+---
+
+## Conclusion
+
+This project provides a robust system for recommending fertilizers based on crop and environmental conditions. By leveraging Prolog’s powerful reasoning capabilities, it provides accurate and context-specific recommendations to optimize agricultural practices.

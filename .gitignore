@@ -132,5 +132,5 @@ dist
 .pipInstall.sh
 .venv
 /scripts/.venv
-/scripts/__pycache__
-.re.sh/Users/mac/Desktop/Fertilizer-Recommendation-Engine-PROLOG/scripts/__pycache__/
+.re.sh
+/scripts/__pycache__/
