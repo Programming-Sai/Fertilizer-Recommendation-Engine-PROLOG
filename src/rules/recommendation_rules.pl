@@ -1,3 +1,5 @@
+:- set_prolog_flag(singletons, off).
+
 % Import the fact files (soil facts split by crop type, and other fact files)
 :- consult('../facts/crop_facts.pl').         % Import crop facts
 :- consult('../facts/environmental_facts.pl').  % Import environment facts
@@ -25,7 +27,7 @@ check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, 
     ).
 
 % Recommendation Rule
-recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
+recommend_fertilizer(_CropType, _GrowthStage, _YieldTarget, _FertilizerHistory, _WaterRequirement, _SoilType, _PhLevel, _Nitrogen, _Phosphorous, _Potassium, _OrganicMatter, _SoilMoisture, _ElectricalConductivity, _Temperature, _Humidity, _Rainfall, _Season, _Location, Recommendation) :-
     % % Check crop facts
     % ( crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
     %     FactStatus = 'Crop fact found'
@@ -52,7 +54,8 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
 
     % If all facts match, provide a recommendation
-    fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
+    % fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
+    fertilizer_recommendation(_CropType, _Nitrogen, _Phosphorous, _Potassium, _SoilType, _ApplicationMode, _Frequency, Recommendation).
 
 
 
@@ -65,7 +68,7 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
     check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location),
 
     % If no impracticalities are found, proceed with recommendations
-    fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
+    fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, _ApplicationMode, _Frequency, Recommendation).
 
 
 
@@ -98,7 +101,7 @@ check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season,
     ).
 
 % Expanded fertilizer recommendation rules
-fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation) :-
+fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, _SoilType, _ApplicationMode, _Frequency, Recommendation) :-
     ( CropType == cereal ->
         ( Nitrogen == high, Phosphorous == high, Potassium == high ->
             Recommendation = {
@@ -208,9 +211,9 @@ fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, 
 % Default recommendation if no matches
 fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
     Recommendation = {
-        "fertilizerType": "None",
-        "NPK": {"ratio": "None", "values": {"N": "None", "P": "None", "K": "None"}, "units": "kg/ha"},
-        "applicationMode": "None",
-        "frequency": "None",
-        "reasoning": ["No suitable recommendation available for the provided conditions."]
+        "fertilizerType": "",
+        "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
+        "applicationMode": "",
+        "frequency": "",
+        "reasoning": []
     }.
