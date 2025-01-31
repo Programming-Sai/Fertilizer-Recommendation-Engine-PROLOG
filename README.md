@@ -5,6 +5,7 @@ This project provides a Prolog-based backend for recommending fertilizers based 
 ## Table of Contents
 
 - [Installation](#installation)
+- [Running the Server with Docker](#running-the-server-with-docker)
 - [Project Structure](#project-structure)
 - [How It Works](#how-it-works)
 - [Files Explanation](#files-explanation)
@@ -69,6 +70,76 @@ To get the system up and running, follow these steps:
 
 ---
 
+Got it! Here's a new section focused solely on running the application using the main `server` repo without the submodule:
+
+---
+
+## Running the Server with Docker
+
+To run the **Fertilizer Recommendation Engine - PROLOG** using Docker, follow the steps below to build and launch the container.
+
+### 1. Build the Docker Image
+
+Ensure you're in the main `server` repo directory where the `Dockerfile` is located. To build the Docker image, use the following command:
+
+```bash
+docker build -t prolog-server .
+```
+
+This will build the Docker image named `prolog-server` using the Dockerfile in the current directory.
+
+### 2. Run the Docker Container
+
+After building the image, you can start the container using this command:
+
+```bash
+docker run -d -p 5000:5000 prolog-server
+```
+
+This runs the container in **detached mode**, mapping port `5000` of the container to port `5000` on your local machine. The Flask server should now be accessible at `http://127.0.0.1:5000/`.
+
+### 3. Verify the Server is Running
+
+You can check if the server is running by visiting `http://127.0.0.1:5000/` in your browser. If the server is working correctly, you should see the Flask application running.
+
+Alternatively, check the logs of the running container with:
+
+```bash
+docker logs <container-id>
+```
+
+To get the container ID, run:
+
+```bash
+docker ps
+```
+
+### 4. Stop the Docker Container
+
+If you need to stop the server, you can use the following command:
+
+```bash
+docker stop <container-id>
+```
+
+To get the container ID, run:
+
+```bash
+docker ps
+```
+
+### 5. Clean Up (Optional)
+
+To remove any unused containers, images, or volumes, you can run:
+
+```bash
+docker system prune
+```
+
+This will help you clean up any resources you no longer need.
+
+---
+
 ## Project Structure
 
 Here’s a brief overview of the project structure:
@@ -102,6 +173,7 @@ Fertilizer-Recommendation-Engine-PROLOG/
 │   └── knowledge_base_skeleton.json
 ├── .gitignore
 ├── requirements.txt
+├── Dockerfile
 └── README.md
 ```
 

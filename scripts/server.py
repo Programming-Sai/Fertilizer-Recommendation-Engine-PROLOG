@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from read_prolog_output import pread
-import os
+import webbrowser
+
 
 
 server = Flask(__name__)
@@ -61,4 +62,15 @@ def recommend_fertilizer():
 
 
 if __name__ == '__main__':
-    server.run(debug=True)
+    try:
+        print("Starting server...")
+        # Print server access URL
+        print(f"Server is accessible at: http://localhost:5000/")
+
+        # Open the server URL in the default web browser
+        webbrowser.open("http://localhost:5000/")
+
+        # Run the server
+        server.run(host="0.0.0.0", port=5000, debug=False)   
+    except Exception as e:
+        print(f"Failed to start the server. Error: {e}")

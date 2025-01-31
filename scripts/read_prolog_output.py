@@ -2,9 +2,11 @@ from pyswip import Prolog
 import json
 import ast
 import re
+import os
+
 
 def pread(query=None):
-    recommender = "/Users/mac/Desktop/Fertilizer-Recommendation-Engine-PROLOG/src/rules/recommendation_rules.pl"
+    recommender = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src', 'rules', 'recommendation_rules.pl')
     prolog = Prolog()
     prolog.consult(recommender)
     result={}
