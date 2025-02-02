@@ -11,10 +11,12 @@ def pread(query=None):
     prolog.consult(recommender)
     result={}
     query = query or "recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation)."
-    r = list(list(prolog.query(query)))[0]['Recommendation'].split(',(:')
-
-    lines=[re.sub(', ', ': ', i.replace('b', '').replace('{}', '').replace('(', '').replace(')', ''), count=1) for i in r]
+    raw_result = list(prolog.query(query))
+    lookup_words = ['broadcasting', 'Tuber']
+    r = list(raw_result)[0]['Recommendation'].split(',(:')
+    lines=[re.sub(', ', ': ', (i.replace("b", '')).replace('{}', '').replace('(', '').replace(')', ''), count=1) for i in r]
     lines.remove('')
+    
 
 
     result['fertilizerType'] = lines[0].split(': ')[1].replace("'", '').replace(', ', '')
@@ -25,14 +27,34 @@ def pread(query=None):
             'P': lines[5].split(", :")[0].split(': ')[1].replace("'", ''),
             'K': lines[5].split(", :")[1].split(': ')[0].split(", ")[1].replace("'", ''),
         },
-        'units': lines[5].split(", :")[2].split(", ")[1],
+        'units': lines[5].split(", :")[2].split(", ")[1].replace("'", ''),
     }
-    result['applicationMode']=lines[6].split(': ')[1].replace("'", '').replace(', ', '')
+    result['applicationMode']=get_missing_b(lookup_words, lines[6].split(': ')[1].replace("'", '').replace(', ', ''))
     result['frequency']=lines[7].split(":'")[0].split(': ')[1].replace("'", '').replace(', ', '')
-    result['reasoning']=ast.literal_eval(lines[7].split(":'")[1].replace('reasoning\', ', ''))
+    # result['reasoning']=ast.literal_eval(lines[7].split(":'")[1].replace('reasoning\', ', ''))
+    result['reasoning']=get_missing_b(lookup_words, ast.literal_eval(lines[7].split(":'")[1].replace('reasoning\', ', '')))
 
-    return json.dumps(result, indent=4), result
-   
+    return json.dumps(result, indent=4), result, raw_result
+
+
+def get_missing_b(lookup_words, word):
+    if isinstance(word, str):
+        return [lookup_word if word == lookup_word.replace("b", '') else word for lookup_word in lookup_words][0]
+    elif isinstance(word, list):
+        for lookup_word in lookup_words:
+            for idx, w in enumerate(word):
+                for wo in w.split(" "):
+                    d = lookup_word
+                    if wo == lookup_word.replace("b", ''):
+                        word[idx] = w.replace(wo, d)
+        return word
+
+
+
+
+
+
+
 # Run the function
 # print(pread()[0])
 # print(pread("recommend_fertilizer(tuber, vegetative, moderate, low, moderate, cool, moderate, high, moderate, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).")[0])
