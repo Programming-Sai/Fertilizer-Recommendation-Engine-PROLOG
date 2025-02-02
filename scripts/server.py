@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from read_prolog_output import pread
+from flask_cors import CORS
 import webbrowser
 
 
 
 server = Flask(__name__)
+
+CORS(server)
 
 @server.route('/')
 def index():
