@@ -2,12 +2,31 @@
 % crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement).
 
 
-% Impractical crop combinations
-impractical_crop(_, _, _, low, high).    % Low fertilizer + High water
-impractical_crop(_, _, high, low, _).    % High yield + Low fertilizer
-impractical_crop(_, _, _, high, low).    % High fertilizer + Low water
-impractical_crop(_, _, high, _, low).    % High yield + Low water
-impractical_crop(_, early, _, high, _).  % Early growth stage + High fertilizer
+% Impractical Crop Conditions (explicit feature tracking)
+impractical_crop(_, _, _, FertilizerHistory, WaterRequirement, 
+    'Applying low fertilizer while providing excessive water dilutes nutrients, leading to poor crop yield.', 
+    [fertilizer_history-FertilizerHistory, water_requirement-WaterRequirement]) :-
+    FertilizerHistory = low, WaterRequirement = high.
+
+impractical_crop(_, _, YieldTarget, FertilizerHistory, _, 
+    'Aiming for a high yield with low fertilizer application leads to nutrient deficiency and weak plant growth.', 
+    [yield_target-YieldTarget, fertilizer_history-FertilizerHistory]) :-
+    YieldTarget = high, FertilizerHistory = low.
+
+impractical_crop(_, _, _, FertilizerHistory, WaterRequirement, 
+    'Over-fertilization combined with low water supply can cause nutrient toxicity and plant stress.', 
+    [fertilizer_history-FertilizerHistory, water_requirement-WaterRequirement]) :-
+    FertilizerHistory = high, WaterRequirement = low.
+
+impractical_crop(_, _, YieldTarget, _, WaterRequirement, 
+    'Trying to achieve high yield with low water availability results in drought stress and reduced productivity.', 
+    [yield_target-YieldTarget, water_requirement-WaterRequirement]) :-
+    YieldTarget = high, WaterRequirement = low.
+
+impractical_crop(_, early, _, FertilizerHistory, _, 
+    'Applying high fertilizer in the early growth stage can burn seedlings and disrupt proper development.', 
+    [growth_stage-early, fertilizer_history-FertilizerHistory]) :-
+    FertilizerHistory = high.
 
 
 % Cereals

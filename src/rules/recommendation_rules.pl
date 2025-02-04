@@ -26,82 +26,101 @@ check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, 
     ;   CropType == fruit -> soil_fruit(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity)
     ).
 
-% Recommendation Rule
-recommend_fertilizer(_CropType, _GrowthStage, _YieldTarget, _FertilizerHistory, _WaterRequirement, _SoilType, _PhLevel, _Nitrogen, _Phosphorous, _Potassium, _OrganicMatter, _SoilMoisture, _ElectricalConductivity, _Temperature, _Humidity, _Rainfall, _Season, _Location, Recommendation) :-
-    % % Check crop facts
-    % ( crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
-    %     FactStatus = 'Crop fact found'
-    % ;
-    %     FactStatus = 'Crop fact NOT found',
-    %     fail
-    % ),
-
-    % % Check environmental facts
-    % ( environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
-    %     EnvStatus = 'Environment fact found'
-    % ;
-    %     EnvStatus = 'Environment fact NOT found',
-    %     fail
-    % ),
-
-    % % Check soil facts
-    % ( check_soil_facts(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
-    %     SoilStatus = 'Soil fact found'
-    % ;
-    %     SoilStatus = 'Soil fact NOT found',
-    %     fail
-    % ),
 
 
-    % If all facts match, provide a recommendation
-    % fertilizer_recommendation(CropType, Nitrogen, Phosphorous, Potassium, SoilType, ApplicationMode, Frequency, Recommendation).
-    fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location,  Recommendation).
+format_reason_string(ReasonLists, FormattedString) :-
+    flatten(ReasonLists, FlatList),      % Flatten nested lists into one list
+    exclude(=([]), FlatList, NonEmpty),  % Remove empty lists
+    ( NonEmpty = [] -> FormattedString = ""
+    ; atomic_list_concat(NonEmpty, ' | ', FormattedString) ).
 
 
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                     SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
+                     SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
+                     Season, Location, ImpracticalReasons, Recommendation) :-
 
+    % Run all checks without stopping
+    ( check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, SoilReasons)
+    -> true ; SoilReasons = [] ),
 
-% Rule for fertilizer recommendation with impracticality checks
-recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
-    % Check for impractical conditions
-    check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity),
-    check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement),
-    check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location),
+    ( check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, CropReasons)
+    -> true ; CropReasons = [] ),
 
-    % If no impracticalities are found, proceed with recommendations
-    fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation).
+    ( check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, EnvReasons)
+    -> true ; EnvReasons = [] ),
 
+    % Convert reasons into a single formatted string
+    format_reason_string([SoilReasons, CropReasons, EnvReasons], ImpracticalReasons),
 
-
-
-
-
-
-% Check for impractical soil conditions
-check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) :-
-    ( impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity) ->
-        write("Impractical soil conditions detected."), nl
+    ( 
+      % If there are impractical conditions, return them directly
+      ImpracticalReasons \= "" ->
+        Recommendation = {
+            "fertilizerType": "",
+            "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
+            "applicationMode": "",
+            "frequency": "",
+            "reasoning": [ImpracticalReasons]
+        }
     ;
-        true
+      
+      fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                                SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
+                                SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
+                                Season, Location, Recommendation)
     ).
 
-% Check for impractical crop conditions
-check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) :-
-    ( impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement) ->
-        write("Impractical crop conditions detected."), nl
-    ;
-        true
-    ).
+% 
 
-% Check for impractical environmental conditions
-check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location) :-
-    ( impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location) ->
-        write("Impractical environmental conditions detected."), nl
-    ;
-        true
-    ).
+
+
+
+
+
+% Check impractical soil conditions
+check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Reasons) :-
+    impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Reason, Factors),
+    Reasons = [Reason].
+
+
+% Check impractical crop conditions
+check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Reasons) :-
+    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Reason, Factors),
+    Reasons = [Reason].
+
+% Check impractical environmental conditions
+check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, Reasons) :-
+    impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, Reason, Factors),
+    Reasons = [Reason].
+
+
+
+
+
+
+% Print reasons and exact problematic values
+
+
+% 
+print_reasons([]).
+print_reasons([(Reason, Factors) | Rest]) :-
+    format(" - ~w~n", [Reason]),
+    print_factors(Factors),
+    print_reasons(Rest).
+
+% Print out each factor and its corresponding value
+print_factors([]).
+print_factors([Factor-Value | Rest]) :-
+    format("   -> ~w: ~w~n", [Factor, Value]),
+    print_factors(Rest).
+% 
+
+
+
 
 % Expanded fertilizer recommendation rules
-fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
+fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirements, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, Season, Location, Recommendation) :-
     ( CropType == cereal ->
         ( Nitrogen == high, Phosphorous == high, Potassium == high ->
             Recommendation = {
@@ -128,123 +147,6 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == vegetable ->
-        ( Nitrogen == high, Phosphorous == high, Potassium == moderate, SoilType == loamy, pHLevel == neutral, OrganicMatter == high ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "25:20:15", "values": {"N": 25, "P": 20, "K": 15}, "units": "kg/ha"},
-                "applicationMode": "side-dressing",
-                "frequency": "every 20 days",
-                "reasoning": ["High nitrogen encourages rapid growth during the vegetative stage.",
-                              "High phosphorous promotes root development and flowering.",
-                              "Moderate potassium helps in disease resistance and fruit quality.",
-                              "Loamy soil with high organic matter allows efficient nutrient uptake.",
-                              "Side-dressing every 20 days ensures consistent nutrient supply during growth."]
-            }
-        )
-    ;
-    CropType == tuber ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilType == silt, pHLevel == slightlyAcidic, OrganicMatter == moderate ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "0:35:25", "values": {"N": 0, "P": 35, "K": 25}, "units": "kg/ha"},
-                "applicationMode": "basal application",
-                "frequency": "once at planting",
-                "reasoning": ["Low nitrogen is sufficient for tubers as they have low nitrogen demand.",
-                              "High phosphorous is crucial for tuber initiation and root development.",
-                              "High potassium promotes tuber quality and helps the plant resist stress.",
-                              "Silt soil with moderate organic matter provides excellent nutrient retention.",
-                              "Basal application at planting is effective in establishing strong tuber growth."]
-            }
-        )
-    ;
-    CropType == fruit ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilMoisture == moderate, pHLevel == neutral, Rainfall == moderate ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "0:35:30", "values": {"N": 0, "P": 35, "K": 30}, "units": "kg/ha"},
-                "applicationMode": "side-dressing",
-                "frequency": "every 25 days",
-                "reasoning": ["Low nitrogen helps focus on fruiting rather than excessive vegetative growth.",
-                              "High phosphorous supports strong root and fruit development.",
-                              "High potassium ensures fruit size, sugar content, and resistance to diseases.",
-                              "Moderate soil moisture and rainfall create ideal conditions for nutrient uptake.",
-                              "Side-dressing every 25 days keeps nutrient levels balanced during fruit development."]
-            }
-        )
-    ;
-    CropType == oilseed ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == low, SoilType == clay, pHLevel == slightlyAlkaline, OrganicMatter == moderate ->
-            Recommendation = {
-                "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "15:30:10", "values": {"N": 15, "P": 30, "K": 10}, "units": "kg/ha"},
-                "applicationMode": "fertigation",
-                "frequency": "every 30 days",
-                "reasoning": ["Moderate nitrogen supports balanced growth without excessive vegetative growth.",
-                              "High phosphorous promotes root and nodule development.",
-                              "Low potassium prevents excessive plant stress while still promoting oil content.",
-                              "Clay soil helps retain nutrients, and slightly alkaline pH is optimal for nutrient uptake.",
-                              "Fertigation ensures consistent nutrient availability in this setup."]
-            }
-        )
-    ;
-    CropType == cereal ->
-        ( Nitrogen == moderate, Phosphorous == low, Potassium == high, SoilMoisture == high, pHLevel == neutral, Rainfall == high ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:5:30", "values": {"N": 20, "P": 5, "K": 30}, "units": "kg/ha"},
-                "applicationMode": "top-dressing",
-                "frequency": "every 15 days",
-                "reasoning": ["Moderate nitrogen supports steady growth and grain filling.",
-                              "Low phosphorous is acceptable as long as potassium is high, preventing excessive vegetative growth.",
-                              "High potassium promotes drought resistance and overall plant health during high rainfall.",
-                              "Top-dressing every 15 days ensures that the crop gets adequate nutrients during the critical grain-filling period."]
-            }
-        )
-    ;
-    CropType == vegetable ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, Temperature == moderate, pHLevel == slightlyAcidic, SoilMoisture == moderate ->
-            Recommendation = {
-                "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "0:40:20", "values": {"N": 0, "P": 40, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "basal application",
-                "frequency": "once at planting",
-                "reasoning": ["Low nitrogen is ideal for vegetables with low nitrogen requirements.",
-                              "High phosphorous supports root and flower development.",
-                              "Moderate potassium helps prevent disease and improve fruit quality.",
-                              "Moderate soil moisture and slightly acidic pH help with nutrient uptake during early growth."]
-            }
-        )
-    ;
-    CropType == legume ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == moderate, SoilType == chalky, pHLevel == slightlyAlkaline, OrganicMatter == high ->
-            Recommendation = {
-                "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "10:35:15", "values": {"N": 10, "P": 35, "K": 15}, "units": "kg/ha"},
-                "applicationMode": "top-dressing",
-                "frequency": "every 30 days",
-                "reasoning": ["Moderate nitrogen boosts growth without compromising nodule development.",
-                              "High phosphorous supports root growth and nodule fixation.",
-                              "Moderate potassium helps with disease resistance and root development.",
-                              "Chalky soil with high organic matter ensures nutrient retention and proper aeration."]
-            }
-        )
-    ;
-    CropType == tuber ->
-        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilType == sandy, pHLevel == alkaline, OrganicMatter == low ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:15:30", "values": {"N": 20, "P": 15, "K": 30}, "units": "kg/ha"},
-                "applicationMode": "side-dressing",
-                "frequency": "every 15 days",
-                "reasoning": ["High nitrogen ensures that the plant has enough vegetative growth to support tuber development.",
-                              "Moderate phosphorous promotes tuber initiation, especially in sandy, alkaline soils.",
-                              "High potassium helps to improve tuber yield and quality.",
-                              "Side-dressing every 15 days helps maintain nutrient levels during tuber bulking."]
-            }
-        )
-
-    ;
-    CropType == vegetable ->
         ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
             Recommendation = {
                 "fertilizerType": "NPK",
@@ -268,8 +170,183 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
             }
         )
     ;
+    CropType == legume ->
+        ( Nitrogen == low, Phosphorous == moderate, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:20:20", "values": {"N": 0, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Legumes fix their own nitrogen; minimal nitrogen supplementation is needed.",
+                              "Phosphorous promotes root and nodule development.",
+                              "Potassium enhances resistance to diseases and improves pod quality.",
+                              "Basal application sets the foundation for growth."]
+            }
+        )
+    ;
+    CropType == fruit ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == moderate ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:20:10", "values": {"N": 20, "P": 20, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 45 days",
+                "reasoning": ["High nitrogen supports vegetative growth, especially in young trees.",
+                              "Phosphorous ensures strong roots and better fruit setting.",
+                              "Moderate potassium levels support overall plant health.",
+                              "Fertigation ensures targeted delivery to deep-rooted crops."]
+            }
+        )
+    ;
+    CropType == oilseed ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:20:20", "values": {"N": 10, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Oilseeds need high phosphorous for better seed quality.",
+                              "Potassium improves oil content and disease resistance.",
+                              "Moderate nitrogen supports growth without risking lodging."]
+            }
+        )
+    ;
+    CropType == tuber ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
+                "frequency": "every 45 days",
+                "reasoning": ["Tuber crops need high potassium for starch synthesis.",
+                              "Nitrogen supports vegetative growth and leaf area development.",
+                              "Moderate phosphorous aids in root expansion.",
+                              "Top-dressing provides nutrients as crops mature."]
+            }
+        )
+    ;
+        CropType == vegetable ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == moderate, WaterRequirements == high, SoilType == loamy, PhLevel == neutral ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 25 days",
+                "reasoning": ["Vegetables require high nitrogen for rapid vegetative growth.",
+                              "High phosphorous supports root development and flower initiation.",
+                              "Potassium is essential for disease resistance and fruit quality.",
+                              "Loamy soil with neutral pH ensures optimal nutrient availability for vegetables.",
+                              "Frequent fertigation maximizes nutrient uptake during high water demand."]
+            }
+        )
+    ;
+    CropType == fruit ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == high, Temperature == moderate, WaterRequirements == moderate, OrganicMatter == moderate ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "15:20:25", "values": {"N": 15, "P": 20, "K": 25}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "every 40 days",
+                "reasoning": ["Moderate nitrogen helps promote balanced vegetative growth in fruiting plants.",
+                              "High phosphorous encourages strong root system and fruit set.",
+                              "High potassium aids in fruit development, sugar accumulation, and disease resistance.",
+                              "Side-dressing ensures nutrient availability as the plant matures and produces fruit.",
+                              "Moderate organic matter helps in nutrient release and maintains soil fertility."]
+            }
+        )
+    ;
+    CropType == legume ->
+        ( Nitrogen == low, Phosphorous == moderate, Potassium == low, PhLevel == slightlyAcidic, SoilType == sandy, Season == dry ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:15:10", "values": {"N": 0, "P": 15, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Legumes fix their own nitrogen; thus, minimal nitrogen is required.",
+                              "Moderate phosphorous supports root and nodule development, essential in slightly acidic soils.",
+                              "Low potassium demand suits legumes as they grow in sandy soils with lower fertility.",
+                              "Basal application provides a steady nutrient supply during the crucial early growth phase.",
+                              "Dry season conditions necessitate a nutrient plan that adapts to lower rainfall."]
+            }
+        )
+    ;
+    CropType == oilseed ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == high, PhLevel == alkaline, SoilMoisture == high, Location == tropical ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "20:20:20", "values": {"N": 20, "P": 20, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 30 days",
+                "reasoning": ["Oilseeds thrive with balanced levels of nitrogen, phosphorous, and potassium.",
+                              "Alkaline soils require balanced fertilizer to avoid nutrient deficiencies.",
+                              "Tropical locations with high moisture require regular applications for optimal growth.",
+                              "Broadcasting ensures even distribution across the field, ideal for large areas.",
+                              "Oilseeds benefit from high nutrient availability throughout their growth stages."]
+            }
+        )
+    ;
+    CropType == tuber ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilMoisture == moderate, PhLevel == neutral, WaterRequirements == high ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "10:25:20", "values": {"N": 10, "P": 25, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
+                "frequency": "every 35 days",
+                "reasoning": ["Tuber crops require high potassium to stimulate tuber formation and growth.",
+                              "High phosphorous is vital for root expansion and early tuber initiation.",
+                              "Moderate soil moisture ensures that nutrients are available for uptake.",
+                              "Neutral pH levels promote efficient nutrient absorption for tuber crops.",
+                              "Regular top-dressing allows for timely nutrient replenishment during the growing season."]
+            }
+        )
+    ;
+    CropType == cereal ->
+        ( Nitrogen == veryHigh, Phosphorous == moderate, Potassium == high, Season == summer, SoilType == sandy, PhLevel == slightlyAlkaline ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "30:10:20", "values": {"N": 30, "P": 10, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "broadcasting",
+                "frequency": "every 20 days",
+                "reasoning": ["Cereal crops have a high nitrogen demand, especially during the vegetative stage.",
+                              "Moderate phosphorous is essential for root development and flowering.",
+                              "High potassium is important for improving grain quality and disease resistance.",
+                              "Slightly alkaline pH and sandy soils favor nutrient availability and drainage.",
+                              "Summer season conditions require frequent fertilizer application to meet the plants high nutrient demand."]
+            }
+        )
+    ;
+    CropType == vegetable ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == moderate, PhLevel == acidic, SoilMoisture == high, Season == wet ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "15:25:15", "values": {"N": 15, "P": 25, "K": 15}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 20 days",
+                "reasoning": ["Moderate nitrogen supports balanced leaf growth while avoiding excessive vegetative growth.",
+                              "High phosphorous ensures strong root system development in acidic soils.",
+                              "High potassium is necessary for optimal flowering and fruiting in wet conditions.",
+                              "Fertigation ensures efficient nutrient uptake during the rainy season when water availability is high.",
+                              "Consistent fertigation provides nutrients directly to the root zone for rapid absorption."]
+            }
+        )
+    ;
+    CropType == legume ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, PhLevel == neutral, SoilType == loamy, OrganicMatter == high ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:25:15", "values": {"N": 0, "P": 25, "K": 15}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "once at flowering",
+                "reasoning": ["Legumes fix nitrogen, so high nitrogen fertilizers are not necessary.",
+                              "High phosphorous is critical for root and nodule development in neutral loamy soils.",
+                              "Moderate potassium promotes disease resistance and pod quality during flowering.",
+                              "Side-dressing provides targeted nutrition to support plant needs during the reproductive phase.",
+                              "High organic matter improves soil structure and nutrient retention, enhancing fertilizer efficacy."]
+            }
+        )
+    ;
         CropType == fruit ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == high, SoilMoisture == moderate, pHLevel == neutral, Season == autumn ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == high, SoilMoisture == moderate, PhLevel == neutral, Season == autumn ->
             Recommendation = {
                 "fertilizerType": "NPK",
                 "NPK": {"ratio": "18:22:20", "values": {"N": 18, "P": 22, "K": 20}, "units": "kg/ha"},
@@ -284,7 +361,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == vegetable ->
-        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, Temperature == hot, pHLevel == slightlyAlkaline, WaterRequirements == veryHigh ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, Temperature == hot, PhLevel == slightlyAlkaline, WaterRequirements == veryHigh ->
             Recommendation = {
                 "fertilizerType": "NPK",
                 "NPK": {"ratio": "25:10:25", "values": {"N": 25, "P": 10, "K": 25}, "units": "kg/ha"},
@@ -299,7 +376,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == cereal ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == clay, pHLevel == acidic, OrganicMatter == moderate ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == clay, PhLevel == acidic, OrganicMatter == moderate ->
             Recommendation = {
                 "fertilizerType": "P-K Blend",
                 "NPK": {"ratio": "0:30:20", "values": {"N": 0, "P": 30, "K": 20}, "units": "kg/ha"},
@@ -314,7 +391,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == tuber ->
-        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilMoisture == high, Temperature == moderate, pHLevel == neutral ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilMoisture == high, Temperature == moderate, PhLevel == neutral ->
             Recommendation = {
                 "fertilizerType": "NPK",
                 "NPK": {"ratio": "20:15:25", "values": {"N": 20, "P": 15, "K": 25}, "units": "kg/ha"},
@@ -343,7 +420,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == legume ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == peat, pHLevel == acidic, OrganicMatter == high ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == peat, PhLevel == acidic, OrganicMatter == high ->
             Recommendation = {
                 "fertilizerType": "P-K Blend",
                 "NPK": {"ratio": "0:25:20", "values": {"N": 0, "P": 25, "K": 20}, "units": "kg/ha"},
@@ -358,7 +435,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
         )
     ;
     CropType == vegetable ->
-        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, pHLevel == slightlyAlkaline, SoilMoisture == high, Rainfall == high ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, PhLevel == slightlyAlkaline, SoilMoisture == high, Rainfall == high ->
             Recommendation = {
                 "fertilizerType": "NPK",
                 "NPK": {"ratio": "25:15:25", "values": {"N": 25, "P": 15, "K": 25}, "units": "kg/ha"},
@@ -401,330 +478,133 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
                               "Moderate organic matter helps with nutrient retention in sandy soils."]
             }
         )
-
-    ;
-    CropType == legume ->
-        ( Nitrogen == low, Phosphorous == moderate, Potassium == moderate ->
-            Recommendation = {
-                "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "0:20:20", "values": {"N": 0, "P": 20, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "basal application",
-                "frequency": "once at planting",
-                "reasoning": ["Legumes fix their own nitrogen; minimal nitrogen supplementation is needed.",
-                              "Phosphorous promotes root and nodule development.",
-                              "Potassium enhances resistance to diseases and improves pod quality.",
-                              "Basal application sets the foundation for growth."]
-            }
-        )
     ;
         CropType == vegetable ->
-        ( Nitrogen == high, Phosphorous == high, Potassium == moderate, WaterRequirements == high, SoilType == loamy, pHLevel == neutral ->
+        ( Nitrogen == high, Phosphorous == high, Potassium == moderate, SoilType == loamy, PhLevel == neutral, OrganicMatter == high ->
             Recommendation = {
                 "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "fertigation",
-                "frequency": "every 25 days",
-                "reasoning": ["Vegetables require high nitrogen for rapid vegetative growth.",
-                              "High phosphorous supports root development and flower initiation.",
-                              "Potassium is essential for disease resistance and fruit quality.",
-                              "Loamy soil with neutral pH ensures optimal nutrient availability for vegetables.",
-                              "Frequent fertigation maximizes nutrient uptake during high water demand."]
-            }
-        )
-    ;
-    CropType == fruit ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == high, Temperature == moderate, WaterRequirements == moderate, OrganicMatter == moderate ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "15:20:25", "values": {"N": 15, "P": 20, "K": 25}, "units": "kg/ha"},
+                "NPK": {"ratio": "25:20:15", "values": {"N": 25, "P": 20, "K": 15}, "units": "kg/ha"},
                 "applicationMode": "side-dressing",
-                "frequency": "every 40 days",
-                "reasoning": ["Moderate nitrogen helps promote balanced vegetative growth in fruiting plants.",
-                              "High phosphorous encourages strong root system and fruit set.",
-                              "High potassium aids in fruit development, sugar accumulation, and disease resistance.",
-                              "Side-dressing ensures nutrient availability as the plant matures and produces fruit.",
-                              "Moderate organic matter helps in nutrient release and maintains soil fertility."]
-            }
-        )
-    ;
-    CropType == legume ->
-        ( Nitrogen == low, Phosphorous == moderate, Potassium == low, pHLevel == slightlyAcidic, SoilType == sandy, Season == dry ->
-            Recommendation = {
-                "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "0:15:10", "values": {"N": 0, "P": 15, "K": 10}, "units": "kg/ha"},
-                "applicationMode": "basal application",
-                "frequency": "once at planting",
-                "reasoning": ["Legumes fix their own nitrogen; thus, minimal nitrogen is required.",
-                              "Moderate phosphorous supports root and nodule development, essential in slightly acidic soils.",
-                              "Low potassium demand suits legumes as they grow in sandy soils with lower fertility.",
-                              "Basal application provides a steady nutrient supply during the crucial early growth phase.",
-                              "Dry season conditions necessitate a nutrient plan that adapts to lower rainfall."]
-            }
-        )
-    ;
-    CropType == oilseed ->
-        ( Nitrogen == high, Phosphorous == high, Potassium == high, pHLevel == alkaline, SoilMoisture == high, Location == tropical ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:20:20", "values": {"N": 20, "P": 20, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "broadcasting",
-                "frequency": "every 30 days",
-                "reasoning": ["Oilseeds thrive with balanced levels of nitrogen, phosphorous, and potassium.",
-                              "Alkaline soils require balanced fertilizer to avoid nutrient deficiencies.",
-                              "Tropical locations with high moisture require regular applications for optimal growth.",
-                              "Broadcasting ensures even distribution across the field, ideal for large areas.",
-                              "Oilseeds benefit from high nutrient availability throughout their growth stages."]
+                "frequency": "every 20 days",
+                "reasoning": ["High nitrogen encourages rapid growth during the vegetative stage.",
+                              "High phosphorous promotes root development and flowering.",
+                              "Moderate potassium helps in disease resistance and fruit quality.",
+                              "Loamy soil with high organic matter allows efficient nutrient uptake.",
+                              "Side-dressing every 20 days ensures consistent nutrient supply during growth."]
             }
         )
     ;
     CropType == tuber ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilMoisture == moderate, pHLevel == neutral, WaterRequirements == high ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilType == silt, PhLevel == slightlyAcidic, OrganicMatter == moderate ->
             Recommendation = {
                 "fertilizerType": "NPK",
-                "NPK": {"ratio": "10:25:20", "values": {"N": 10, "P": 25, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "top-dressing",
-                "frequency": "every 35 days",
-                "reasoning": ["Tuber crops require high potassium to stimulate tuber formation and growth.",
-                              "High phosphorous is vital for root expansion and early tuber initiation.",
-                              "Moderate soil moisture ensures that nutrients are available for uptake.",
-                              "Neutral pH levels promote efficient nutrient absorption for tuber crops.",
-                              "Regular top-dressing allows for timely nutrient replenishment during the growing season."]
+                "NPK": {"ratio": "0:35:25", "values": {"N": 0, "P": 35, "K": 25}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Low nitrogen is sufficient for tubers as they have low nitrogen demand.",
+                              "High phosphorous is crucial for tuber initiation and root development.",
+                              "High potassium promotes tuber quality and helps the plant resist stress.",
+                              "Silt soil with moderate organic matter provides excellent nutrient retention.",
+                              "Basal application at planting is effective in establishing strong tuber growth."]
+            }
+        )
+    ;
+    CropType == fruit ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == high, SoilMoisture == moderate, PhLevel == neutral, Rainfall == moderate ->
+            Recommendation = {
+                "fertilizerType": "NPK",
+                "NPK": {"ratio": "0:35:30", "values": {"N": 0, "P": 35, "K": 30}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "every 25 days",
+                "reasoning": ["Low nitrogen helps focus on fruiting rather than excessive vegetative growth.",
+                              "High phosphorous supports strong root and fruit development.",
+                              "High potassium ensures fruit size, sugar content, and resistance to diseases.",
+                              "Moderate soil moisture and rainfall create ideal conditions for nutrient uptake.",
+                              "Side-dressing every 25 days keeps nutrient levels balanced during fruit development."]
+            }
+        )
+    ;
+    CropType == oilseed ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == low, SoilType == clay, PhLevel == slightlyAlkaline, OrganicMatter == moderate ->
+            Recommendation = {
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "15:30:10", "values": {"N": 15, "P": 30, "K": 10}, "units": "kg/ha"},
+                "applicationMode": "fertigation",
+                "frequency": "every 30 days",
+                "reasoning": ["Moderate nitrogen supports balanced growth without excessive vegetative growth.",
+                              "High phosphorous promotes root and nodule development.",
+                              "Low potassium prevents excessive plant stress while still promoting oil content.",
+                              "Clay soil helps retain nutrients, and slightly alkaline pH is optimal for nutrient uptake.",
+                              "Fertigation ensures consistent nutrient availability in this setup."]
             }
         )
     ;
     CropType == cereal ->
-        ( Nitrogen == veryHigh, Phosphorous == moderate, Potassium == high, Season == summer, SoilType == sandy, pHLevel == slightlyAlkaline ->
+        ( Nitrogen == moderate, Phosphorous == low, Potassium == high, SoilMoisture == high, PhLevel == neutral, Rainfall == high ->
             Recommendation = {
                 "fertilizerType": "NPK",
-                "NPK": {"ratio": "30:10:20", "values": {"N": 30, "P": 10, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "broadcasting",
-                "frequency": "every 20 days",
-                "reasoning": ["Cereal crops have a high nitrogen demand, especially during the vegetative stage.",
-                              "Moderate phosphorous is essential for root development and flowering.",
-                              "High potassium is important for improving grain quality and disease resistance.",
-                              "Slightly alkaline pH and sandy soils favor nutrient availability and drainage.",
-                              "Summer season conditions require frequent fertilizer application to meet the plants high nutrient demand."]
+                "NPK": {"ratio": "20:5:30", "values": {"N": 20, "P": 5, "K": 30}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
+                "frequency": "every 15 days",
+                "reasoning": ["Moderate nitrogen supports steady growth and grain filling.",
+                              "Low phosphorous is acceptable as long as potassium is high, preventing excessive vegetative growth.",
+                              "High potassium promotes drought resistance and overall plant health during high rainfall.",
+                              "Top-dressing every 15 days ensures that the crop gets adequate nutrients during the critical grain-filling period."]
             }
         )
     ;
     CropType == vegetable ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == moderate, pHLevel == acidic, SoilMoisture == high, Season == wet ->
+        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, Temperature == moderate, PhLevel == slightlyAcidic, SoilMoisture == moderate ->
             Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "15:25:15", "values": {"N": 15, "P": 25, "K": 15}, "units": "kg/ha"},
-                "applicationMode": "fertigation",
-                "frequency": "every 20 days",
-                "reasoning": ["Moderate nitrogen supports balanced leaf growth while avoiding excessive vegetative growth.",
-                              "High phosphorous ensures strong root system development in acidic soils.",
-                              "High potassium is necessary for optimal flowering and fruiting in wet conditions.",
-                              "Fertigation ensures efficient nutrient uptake during the rainy season when water availability is high.",
-                              "Consistent fertigation provides nutrients directly to the root zone for rapid absorption."]
+                "fertilizerType": "P-K Blend",
+                "NPK": {"ratio": "0:40:20", "values": {"N": 0, "P": 40, "K": 20}, "units": "kg/ha"},
+                "applicationMode": "basal application",
+                "frequency": "once at planting",
+                "reasoning": ["Low nitrogen is ideal for vegetables with low nitrogen requirements.",
+                              "High phosphorous supports root and flower development.",
+                              "Moderate potassium helps prevent disease and improve fruit quality.",
+                              "Moderate soil moisture and slightly acidic pH help with nutrient uptake during early growth."]
             }
         )
     ;
     CropType == legume ->
-        ( Nitrogen == low, Phosphorous == high, Potassium == moderate, pHLevel == neutral, SoilType == loamy, OrganicMatter == high ->
+        ( Nitrogen == moderate, Phosphorous == high, Potassium == moderate, SoilType == chalky, PhLevel == slightlyAlkaline, OrganicMatter == high ->
             Recommendation = {
                 "fertilizerType": "P-K Blend",
-                "NPK": {"ratio": "0:25:15", "values": {"N": 0, "P": 25, "K": 15}, "units": "kg/ha"},
-                "applicationMode": "side-dressing",
-                "frequency": "once at flowering",
-                "reasoning": ["Legumes fix nitrogen, so high nitrogen fertilizers are not necessary.",
-                              "High phosphorous is critical for root and nodule development in neutral loamy soils.",
-                              "Moderate potassium promotes disease resistance and pod quality during flowering.",
-                              "Side-dressing provides targeted nutrition to support plant needs during the reproductive phase.",
-                              "High organic matter improves soil structure and nutrient retention, enhancing fertilizer efficacy."]
-            }
-        )
-
-    ;
-    CropType == fruit ->
-        ( Nitrogen == high, Phosphorous == high, Potassium == moderate ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:20:10", "values": {"N": 20, "P": 20, "K": 10}, "units": "kg/ha"},
-                "applicationMode": "fertigation",
-                "frequency": "every 45 days",
-                "reasoning": ["High nitrogen supports vegetative growth, especially in young trees.",
-                              "Phosphorous ensures strong roots and better fruit setting.",
-                              "Moderate potassium levels support overall plant health.",
-                              "Fertigation ensures targeted delivery to deep-rooted crops."]
-            }
-        )
-    ;
-    CropType == oilseed ->
-        ( Nitrogen == moderate, Phosphorous == high, Potassium == high ->
-            Recommendation = {
-                "fertilizerType": "NPK",
-                "NPK": {"ratio": "10:20:20", "values": {"N": 10, "P": 20, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "broadcasting",
+                "NPK": {"ratio": "10:35:15", "values": {"N": 10, "P": 35, "K": 15}, "units": "kg/ha"},
+                "applicationMode": "top-dressing",
                 "frequency": "every 30 days",
-                "reasoning": ["Oilseeds need high phosphorous for better seed quality.",
-                              "Potassium improves oil content and disease resistance.",
-                              "Moderate nitrogen supports growth without risking lodging."]
+                "reasoning": ["Moderate nitrogen boosts growth without compromising nodule development.",
+                              "High phosphorous supports root growth and nodule fixation.",
+                              "Moderate potassium helps with disease resistance and root development.",
+                              "Chalky soil with high organic matter ensures nutrient retention and proper aeration."]
             }
-        )
-    ;
-    CropType == vegetable,
-    Nitrogen == moderate, Phosphorous == high, Potassium == moderate, SoilType == loamy ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "10:20:10", "values": {"N": 10, "P": 20, "K": 10}, "units": "kg/ha"},
-            "applicationMode": "fertigation",
-            "frequency": "every 40 days",
-            "reasoning": [
-                "Moderate nitrogen supports balanced growth without excess vegetative tissue.",
-                "High phosphorous encourages strong root development, especially during flowering.",
-                "Moderate potassium aids in overall plant health and resistance to diseases.",
-                "Fertigation ensures efficient nutrient uptake directly to the root zone.",
-                "Loamy soil provides good water retention and nutrient availability for optimal uptake."
-            ]
-        }
-    ;
-    CropType == fruit,
-    Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilType == clay ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
-            "applicationMode": "broadcasting",
-            "frequency": "every 60 days",
-            "reasoning": [
-                "High nitrogen is crucial for vigorous vegetative growth and fruit production.",
-                "Moderate phosphorous promotes root and flower development, especially in clay soils.",
-                "High potassium supports fruit development and overall plant health.",
-                "Clay soils retain nutrients well, which makes broadcasting ideal for even distribution.",
-                "The recommended frequency of application ensures continuous nutrient availability."
-            ]
-        }
-    ;
-    CropType == oilseed,
-    Nitrogen == moderate, Phosphorous == high, Potassium == high, SoilType == peat ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "10:20:20", "values": {"N": 10, "P": 20, "K": 20}, "units": "kg/ha"},
-            "applicationMode": "side-dressing",
-            "frequency": "every 30 days",
-            "reasoning": [
-                "Moderate nitrogen supports steady growth without excessive vegetative growth.",
-                "High phosphorous is essential for root establishment and seed quality.",
-                "High potassium enhances disease resistance and improves oil content.",
-                "Side-dressing ensures nutrients are placed directly where they are needed by the plants.",
-                "Peat soils good moisture retention helps in maintaining nutrient availability."
-            ]
-        }
-    ;
-    CropType == legume,
-    Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == sandy ->
-        Recommendation = {
-            "fertilizerType": "P-K Blend",
-            "NPK": {"ratio": "0:20:10", "values": {"N": 0, "P": 20, "K": 10}, "units": "kg/ha"},
-            "applicationMode": "broadcasting",
-            "frequency": "every 60 days",
-            "reasoning": [
-                "Legumes fix their own nitrogen, so minimal nitrogen is required.",
-                "High phosphorous is vital for root development, particularly in sandy soils.",
-                "Moderate potassium supports disease resistance and improves overall crop health.",
-                "Broadcasting provides an even distribution of nutrients over the field.",
-                "Sandy soils benefit from more frequent, lighter fertilizer applications due to lower retention."
-            ]
-        }
-    ;
-    CropType == cereal,
-    Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilType == clay ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
-            "applicationMode": "top-dressing",
-            "frequency": "every 30 days",
-            "reasoning": [
-                "High nitrogen supports rapid vegetative growth and robust tillering.",
-                "Moderate phosphorous ensures strong root system development and early flowering.",
-                "High potassium helps with the synthesis of starch and overall grain quality.",
-                "Top-dressing provides targeted nutrient application during key growth stages.",
-                "Clay soils retain nutrients effectively, ensuring proper uptake of applied fertilizers."
-            ]
-        }
-    ;
-    CropType == tuber,
-    Nitrogen == moderate, Phosphorous == moderate, Potassium == high, SoilType == loamy ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "10:10:20", "values": {"N": 10, "P": 10, "K": 20}, "units": "kg/ha"},
-            "applicationMode": "side-dressing",
-            "frequency": "every 40 days",
-            "reasoning": [
-                "Moderate nitrogen supports balanced growth without excessive foliage.",
-                "Moderate phosphorous promotes healthy tuber development and overall plant health.",
-                "High potassium ensures optimal tuber size and quality, crucial for starch production.",
-                "Side-dressing focuses on feeding plants during critical growth periods.",
-                "Loamy soils good structure and water retention properties optimize nutrient uptake."
-            ]
-        }
-    ;
-    CropType == vegetable,
-    Nitrogen == veryHigh, Phosphorous == high, Potassium == veryHigh, SoilType == silt ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "30:20:30", "values": {"N": 30, "P": 20, "K": 30}, "units": "kg/ha"},
-            "applicationMode": "fertigation",
-            "frequency": "every 20 days",
-            "reasoning": [
-                "Very high nitrogen is essential for vigorous vegetative growth, especially in leafy vegetables.",
-                "High phosphorous supports strong root development and flower initiation.",
-                "Very high potassium promotes fruiting and enhances resistance to environmental stresses.",
-                "Fertigation ensures precise nutrient delivery, maximizing uptake efficiency.",
-                "Silt soils provide a good balance of drainage and moisture retention, making them ideal for fertigation."
-            ]
-        }
-    ;
-    CropType == fruit,
-    Nitrogen == low, Phosphorous == high, Potassium == moderate, SoilType == sandy ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "5:20:10", "values": {"N": 5, "P": 20, "K": 10}, "units": "kg/ha"},
-            "applicationMode": "broadcasting",
-            "frequency": "every 50 days",
-            "reasoning": [
-                "Low nitrogen is suitable for fruit crops, as excess nitrogen can delay fruiting.",
-                "High phosphorous is essential for strong root system and improved fruit setting.",
-                "Moderate potassium supports fruit quality and disease resistance.",
-                "Broadcasting ensures uniform distribution across sandy soils.",
-                "Sandy soils require more frequent applications due to lower nutrient retention."
-            ]
-        }
-    ;
-    CropType == oilseed,
-    Nitrogen == moderate, Phosphorous == moderate, Potassium == high, SoilType == chalky ->
-        Recommendation = {
-            "fertilizerType": "NPK",
-            "NPK": {"ratio": "10:10:20", "values": {"N": 10, "P": 10, "K": 20}, "units": "kg/ha"},
-            "applicationMode": "top-dressing",
-            "frequency": "every 30 days",
-            "reasoning": [
-                "Moderate nitrogen promotes steady growth without causing lodging in oilseeds.",
-                "Moderate phosphorous encourages root development and improves seed quality.",
-                "High potassium supports oil formation and enhances disease resistance.",
-                "Top-dressing delivers nutrients directly to the active root zone for efficient uptake.",
-                "Chalky soils benefit from consistent nutrient applications, as they can be prone to leaching."
-            ]
-        }
         )
     ;
     CropType == tuber ->
-        ( Nitrogen == high, Phosphorous == moderate, Potassium == high ->
+        ( Nitrogen == high, Phosphorous == moderate, Potassium == high, SoilType == sandy, PhLevel == alkaline, OrganicMatter == low ->
             Recommendation = {
                 "fertilizerType": "NPK",
-                "NPK": {"ratio": "20:10:20", "values": {"N": 20, "P": 10, "K": 20}, "units": "kg/ha"},
-                "applicationMode": "top-dressing",
-                "frequency": "every 45 days",
-                "reasoning": ["Tuber crops need high potassium for starch synthesis.",
-                              "Nitrogen supports vegetative growth and leaf area development.",
-                              "Moderate phosphorous aids in root expansion.",
-                              "Top-dressing provides nutrients as crops mature."]
+                "NPK": {"ratio": "20:15:30", "values": {"N": 20, "P": 15, "K": 30}, "units": "kg/ha"},
+                "applicationMode": "side-dressing",
+                "frequency": "every 15 days",
+                "reasoning": ["High nitrogen ensures that the plant has enough vegetative growth to support tuber development.",
+                              "Moderate phosphorous promotes tuber initiation, especially in sandy, alkaline soils.",
+                              "High potassium helps to improve tuber yield and quality.",
+                              "Side-dressing every 15 days helps maintain nutrient levels during tuber bulking."]
             }
         )
-    ,
+
+    ),
     !. % Prevent fallback execution if successful.
+
+
+    
+
+
+
+
+
 
 % Default recommendation if no matches
 fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
@@ -735,10 +615,3 @@ fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
         "frequency": "",
         "reasoning": []
     }.
-
-
-
-
-% TODO Fix alignment of new rules
-% Starting with this
-% ?- recommend_fertilizer(vegetable, vegetative, moderate, low, moderate, cool, slightlyAcidic, low, high, moderate, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).

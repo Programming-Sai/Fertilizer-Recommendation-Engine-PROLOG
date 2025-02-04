@@ -2,12 +2,26 @@
 % environment(CropType, Temperature, Humidity, Rainfall, Season, Location).
 
 
-% Example impractical facts
-impractical_environment(_, low, high, _, _, _).      % Low temperature + High humidity
-impractical_environment(_, _, low, high, _, _).      % Low humidity + High rainfall
-impractical_environment(_, _, high, low, _, _).      % High humidity + Low rainfall
-impractical_environment(_, low, _, _, summer, _).    % Low temperature in summer
+% Impractical Environmental Conditions (explicit feature tracking)
+impractical_environment(_, Temperature, Humidity, _, _, _, 
+    'Low temperatures combined with high humidity increase the risk of fungal infections and slow plant growth.', 
+    [temperature-Temperature, humidity-Humidity]) :-
+    Temperature = low, Humidity = high.
 
+impractical_environment(_, _, Humidity, Rainfall, _, _, 
+    'Low humidity with excessive rainfall can cause inconsistent soil moisture, leading to root stress.', 
+    [humidity-Humidity, rainfall-Rainfall]) :-
+    Humidity = low, Rainfall = high.
+
+impractical_environment(_, _, Humidity, Rainfall, _, _, 
+    'High humidity with low rainfall promotes fungal diseases and reduces soil moisture levels.', 
+    [humidity-Humidity, rainfall-Rainfall]) :-
+    Humidity = high, Rainfall = low.
+
+impractical_environment(_, Temperature, _, _, Season, _, 
+    'Low temperatures during summer are unexpected and may stunt plant growth, affecting seasonal crops.', 
+    [temperature-Temperature, season-Season]) :-
+    Temperature = low, Season = summer.
 
 
 % Cereals

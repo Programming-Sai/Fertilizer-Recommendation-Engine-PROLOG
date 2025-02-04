@@ -16,13 +16,43 @@
 % soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Pottassium, OrganicMatter, SoilMoisture, ElectricalConductivity).
 
 
-impractical_soil(_, _, _, low, low, low, low, _, _).  % Insufficient nutrients and organic matter
-impractical_soil(_, _, _, high;veryHigh, _, _, _, low, _).  % Excessive nitrogen + low soil moisture
-impractical_soil(_, _, _, _, _, _, low;moderate, _, high;veryHigh;extreme).  % Poor organic matter + high electrical conductivity
-impractical_soil(_, _, _, _, _, _, _, high;veryHigh, low).  % High soil moisture + low electrical conductivity
-impractical_soil(_, _, _, _, _, _, _, _, extreme).  % Unknown or extreme electrical conductivity
-impractical_soil(_, clay, acidic;slightlyAcidic, _, _, _, _, _, _).  % Low pH in clay soil
-impractical_soil(_, sandy, alkaline;slightlyAlkaline, _, _, _, _, _, _).  % High pH in sandy soil
+% Impractical Soil Conditions (explicit feature tracking)
+impractical_soil(_, _, _, Nitrogen, Phosphorous, Potassium, OrganicMatter, _, _, 
+    'Soil has insufficient nitrogen, phosphorus, potassium, and organic matter. This can lead to poor crop growth.', 
+    [nitrogen-Nitrogen, phosphorus-Phosphorous, potassium-Potassium, organic_matter-OrganicMatter]) :-
+    Nitrogen = low, Phosphorous = low, Potassium = low, OrganicMatter = low.
+
+impractical_soil(_, _, _, Nitrogen, _, _, _, SoilMoisture, _, 
+    'Excessive nitrogen levels combined with low soil moisture can cause nitrogen burn and nutrient imbalance.', 
+    [nitrogen-Nitrogen, soil_moisture-SoilMoisture]) :-
+    (Nitrogen = high; Nitrogen = veryHigh), SoilMoisture = low.
+
+impractical_soil(_, _, _, _, _, _, OrganicMatter, _, ElectricalConductivity, 
+    'Poor organic matter with very high electrical conductivity can lead to soil salinity issues, reducing water uptake.', 
+    [organic_matter-OrganicMatter, electrical_conductivity-ElectricalConductivity]) :-
+    (OrganicMatter = low; OrganicMatter = moderate), 
+    (ElectricalConductivity = high; ElectricalConductivity = veryHigh; ElectricalConductivity = extreme).
+
+impractical_soil(_, _, _, _, _, _, _, SoilMoisture, ElectricalConductivity, 
+    'High soil moisture combined with low electrical conductivity indicates poor drainage, leading to root rot.', 
+    [soil_moisture-SoilMoisture, electrical_conductivity-ElectricalConductivity]) :-
+    (SoilMoisture = high; SoilMoisture = veryHigh), ElectricalConductivity = low.
+
+impractical_soil(_, _, _, _, _, _, _, _, ElectricalConductivity, 
+    'Extreme electrical conductivity values are unpredictable and may cause severe nutrient imbalances.', 
+    [electrical_conductivity-ElectricalConductivity]) :-
+    ElectricalConductivity = extreme.
+
+impractical_soil(_, clay, PhLevel, _, _, _, _, _, _, 
+    'Acidic soil in clay conditions leads to poor root development and nutrient unavailability.', 
+    [ph_level-PhLevel]) :-
+    (PhLevel = acidic; PhLevel = slightlyAcidic).
+
+impractical_soil(_, sandy, PhLevel, _, _, _, _, _, _, 
+    'Alkaline soil in sandy conditions can cause nutrient leaching and poor water retention.', 
+    [ph_level-PhLevel]) :-
+    (PhLevel = alkaline; PhLevel = slightlyAlkaline).
+
 
 soil_cereal(cereal, loamy, acidic, low, low, low, moderate, low, low).
 soil_cereal(cereal, loamy, acidic, low, low, low, moderate, low, moderate).
