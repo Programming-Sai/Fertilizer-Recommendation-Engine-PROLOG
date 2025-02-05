@@ -1,6 +1,6 @@
 import json
 
-def p2q(predicate, http_prefix='http://localhost:8080/recommendation?'):
+def p2q(predicate, http_prefix='http://localhost:5000/recommend?'):
     return http_prefix+"&".join([f"{i}={j}" for i, j in zip(["cropType", "growthStage","yieldTarget","fertilizerHistory","waterRequirements","temperature","humidity","rainfall","season","location", "pHLevel","nitrogen","phosphorous", "potassium", "soilType", "organicMatter", "soilMoisture", "electricalConductivity" ], predicate.replace("recommend_fertilizer(", "").replace(").", "").split(", ")[:18])])
     
 
@@ -13,6 +13,7 @@ def p2j(predicate):
 
 
 
+
   
 
 
@@ -22,6 +23,7 @@ def p2j(predicate):
 
 # print("\n\n", p2q("recommend_fertilizer(tuber, vegetative, moderate, low, moderate, cool, moderate, high, moderate, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).", http_prefix="http://127.0.0.1:5000/recommend?") , "\n\n")
 
+print("\n\n", p2q("recommend_fertilizer(vegetable, vegetative, moderate, low, veryHigh, sandy, slightlyAlkaline, moderate, high, moderate, high, moderate, moderate, hot, high, moderate, autumn, arid, Recommendation)."), "\n\n")
 
 # print("\n\n", p2j("recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).") , "\n\n")
 

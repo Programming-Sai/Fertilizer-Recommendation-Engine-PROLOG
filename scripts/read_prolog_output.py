@@ -4,14 +4,14 @@ import ast
 import re
 import os
 
-lookup_words = ['broadcasting', 'Tuber']
+lookup_words = ['broadcasting', 'Tuber', 'broadcast']
 
 def pread(query=None):
     recommender = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src', 'rules', 'recommendation_rules.pl')
     prolog = Prolog()
     prolog.consult(recommender)
     result={}
-    query = query or "recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation)."
+    query = query or "recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, _, Recommendation)."
     raw_result = list(prolog.query(query))
  
     if raw_result:
@@ -62,8 +62,8 @@ def get_missing_b(lookup_words, word):
 # print(pread()[0])
 # print(pread("recommend_fertilizer(tuber, vegetative, moderate, low, moderate, cool, moderate, high, moderate, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).")[0])
 
-x="recommend_fertilizer(vegetable, vegetative, moderate, low, moderate, loamy, neutral, high, high, moderate, high, moderate, moderate, cool, high, moderate, spring, arid, Recommendation)."
+# x="recommend_fertilizer(vegetable, vegetative, moderate, low, moderate, loamy, neutral, high, high, moderate, high, moderate, moderate, cool, high, moderate, spring, arid, Recommendation)."
 
 
 
-print(pread(x)[0])
+# print(pread(x)[0])

@@ -53,7 +53,7 @@ def recommend_fertilizer():
     prolog_query = f"""
     recommend_fertilizer('{crop_type}', '{growth_stage}', '{yield_target}', '{fertilizer_history}', '{water_requirement}', 
     '{soil_type}', '{ph_level}', '{nitrogen}', '{phosphorous}', '{potassium}', '{organic_matter}', '{soil_moisture}', 
-    '{electrical_conductivity}', '{temperature}', '{humidity}', '{rainfall}', '{season}', '{location}', Recommendation).
+    '{electrical_conductivity}', '{temperature}', '{humidity}', '{rainfall}', '{season}', '{location}', _, Recommendation).
     """
 
     recommendation = pread(query=prolog_query)[1]

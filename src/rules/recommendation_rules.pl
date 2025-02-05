@@ -34,7 +34,6 @@ format_reason_string(ReasonLists, FormattedString) :-
     ( NonEmpty = [] -> FormattedString = ""
     ; atomic_list_concat(NonEmpty, ' | ', FormattedString) ).
 
-
 recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
                      SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
                      SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
@@ -64,14 +63,24 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
             "reasoning": [ImpracticalReasons]
         }
     ;
-      
-      fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
-                                SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
-                                SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
-                                Season, Location, Recommendation)
+      % Otherwise, try fertilizer recommendation
+      ( 
+        fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                                  SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
+                                  SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
+                                  Season, Location, Recommendation) 
+      -> true 
+      ; 
+        % 🔥 Default fallback recommendation if no match found
+        Recommendation = {
+            "fertilizerType": "General-Purpose Fertilizer",
+            "NPK": {"ratio": "10:10:10", "values": {"N": "10", "P": "10", "K": "10"}, "units": "kg/ha"},
+            "applicationMode": "broadcast",
+            "frequency": "every 60 days",
+            "reasoning": ["No specific recommendation found, using a balanced general-purpose fertilizer."]
+        }
+      )
     ).
-
-% 
 
 
 
@@ -606,12 +615,3 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
 
 
 
-% Default recommendation if no matches
-fertilizer_recommendation(_, _, _, _, _, _, _, Recommendation) :-
-    Recommendation = {
-        "fertilizerType": "",
-        "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
-        "applicationMode": "",
-        "frequency": "",
-        "reasoning": []
-    }.
