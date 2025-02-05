@@ -54,13 +54,15 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
     ( 
       % If there are impractical conditions, return them directly
+
       ImpracticalReasons \= "" ->
+      atom_string(ImpracticalReasons, ReasonStr),  
         Recommendation = {
             "fertilizerType": "",
             "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
             "applicationMode": "",
             "frequency": "",
-            "reasoning": [ImpracticalReasons]
+            "reasoning": [ReasonStr]
         }
     ;
       % Otherwise, try fertilizer recommendation
@@ -71,7 +73,7 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
                                   Season, Location, Recommendation) 
       -> true 
       ; 
-        % 🔥 Default fallback recommendation if no match found
+        % Default fallback recommendation if no match found
         Recommendation = {
             "fertilizerType": "General-Purpose Fertilizer",
             "NPK": {"ratio": "10:10:10", "values": {"N": "10", "P": "10", "K": "10"}, "units": "kg/ha"},
@@ -89,41 +91,22 @@ recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, Wate
 
 % Check impractical soil conditions
 check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Reasons) :-
-    impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Reason, Factors),
+    impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, Reason, _Factors),
     Reasons = [Reason].
 
 
 % Check impractical crop conditions
 check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Reasons) :-
-    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Reason, Factors),
+    impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, Reason, _Factors),
     Reasons = [Reason].
 
 % Check impractical environmental conditions
 check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, Reasons) :-
-    impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, Reason, Factors),
+    impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, Reason, _Factors),
     Reasons = [Reason].
 
 
 
-
-
-
-% Print reasons and exact problematic values
-
-
-% 
-print_reasons([]).
-print_reasons([(Reason, Factors) | Rest]) :-
-    format(" - ~w~n", [Reason]),
-    print_factors(Factors),
-    print_reasons(Rest).
-
-% Print out each factor and its corresponding value
-print_factors([]).
-print_factors([Factor-Value | Rest]) :-
-    format("   -> ~w: ~w~n", [Factor, Value]),
-    print_factors(Rest).
-% 
 
 
 

@@ -134,3 +134,4 @@ dist
 /scripts/.venv
 .re.sh
 /scripts/__pycache__/
+*/tempCodeRunnerFile.py

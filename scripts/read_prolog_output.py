@@ -4,11 +4,20 @@ import ast
 import re
 import os
 
-lookup_words = ['broadcasting', 'Tuber', 'broadcast']
+
+prolog = Prolog()
+lookup_words = [
+    'broadcasting', 'Tuber', 'broadcast', 'balanced', "boron", "biological", "buffering", 
+    "bulk", "bacterium", "boron deficiency", "base fertilizer", 
+    "bedding", "biodegradable", "blended fertilizer", "biosolid", 
+    "beneficial microorganisms", "bacterial inoculant", "buffering capacity", "budding"
+] 
+
+lookup_words += [i.capitalize() for i in lookup_words]
+
 
 def pread(query=None):
     recommender = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src', 'rules', 'recommendation_rules.pl')
-    prolog = Prolog()
     prolog.consult(recommender)
     result={}
     query = query or "recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, _, Recommendation)."
@@ -37,22 +46,30 @@ def pread(query=None):
 
         # return raw_result
         return json.dumps(result, indent=4), result, raw_result
-    return {}, [], []
+    return {}, [], raw_result
 
 
 def get_missing_b(lookup_words, word):
     if isinstance(word, str):
-        return [lookup_word if word.lower() == lookup_word.replace("b", '').lower() else word for lookup_word in lookup_words][0]
-    elif isinstance(word, list):
         for lookup_word in lookup_words:
-            for idx, w in enumerate(word):
-                for wo in w.split(" "):
-                    d = lookup_word
-                    if wo.lower() == lookup_word.replace("b", '').lower():
-                        word[idx] = w.replace(wo, d)
-        return word
+            if word.lower() == lookup_word.replace("b", "").lower():
+                return lookup_word  # Return the corrected word
+        return word  # If no match is found, return the original word
 
-
+    elif isinstance(word, list):
+        corrected_list = []
+        for w in word:
+            words = w.split()  # Split the string into words
+            corrected_words = []
+            for w_word in words:
+                corrected_word = w_word  # Default to original
+                for lookup_word in lookup_words:
+                    if lookup_word.replace("b", "").lower() in w_word.lower():
+                        corrected_word = lookup_word  # Replace if match found
+                        break  # Stop checking after the first match
+                corrected_words.append(corrected_word)
+            corrected_list.append(" ".join(corrected_words))  # Rejoin the words into a corrected string
+        return corrected_list
 
 
 
@@ -62,8 +79,9 @@ def get_missing_b(lookup_words, word):
 # print(pread()[0])
 # print(pread("recommend_fertilizer(tuber, vegetative, moderate, low, moderate, cool, moderate, high, moderate, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).")[0])
 
-# x="recommend_fertilizer(vegetable, vegetative, moderate, low, moderate, loamy, neutral, high, high, moderate, high, moderate, moderate, cool, high, moderate, spring, arid, Recommendation)."
+# x="recommend_fertilizer(vegetable, vegetative, moderate, low, veryHigh, sandy, slightlyAlkaline, moderate, high, moderate, high, moderate, moderate, hot, high, moderate, autumn, arid, _, Recommendation)."
 
 
+# print(get_missing_b(lookup_words, "roadcast"))
 
 # print(pread(x)[0])

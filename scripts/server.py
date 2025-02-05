@@ -1,11 +1,24 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
-from read_prolog_output import pread
+from read_prolog_output import pread, prolog
 from flask_cors import CORS
 import webbrowser
-
+import atexit
 
 
 server = Flask(__name__)
+
+def cleanup():
+    try:
+        print("Stopping PROLOG engine...")
+        list(prolog.query("halt."))  
+        print("PROLOG engine stopped.")
+    except Exception as e:
+        print(f"Error stopping Prolog: {e}")
+
+atexit.register(cleanup)  # Register cleanup function
+
+
+
 
 CORS(server)
 
@@ -50,16 +63,11 @@ def recommend_fertilizer():
         return jsonify({'error': f'Missing required parameters: {", ".join(missing_params)}'}), 400
 
 
-    prolog_query = f"""
-    recommend_fertilizer('{crop_type}', '{growth_stage}', '{yield_target}', '{fertilizer_history}', '{water_requirement}', 
-    '{soil_type}', '{ph_level}', '{nitrogen}', '{phosphorous}', '{potassium}', '{organic_matter}', '{soil_moisture}', 
-    '{electrical_conductivity}', '{temperature}', '{humidity}', '{rainfall}', '{season}', '{location}', _, Recommendation).
-    """
-
+    prolog_query = f"recommend_fertilizer('{crop_type}', '{growth_stage}', '{yield_target}', '{fertilizer_history}', '{water_requirement}', '{soil_type}', '{ph_level}', '{nitrogen}', '{phosphorous}', '{potassium}', '{organic_matter}', '{soil_moisture}', '{electrical_conductivity}', '{temperature}', '{humidity}', '{rainfall}', '{season}', '{location}', _, Recommendation)." 
+    
     recommendation = pread(query=prolog_query)[1]
 
     return jsonify({'recommendation': recommendation})
-
 
 
 
