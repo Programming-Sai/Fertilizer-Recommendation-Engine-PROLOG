@@ -1,4 +1,0 @@
-recommend_fertilizer(vegetable, vegetative, moderate, low, veryHigh, 
-                     sandy, slightlyAlkaline, moderate, high, moderate, high, moderate, 
-                     moderate, hot, high, moderate, autumn, arid, 
-Recommendation).

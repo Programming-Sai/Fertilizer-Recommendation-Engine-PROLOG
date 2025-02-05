@@ -10,7 +10,8 @@ lookup_words = [
     'broadcasting', 'Tuber', 'broadcast', 'balanced', "boron", "biological", "buffering", 
     "bulk", "bacterium", "boron deficiency", "base fertilizer", 
     "bedding", "biodegradable", "blended fertilizer", "biosolid", 
-    "beneficial microorganisms", "bacterial inoculant", "buffering capacity", "budding"
+    "beneficial microorganisms", "bacterial inoculant", "buffering capacity", "budding",
+    "basal application"
 ] 
 
 lookup_words += [i.capitalize() for i in lookup_words]

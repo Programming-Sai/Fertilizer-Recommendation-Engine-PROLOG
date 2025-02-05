@@ -23,7 +23,7 @@ def p2j(predicate):
 
 # print("\n\n", p2q("recommend_fertilizer(tuber, vegetative, moderate, low, moderate, cool, moderate, high, moderate, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).", http_prefix="http://127.0.0.1:5000/recommend?") , "\n\n")
 
-print("\n\n", p2q("recommend_fertilizer(fruit, vegetative, moderate, low, moderate, sandy, neutral, low, high, high, high, moderate, moderate, cool, high, moderate, spring, arid, _, Recommendation)."), "\n\n")
+# print("\n\n", p2q("recommend_fertilizer(oilseed, vegetative, moderate, high, high, loamy, alkaline, high, high, high, low, high, moderate, cool, high, moderate, spring, tropical, _, Recommendation)."), "\n\n")
 
 # print("\n\n", p2j("recommend_fertilizer(cereal, vegetative, moderate, low, moderate, cool, moderate, high, high, high, neutral, moderate, moderate, moderate, loamy, moderate, moderate, moderate, Recommendation).") , "\n\n")
 

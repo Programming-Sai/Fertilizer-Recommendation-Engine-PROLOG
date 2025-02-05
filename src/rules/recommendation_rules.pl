@@ -34,55 +34,7 @@ format_reason_string(ReasonLists, FormattedString) :-
     ( NonEmpty = [] -> FormattedString = ""
     ; atomic_list_concat(NonEmpty, ' | ', FormattedString) ).
 
-recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
-                     SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
-                     SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
-                     Season, Location, ImpracticalReasons, Recommendation) :-
 
-    % Run all checks without stopping
-    ( check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, SoilReasons)
-    -> true ; SoilReasons = [] ),
-
-    ( check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, CropReasons)
-    -> true ; CropReasons = [] ),
-
-    ( check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, EnvReasons)
-    -> true ; EnvReasons = [] ),
-
-    % Convert reasons into a single formatted string
-    format_reason_string([SoilReasons, CropReasons, EnvReasons], ImpracticalReasons),
-
-    ( 
-      % If there are impractical conditions, return them directly
-
-      ImpracticalReasons \= "" ->
-      atom_string(ImpracticalReasons, ReasonStr),  
-        Recommendation = {
-            "fertilizerType": "",
-            "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
-            "applicationMode": "",
-            "frequency": "",
-            "reasoning": [ReasonStr]
-        }
-    ;
-      % Otherwise, try fertilizer recommendation
-      ( 
-        fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
-                                  SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
-                                  SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
-                                  Season, Location, Recommendation) 
-      -> true 
-      ; 
-        % Default fallback recommendation if no match found
-        Recommendation = {
-            "fertilizerType": "General-Purpose Fertilizer",
-            "NPK": {"ratio": "10:10:10", "values": {"N": "10", "P": "10", "K": "10"}, "units": "kg/ha"},
-            "applicationMode": "broadcast",
-            "frequency": "every 60 days",
-            "reasoning": ["No specific recommendation found, using a balanced general-purpose fertilizer."]
-        }
-      )
-    ).
 
 
 
@@ -217,7 +169,8 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
             }
         )
     ;
-        CropType == vegetable ->
+    % BREAK OFF POINT
+    CropType == vegetable ->
         ( Nitrogen == high, Phosphorous == high, Potassium == moderate, WaterRequirements == high, SoilType == loamy, PhLevel == neutral ->
             Recommendation = {
                 "fertilizerType": "NPK",
@@ -246,6 +199,7 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
                               "Moderate organic matter helps in nutrient release and maintains soil fertility."]
             }
         )
+    % ).
     ;
     CropType == legume ->
         ( Nitrogen == low, Phosphorous == moderate, Potassium == low, PhLevel == slightlyAcidic, SoilType == sandy, Season == dry ->
@@ -592,6 +546,61 @@ fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory,
 
 
     
+
+
+recommend_fertilizer(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                     SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
+                     SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
+                     Season, Location, ImpracticalReasons, Recommendation) :-
+
+    % Run all checks without stopping
+    ( check_impractical_soil(CropType, SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, SoilMoisture, ElectricalConductivity, SoilReasons)
+    -> true ; SoilReasons = [] ),
+
+    ( check_impractical_crop(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, CropReasons)
+    -> true ; CropReasons = [] ),
+
+    ( check_impractical_environment(CropType, Temperature, Humidity, Rainfall, Season, Location, EnvReasons)
+    -> true ; EnvReasons = [] ),
+
+    % Convert reasons into a single formatted string
+    format_reason_string([SoilReasons, CropReasons, EnvReasons], ImpracticalReasons),
+
+    ( 
+      % If there are impractical conditions, return them directly
+
+      ImpracticalReasons \= "" ->
+      atom_string(ImpracticalReasons, ReasonStr),  
+        Recommendation = {
+            "fertilizerType": "",
+            "NPK": {"ratio": "", "values": {"N": "", "P": "", "K": ""}, "units": "kg/ha"},
+            "applicationMode": "",
+            "frequency": "",
+            "reasoning": [ReasonStr]
+        }
+    ;
+      % Otherwise, try fertilizer recommendation
+      ( 
+        fertilizer_recommendation(CropType, GrowthStage, YieldTarget, FertilizerHistory, WaterRequirement, 
+                                  SoilType, PhLevel, Nitrogen, Phosphorous, Potassium, OrganicMatter, 
+                                  SoilMoisture, ElectricalConductivity, Temperature, Humidity, Rainfall, 
+                                  Season, Location, Recommendation) 
+      -> true 
+      ; 
+        % Default fallback recommendation if no match found
+        Recommendation = {
+            "fertilizerType": "General-Purpose Fertilizer",
+            "NPK": {"ratio": "10:10:10", "values": {"N": "10", "P": "10", "K": "10"}, "units": "kg/ha"},
+            "applicationMode": "broadcast",
+            "frequency": "every 60 days",
+            "reasoning": ["No specific recommendation found, using a balanced general-purpose fertilizer."]
+        }
+      )
+    ).
+
+
+
+% 
 
 
 
